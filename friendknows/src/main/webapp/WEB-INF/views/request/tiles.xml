@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+
+	<definition name="request/review" extends="page">
+		<put-attribute name="content" value="/WEB-INF/views/request/review.jsp" />
+	</definition>
+
+	<definition name="request/reviewAcknowledgment" extends="page">
+		<put-attribute name="content"
+			value="/WEB-INF/views/request/reviewAcknowledgment.jsp" />
+	</definition>
+
+	<definition name="request/submitReview" extends="page">
+		<put-attribute name="content"
+			value="/WEB-INF/views/request/submitReview.jsp" />
+	</definition>
+
+	<definition name="request/reviewAcknowledgment" extends="page">
+		<put-attribute name="content"
+			value="/WEB-INF/views/request/reviewAcknowledgment.jsp" />
+	</definition>
+
+	<definition name="request/propagate" extends="page">
+		<put-attribute name="content"
+			value="/WEB-INF/views/request/propagate.jsp" />
+	</definition>
+
+	<definition name="request/propagateAcknowledgement" extends="page">
+		<put-attribute name="content"
+			value="/WEB-INF/views/request/propagateAcknowledgement.jsp" />
+	</definition>
+</tiles-definitions>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<beans:bean id="reviewUserDAO"
+		class="com.system.you.review.user.dao.impl.ReviewUserDAOImpl">
+	</beans:bean>
+
+	<beans:bean id="categoryDAO"
+		class="com.system.you.review.category.dao.impl.CategoryDAOImpl">
+	</beans:bean>
+
+	<beans:bean id="itemDAO"
+		class="com.system.you.review.item.dao.impl.ItemDAOImpl">
+	</beans:bean>
+
+	<beans:bean id="reviewRequestDAO"
+		class="com.system.you.review.request.dao.impl.RequestDAOImpl">
+	</beans:bean>
+
+	<beans:bean id="reviewerRequestDAO"
+		class="com.system.you.review.request.dao.impl.ReviewerDAOImpl">
+	</beans:bean>
+
+	<beans:bean id="reviewDAO"
+		class="com.system.you.review.request.dao.impl.ReviewDAOImpl">
+	</beans:bean>
+
+	<beans:bean id="externalReviewerDAO"
+		class="com.system.you.review.request.dao.impl.ExternalReviewerDAOImpl">
+	</beans:bean>
+
+</beans:beans>
