@@ -1,0 +1,155 @@
+<%@ page session="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
+<style>
+.ui-autocomplete-loading {
+	background: white url('images/ui-anim_basic_16x16.gif') right center
+		no-repeat;
+}
+
+.fk-no-height {
+	height: 2.18rem;
+}
+</style>
+<script>
+	$(document)
+			.ready(
+					function() {
+
+						$("#friend-search").tokenInput(
+								"/review/facebook/search/", {
+									theme : "facebook",
+									preventDuplicates : true,
+								});
+
+						$("#item-search")
+								.tokenInput(
+										"/review/item/search/",
+										{
+											theme : "facebook",
+											tokenLimit : 1,
+											onResult : function(results) {
+												var id = "token-input-"
+														+ $(this).attr("id");
+												var searchTerm = $("#" + id)
+														.val();
+												results[0] = {
+													id : "new:" + searchTerm,
+													name : searchTerm
+												};
+												return results;
+											},
+
+											onAdd : function() {
+												var url = "/review/"
+														+ $("#item-search")
+																.val()
+														+ "/friends/interested";
+												$
+														.ajax(
+																{
+																	url : url,
+																	headers : {
+																		Accept : "text/html"
+																	},
+																	success : function(
+																			data) {
+																		var $interested_friend = $("#interested_friend");
+																		$interested_friend.append(data);
+																		$interested_friend.show("slow");
+																	},
+																	error : function(
+																			data) {
+																		alert(data);
+																	}
+																})
+														.done(function(data) {
+															alert(data);
+														});
+
+											}, 
+											onDelete: function(){
+												
+											}
+											
+										});
+
+						$("#category-search").tokenInput(
+								"/review/category/search/", {
+									theme : "facebook",
+									tokenLimit : 1,
+								});
+
+					});
+</script>
+
+<h3>Initiate a review</h3>
+
+<div class="fk-error">
+	<c:forEach var="error" items="${messages}">
+		<div>${error.value}</div>
+	</c:forEach>
+</div>
+
+<form:form commandName="form" id="initateReview" method="POST"
+	action="${formActionURL}">
+
+
+	<div class="row">
+		<div class="small-6 columns small-centered">
+			<div class="row">
+				<div class="row collapse">
+					<div class="small-3 large-2 columns">
+						<span class="prefix">Category</span>
+					</div>
+					<div class="small-9 large-10 columns">
+						<form:input id="category-search" type="text" path="category"
+							placeholder="Select Category..." />
+					</div>
+				</div>
+				<div class="row collapse">
+					<div class="small-3 large-2 columns">
+						<span class="prefix">Item</span>
+					</div>
+					<div class="small-9 large-10 columns">
+						<form:input id="item-search" type="text" path="item"
+							placeholder="Select Item..." />
+					</div>
+				</div>
+				<div class="row collapse">
+					<div class="small-12 large-12 columns">
+						<form:textarea path="description"
+							placeholder="Write description....." rows="5" />
+					</div>
+				</div>
+				<div class="row collapse fk-margin-top">
+					<div class="small-3 large-2 columns fk-margin-top">
+						<span class="prefix">Scope</span>
+					</div>
+					<div class="small-9 large-10 columns fk-margin-top">
+						<form:select path="scope">
+							<form:option value="public">Public</form:option>
+							<form:option value="private">Private</form:option>
+						</form:select>
+					</div>
+				</div>
+				<div class="row collapse fk-margin-top">
+					<div class="small-3 large-2 columns fk-margin-top">
+						<span class="prefix">Friends</span>
+					</div>
+					<div class="small-9 large-10 columns fk-margin-top">
+						<input id="friend-search" type="text" name="friends" />
+					</div>
+				</div>
+				<div class="row ">
+					<div class="small-3 large-2 columns small-centered">
+						<form:input type="submit" value="submit" class="button" path="" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="hide" id="interested_friend"></div>
+</form:form>

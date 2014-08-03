@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.system.you.review.web.beans.response.RequestContext"/>
+<fullyQualifiedTypeName name="org.slf4j.Logger"/>
+<fullyQualifiedTypeName name="com.system.you.review.item.bean.helper.impl.RequestBeanHelper"/>
+<fullyQualifiedTypeName name="com.system.you.review.user.bean.ReviewUser"/>
+<fullyQualifiedTypeName name="com.system.you.review.core.PopularTags"/>
+<fullyQualifiedTypeName name="org.apache.commons.lang.StringUtils"/>
+<fullyQualifiedTypeName name="java.util.Map.Entry"/>
+<fullyQualifiedTypeName name="com.system.you.review.core.TagWeights"/>
+<fullyQualifiedTypeName name="com.system.you.review.user.service.ReviewUserService"/>
+<fullyQualifiedTypeName name="com.system.you.review.core.service.TagService"/>
+<fullyQualifiedTypeName name="org.springframework.ui.Model"/>
+<fullyQualifiedTypeName name="com.system.you.review.web.domain.impl.SessionUtils"/>
+<fullyQualifiedTypeName name="com.system.you.review.core.UserInterest"/>
+<fullyQualifiedTypeName name="org.springframework.web.servlet.ModelAndView"/>
+<fullyQualifiedTypeName name="com.system.you.review.web.beans.view.UserViewBean"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="com.system.you.review.web.beans.view.UserInterestViewBean"/>
+<fullyQualifiedTypeName name="com.system.you.review.item.bean.helper.impl.UserBeanHelper"/>
+<fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+</qualifiedTypeNameHistroy>

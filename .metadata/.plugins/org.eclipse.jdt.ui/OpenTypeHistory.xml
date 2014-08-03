@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.controller{ProfileController.java[ProfileController" modifiers="1" timestamp="1405858384771"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.user.bean{ReviewUser.java[ReviewUser" modifiers="1" timestamp="1404836956916"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.item.bean.helper.impl{CategoryBeanHelper.java[CategoryBeanHelper" modifiers="1" timestamp="1405859055128"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.item.bean.helper.impl{ItemBeanHelper.java[ItemBeanHelper" modifiers="1" timestamp="1405859115763"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.beans.view{RequestViewBean.java[RequestViewBean" modifiers="1" timestamp="1406051443277"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.controller.helper{EditRequestDescriptionHelper.java[EditRequestDescriptionHelper" modifiers="1" timestamp="1406347368716"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.item.bean.helper.impl{RequestBeanHelper.java[RequestBeanHelper" modifiers="1" timestamp="1406347210530"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.search{SearchController.java[SearchController" modifiers="1" timestamp="1404836956308"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.facebook{FacebookFriendsController.java[FacebookFriendsController" modifiers="1" timestamp="1406442836718"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.controller{RequestController.java[RequestController" modifiers="1" timestamp="1406311021788"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.beans.view{UserViewBean.java[UserViewBean" modifiers="1" timestamp="1405840550466"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.core{UserInterest.java[UserInterest" modifiers="1" timestamp="1406443202004"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web{ContextInitializationFilter.java[ContextInitializationFilter" modifiers="1" timestamp="1405840550403"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.beans.view{UserInterestViewBean.java[UserInterestViewBean" modifiers="1" timestamp="1406445057132"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.controller{ItemController.java[ItemController" modifiers="1" timestamp="1406446805997"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.core.service.impl{TagServiceImpl.java[TagServiceImpl" modifiers="1" timestamp="1406446767094"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.beans.view{ItemViewBean.java[ItemViewBean" modifiers="1" timestamp="1404836956557"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.request.bean{Reviewer.java[Reviewer" modifiers="1" timestamp="1405265748045"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.controller{ReviewController.java[ReviewController" modifiers="1" timestamp="1405840550435"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.controller{HomeController.java[HomeController" modifiers="1" timestamp="1404836956495"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.beans.view{ReviewViewBean.java[ReviewViewBean" modifiers="1" timestamp="1405265748330"/>
+<typeInfo handle="=youreview/src\/main\/java&lt;com.system.you.review.web.beans.view{ReviewerViewBean.java[ReviewerViewBean" modifiers="1" timestamp="1404836956573"/>
+</typeInfoHistroy>

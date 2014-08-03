@@ -1,0 +1,100 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<section>
+<c:forEach items="${initiated}" var="bean" varStatus="index">
+	<div class="row">
+		<div class="row">
+			<div class="large-2 columns ">
+				<span class="label medium-text-center radius">${bean.category.description}</span>
+			</div>
+			<div class="large-2 columns">
+				<span class="label medium-text-center radius">${bean.item.description}</span>
+			</div>
+			<div class="large-4 columns">
+				<span class="fk-operation-link">${bean.createDateTime}</span> <a
+					href="<c:url value="/Request/${bean.id}/Reviewer/Add"/>"
+					class="add_reviewer_link fk-operation-link">[Add Reviewers]</a> <a
+					href="<c:url value="/Request/${bean.id}/Close"/>"
+					class="remove_request_link fk-operation-link">[Remove]</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="small-12 columns">
+				<div class="medium-text-left">
+					<p>
+						<a href="#" class="editable-in-place" data-type="textarea"
+							data-url="http://localhost:8080/review/Request/${bean.id}/Description/Edit">${bean.description}</a>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="small-12 columns">
+				<div class="medium-text-left">
+					<span class="medium-text-right fk-padding">All Tags:</span> <span
+						class="medium-text-left label radius fk-padding"> <c:forEach
+							items="${bean.item.rating.popularTags}" var="weightTag">
+							<c:if test="${weightTag ne null}">${weightTag.tag.viewName}[${weightTag.count}]</c:if>
+						</c:forEach>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="small-12 columns">
+				<div class="medium-text-left fk-padding">
+					<span class="medium-text-right">Trusted Tags:</span> <span
+						class="medium-text-left label radius"> <c:forEach
+							items="${bean.item.connectedRating.popularTags}" var="weightTag">
+							<c:if test="${weightTag ne null}">${weightTag.tag.viewName}[${weightTag.count}]</c:if>
+						</c:forEach>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<c:forEach items="${bean.reviewers}" var="reviewer" varStatus="count">
+				<div class="row">
+					<div class="small-2 columns" style="text-align: center">
+						<img src="${reviewer.user.imageUrl}" />
+					</div>
+					<div class="small-10 columns">
+						<div class="row">
+							<div class="small-4 columns">${reviewer.user.name}</div>
+							<div class="small-4 columns">${reviewer.status}</div>
+							<div class="small-4 columns">
+								<a
+									href="<c:url value="Request/${bean.id}/Reviewer/${reviewer.id}/Remove"/>"
+									class="remove_reviewer_link fk-operation-link">Remove</a>
+							</div>
+						</div>
+						<c:if test="${not empty reviewer.reviews}">
+							<c:forEach items="${reviewer.reviews}" var="review">
+								<div class="row">
+									<div class="small-12 columns">
+										<p>${review.description}</p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="small-3 columns">
+										<c:forEach items="${review.tag.popularTags}" var="weightTag">
+											<c:if test="${weightTag ne null}">${weightTag.tag.viewName}</c:if>
+										</c:forEach>
+									</div>
+									<div class="small-3 columns end">
+										<ul class="inline-list">
+											<li><a>${review.dateTime}</a></li>
+											<li><a href="javascript:verify('${review.id}">Agree</a></li>
+										</ul>
+									</div>
+								</div>
+							</c:forEach>
+						</c:if>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+	</div>
+	<hr />
+</c:forEach>
+</section>

@@ -1,0 +1,25 @@
+package com.system.you.review.item.bean.helper.impl;
+
+import org.springframework.stereotype.Service;
+
+import com.system.you.review.category.bean.Category;
+import com.system.you.review.item.bean.helper.BeanHelper;
+import com.system.you.review.web.beans.view.CategoryViewBean;
+
+@Service
+public class CategoryBeanHelper extends BeanHelper {
+
+	public Category formToData(String categoryId){
+		Category category = new Category();
+		category.setId(categoryId);
+		return category;
+	}
+	
+	public CategoryViewBean dataToView(Category dbBean){
+		checkNulls(dbBean);
+		CategoryViewBean category = new CategoryViewBean();
+		category.setId(dbBean.getId());
+		category.setDescription(dbBean.getDescription());
+		return category;
+	}
+}

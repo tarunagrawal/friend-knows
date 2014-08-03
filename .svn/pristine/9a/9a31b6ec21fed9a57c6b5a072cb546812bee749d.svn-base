@@ -1,0 +1,131 @@
+body {
+	font-family: Helvetica, Arial, "lucida grande", tahoma, verdana, arial,
+		sans-serif;
+}
+
+.fk-date {
+	text-decoration: none;
+	font-size: 0.7rem;
+}
+
+.fk-operation-link {
+	text-decoration: none;
+	font-size: 0.8rem;
+	font-family: Helvetica, Arial, "lucida grande", tahoma, verdana, arial,
+		sans-serif;
+}
+
+.fk-operation-link:hover {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.fk-description {
+	padding: 0.25rem;
+}
+
+.fk-padding {
+	padding: 0.8rem
+}
+
+.fk-padding-except-right {
+	padding: 0.8rem;
+	padding-right: 0;
+}
+
+.fk-padding-top {
+	padding-top: 0.8rem
+}
+
+.fk-header-fill {
+	background-color: #F05252;
+}
+
+.top-bar-fill {
+	background-color: #702D2D;
+}
+
+.fk-logo-color {
+	color: white;
+	'
+}
+
+.fk-content-display {
+	padding-top: 0.8rem;
+}
+
+.fk-label {
+	font-size: 0.8rem;
+	padding: 0.25rem;
+	border: 0.1rem;
+	border-style: solid;
+	border-color: #F05252;
+	text-align: center;
+}
+
+.fk-label.fk-radius {
+	border-radius: 0.25rem;
+}
+
+.fk-request-description {
+	margin-top: 1rem;
+}
+
+.fk-margin-top {
+	margin-top: 1rem;
+}
+
+.fk-margin-bottom {
+	margin-bottom: 1rem;
+}
+
+.fk-line-height {
+	line-height: 2rem;
+}
+
+.fk-color-white {
+	color: white;
+}
+
+.fk-bold {
+	font-weight: bold;
+}
+
+.fk-review-display {
+	border-bottom: 0.1rem;
+	border-bottom-style: dotted;
+}
+
+.fk-clickable:hover {
+	cursor: pointer;
+}
+
+.fk-margin {
+	margin: 1rem;
+}
+
+.fk-bottom-border {
+	border-bottom: 0.1rem;
+	border-bottom-style: solid;
+	border-bottom-color: #DDD;
+}
+
+.fk-details {
+	/* border-left: 0.1rem;
+	border-left-style: solid;
+	border-left-color: #DDD; */
+}
+
+.fk-summary-border {
+	border-right: 0.1rem;
+	border-right-style: solid;
+	border-right-color: #DDD;
+}
+
+.fk-navigation-icon-size {
+	font-size: 2rem;
+}
+
+.fk-selected {
+	background-color: #F3EEF9;
+}

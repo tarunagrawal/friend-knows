@@ -1,0 +1,43 @@
+package com.system.you.review.request.service;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.system.you.review.Identifiable;
+import com.system.you.review.core.cache.CacheRegistry;
+import com.system.you.review.user.bean.ReviewUser;
+import com.system.you.review.web.domain.impl.InteractionContainer;
+
+public class ServiceSupport {
+
+	protected ReviewUser getCurrentlyLoggedInUser() {
+		return InteractionContainer.get().getRequestor().getUser();
+	}
+
+	public boolean alreadyExist(Identifiable entity) {
+		return !StringUtils.isBlank(entity.getId());
+	}
+
+	protected boolean isOnwer(String providerId) {
+		if (StringUtils.isNotBlank(providerId)) {
+			return getCurrentlyLoggedInUser().getProviderUserId()
+					.equalsIgnoreCase(providerId);
+		}
+		return false;
+	}
+
+	protected void triggerAddChange(Object bean) {
+		cacheRegistry.triggerAddChangeForCaches(bean);
+	}
+
+	protected void triggerDeleteChange(Object bean) {
+		cacheRegistry.triggerDeleteChangeForCaches(bean);
+	}
+
+	protected void triggerModifyChange(Object bean) {
+		cacheRegistry.triggerModifyChangeForCaches(bean);
+	}
+
+	@Autowired
+	private CacheRegistry cacheRegistry;
+}

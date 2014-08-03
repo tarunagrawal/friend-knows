@@ -1,0 +1,9 @@
+1405961627513	Copy file
+1406051700257	Extract method 'shouldTruncate'
+1406051727096	Extract method 'truncate'
+1406051780902	Rename method 'shorDescription'
+1406308664412	Copy file
+1406311006099	Extract local variable 'successViewName'
+1406311014258	Extract local variable 'errorView'
+1406311067169	Copy file
+1406347326908	Rename local variable 'responseBean'

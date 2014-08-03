@@ -1,0 +1,166 @@
+package com.system.you.review.request.bean;
+
+import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.Basic;
+import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Where;
+import org.springframework.core.style.ToStringCreator;
+
+import com.system.you.review.database.IConstants;
+import com.system.you.review.item.bean.Item;
+import com.system.you.review.user.bean.ReviewUser;
+
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Entity
+@Table(name = IConstants.ITable.INames.REVIEW_REQUEST_TABLE)
+public class Request {
+
+	@Id
+	@GenericGenerator(name = IConstants.GENERATOR_NAME, strategy = IConstants.GENERATOR_STRATEGY)
+	@GeneratedValue(generator = IConstants.GENERATOR_NAME)
+	@Column(name = IConstants.ITable.IReviewRequest.ID)
+	public String getRequestID() {
+		return requestID;
+	}
+
+	public void setRequestID(String requestID) {
+		this.requestID = requestID;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = IConstants.ITable.IReviewRequest.ITEM_ID, nullable = false)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = IConstants.ITable.IReviewRequest.REVIEWEE_ID, nullable = false)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public ReviewUser getReviewee() {
+		return reviewee;
+	}
+
+	public void setReviewee(ReviewUser reviewee) {
+		this.reviewee = reviewee;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@JoinColumn(name = IConstants.ITable.IReviewRequest.PARENT_REQ_ID, nullable = true)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public Request getParentRequest() {
+		return parentRequest;
+	}
+
+	public void setParentRequest(Request parentRequest) {
+		this.parentRequest = parentRequest;
+	}
+
+	@Enumerated(EnumType.STRING)
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	@OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+	@Fetch(FetchMode.JOIN)
+	@Where(clause = "status != 'CLOSED'")
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public Set<Reviewer> getReviewers() {
+		return reviewers;
+	}
+
+	public void setReviewers(Set<Reviewer> reviewers) {
+		this.reviewers = reviewers;
+	}
+
+	@OneToMany(mappedBy = "parentRequest", fetch = FetchType.LAZY)
+	@Fetch(FetchMode.JOIN)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public Set<Request> getChildren() {
+		return children;
+	}
+
+	public void setChildren(Set<Request> children) {
+		this.children = children;
+	}
+
+	@Basic
+	public Date getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public void setCreateDateTime(Date createDateTime) {
+		this.createDateTime = createDateTime;
+	}
+
+	@Basic
+	public Date getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(Date updateDateTime) {
+		this.updateDateTime = updateDateTime;
+	}
+
+	@Basic
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String toString() {
+		return new ToStringCreator(this)
+				.append(requestID)
+				.append(item)
+				.append(reviewee)
+				.append((parentRequest == null) ? "parentRequest=null"
+						: parentRequest).append(status).toString();
+	}
+
+	private Date createDateTime;
+	private Date updateDateTime;
+	private Item item;
+	private ReviewUser reviewee;
+	private Request parentRequest;
+	private String requestID;
+	private String description;
+	private Status status;
+	private Set<Reviewer> reviewers;
+	private Set<Request> children;
+
+	public static enum Status {
+		INITIATED, PENDING, PROPAGATED, CLOSED
+	}
+}

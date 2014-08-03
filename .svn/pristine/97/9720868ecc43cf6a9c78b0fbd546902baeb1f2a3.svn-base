@@ -1,0 +1,85 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
+<script type="text/javascript">
+</script>
+<%@ page session="false"%>
+<style>
+div.token-input-dropdown-facebook {
+	z-index: 101;
+}
+
+div.ui-dialog {
+	border-width: 2px;
+	border-color: black;
+	border-style: outset;
+}
+
+div.ui-widget-overlay {
+	background-color: white;
+}
+
+div.border {
+	border: 1px solid #8496ba;
+}
+
+textarea {
+	border: none;
+}
+
+.editable-click {
+	border-bottom: none;
+}
+</style>
+<div class="wall">
+	<c:forEach items="${initiated}" var="bean" varStatus="index">
+		<c:if test="${bean.parentRequest eq null}">
+			<%
+				request.setAttribute("onlyverified", new Boolean(false));
+			%>
+			<c:set var="bean" value="${bean}" scope="request" />
+			<jsp:include page="requestPrint.jsp"></jsp:include>
+		</c:if>
+	</c:forEach>
+</div>
+<div id="model-dialog" title="Reply">
+	<form action="/" method="post" id="model-dialog-form">
+		<fieldset>
+			<table>
+				<tr>
+					<td>Reviewer Id</td>
+					<td><input type="hidden" name="reviewerRequestId" /></td>
+				</tr>
+				<tr>
+					<td>Review</td>
+					<td><input type="text" name="reviewDescription" /></td>
+				</tr>
+
+				<tr>
+					<td>Rating</td>
+					<td><input type="text" name="rating" /></td>
+				</tr>
+			</table>
+		</fieldset>
+	</form>
+</div>
+
+<div id="model-dialog-request-description-edit">
+	<form action="/" method="post"
+		id="model-dialog-request-description-edit-form">
+		<table>
+			<tr>
+				<td align="left" colspan="2"><input type="hidden"
+					name="requestId" /></td>
+			</tr>
+			<tr>
+				<td width="30%" align="right">Description:</td>
+				<td align="left">
+					<div class="border">
+						<textarea cols="44" rows="3" name="description"></textarea>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

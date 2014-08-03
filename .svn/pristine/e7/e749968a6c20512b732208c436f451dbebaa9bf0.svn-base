@@ -1,0 +1,194 @@
+package com.system.you.review.web.controller;
+
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.system.you.review.core.exception.UIException;
+import com.system.you.review.request.exception.CreateRequestException;
+import com.system.you.review.request.exception.EditDescriptionException;
+import com.system.you.review.request.exception.RequestCloseException;
+import com.system.you.review.request.exception.RequestForwardException;
+import com.system.you.review.web.URLGenerator;
+import com.system.you.review.web.beans.form.RequestFormBean;
+import com.system.you.review.web.beans.form.ReviewForwardFormBean;
+import com.system.you.review.web.beans.response.RequestContext;
+import com.system.you.review.web.beans.view.RequestViewBean;
+import com.system.you.review.web.beans.view.ReviewerViewBean;
+import com.system.you.review.web.controller.helper.AddReviewerHelper;
+import com.system.you.review.web.controller.helper.CloseRequestHelper;
+import com.system.you.review.web.controller.helper.EditRequestDescriptionHelper;
+import com.system.you.review.web.controller.helper.RemoveReviewerHelper;
+import com.system.you.review.web.controller.helper.RequestCreateHelper;
+import com.system.you.review.web.controller.helper.RequestForwardHelper;
+import com.system.you.review.web.reviewer.exception.AddReviewerException;
+import com.system.you.review.web.reviewer.exception.RemoveReviewerException;
+
+@Controller
+@RequestMapping(value = "/Request/")
+public class RequestController extends ControllerSupport {
+
+	@RequestMapping(value = "/New")
+	public String form(Model model) {
+		RequestContext<RequestFormBean, String> responseBean = requestCreateHelper
+				.form();
+		String formActionURL = URLGenerator.getURL("/Request", "/New/Submit");
+		model.addAttribute(FORM_BEAN, responseBean.getFormBean());
+		model.addAttribute("formActionURL", formActionURL);
+		return defaultView();
+	}
+
+	@RequestMapping(value = "/New/Submit")
+	public String create(Model model, RequestFormBean formBean)
+			throws CreateRequestException {
+		RequestContext<RequestFormBean, String> responseBean = requestCreateHelper
+				.createRequest(formBean);
+		model.addAttribute(FORM_BEAN, responseBean.getFormBean());
+		if (responseBean.containsMessage()) {
+			model.addAttribute(MESSAGES, responseBean.getMessages());
+			throw new CreateRequestException(model, errorView());
+		}
+		return successView();
+	}
+
+	@RequestMapping(value = "/{requestId}/Close")
+	public ModelAndView close(@PathVariable String requestId, Model model)
+			throws RequestCloseException {
+		RequestContext<String, String> responseBean = closeRequestHelper
+				.close(requestId);
+		model.addAttribute(FORM_BEAN, responseBean.getFormBean());
+		if (responseBean.containsMessage()) {
+			model.addAttribute(MESSAGES, responseBean.getMessages());
+			throw new RequestCloseException(model, JSON);
+		}
+		return new ModelAndView(JSON, model.asMap());
+	}
+
+	@RequestMapping(value = "/{requestId}/Reviewer/Add")
+	public String addReviewersForm(@PathVariable String requestId, Model model) {
+		model.addAttribute("requestId", requestId);
+		return "addReviewer";
+	}
+
+	@RequestMapping(value = "/{requestId}/Reviewer/Add/Submit", method = RequestMethod.POST)
+	public ModelAndView addReviewers(@RequestParam String requestId,
+			@RequestParam String friends, Model model)
+			throws AddReviewerException {
+		RequestContext<String[], Set<ReviewerViewBean>> responseBean = addReviewerHelper
+				.addReviewers(requestId, friends);
+		model.addAttribute(FORM_BEAN, responseBean.getViewBean());
+		if (responseBean.containsMessage()) {
+			model.addAttribute(MESSAGES, responseBean.getMessages());
+			throw new AddReviewerException(model, JSON);
+		}
+		model.addAttribute(VIEW_BEAN, responseBean.getViewBean());
+		return new ModelAndView(JSON, model.asMap());
+	}
+
+	@RequestMapping(value = "/{requestId}/Reviewer/{reviewerId}/Remove")
+	public ModelAndView removeReviewer(@PathVariable String requestId,
+			@PathVariable String reviewerId, Model model)
+			throws RemoveReviewerException {
+		RequestContext<String[], String> responseBean = removeReviewerHelper
+				.removeReviewer(requestId, reviewerId);
+		model.addAttribute(FORM_BEAN, responseBean.getFormBean());
+		// if error throw exception
+		if (responseBean.containsMessage()) {
+			model.addAttribute(MESSAGES, responseBean.getMessages());
+			throw new RemoveReviewerException(model, "json");
+		}
+		return new ModelAndView("json", model.asMap());
+	}
+
+	@RequestMapping(value = "/{requestId}/Description/Edit", method = RequestMethod.POST)
+	public ModelAndView editDescription(@PathVariable String requestId,
+			@RequestParam(value = "value") String description, Model model)
+			throws UIException {
+		RequestContext<String[], String> responseBean = editRequestDescriptionHelper
+				.editDescription(requestId, description);
+		model.addAttribute(FORM_BEAN, responseBean.getFormBean());
+		if (responseBean.containsMessage()) {
+			model.addAttribute(MESSAGES, responseBean.getMessages());
+			throw new EditDescriptionException(model, "json");
+		}
+		return new ModelAndView("json", model.asMap());
+	}
+
+	@RequestMapping(value = "/{requestId}/Reviewer/{reviewerId}/Forward/New")
+	public String forwardRequestForm(@PathVariable String requestId,
+			@PathVariable String reviewerId, Model model) {
+		model.addAttribute("requestId", applyXXFilter(requestId));
+		model.addAttribute("reviewerId", applyXXFilter(reviewerId));
+		return "forward";
+	}
+
+	@RequestMapping(value = "/{requestId}/Reviewer/{reviewerId}/Forward/New/Submit")
+	public ModelAndView forwardRequestSubmit(ReviewForwardFormBean formBean,
+			Model model) throws UIException {
+		RequestContext<ReviewForwardFormBean, RequestViewBean> requestContext = forwardRequestHelper
+				.submit(formBean);
+		String viewName = "forward";
+		if (requestContext.containsMessage()) {
+			model.addAttribute(FORM_BEAN, requestContext.getFormBean());
+			model.addAttribute(MESSAGES, requestContext.getMessages());
+			throw new RequestForwardException(model, viewName);
+		}
+		return new ModelAndView(viewName, model.asMap());
+	}
+
+	@ExceptionHandler(value = { CreateRequestException.class,
+			RequestCloseException.class, RemoveReviewerException.class,
+			AddReviewerException.class, EditDescriptionException.class,
+			RequestForwardException.class })
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ModelAndView handleException(UIException ex) {
+		ModelAndView modelAndView = new ModelAndView(ex.getViewName());
+		modelAndView.addAllObjects(ex.getModel().asMap());
+		return modelAndView;
+	}
+
+	private String errorView() {
+		return defaultView();
+	}
+
+	private String successView() {
+		return "redirect:/profile";
+	}
+
+	private String defaultView() {
+		return "request/review";
+	}
+
+	@Autowired
+	private RequestCreateHelper requestCreateHelper;
+
+	@Autowired
+	private CloseRequestHelper closeRequestHelper;
+
+	@Autowired
+	private RemoveReviewerHelper removeReviewerHelper;
+
+	@Autowired
+	private AddReviewerHelper addReviewerHelper;
+
+	@Autowired
+	private RequestForwardHelper forwardRequestHelper;
+
+	@Autowired
+	private EditRequestDescriptionHelper editRequestDescriptionHelper;
+
+	private static Logger logger = LoggerFactory
+			.getLogger(RequestController.class);
+}

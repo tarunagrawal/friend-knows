@@ -1,0 +1,205 @@
+package com.system.you.review.web.controller;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.system.you.review.core.constraint.Constraint;
+import com.system.you.review.core.exception.UIException;
+import com.system.you.review.core.helper.CollectionHelper;
+import com.system.you.review.item.bean.helper.impl.RequestBeanHelper;
+import com.system.you.review.request.bean.Request;
+import com.system.you.review.request.bean.Reviewer;
+import com.system.you.review.request.exception.RequestForwardException;
+import com.system.you.review.request.service.RequestService;
+import com.system.you.review.request.service.ReviewerService;
+import com.system.you.review.web.beans.form.ReviewForwardFormBean;
+import com.system.you.review.web.beans.response.ResponseBean;
+
+@Controller
+@RequestMapping(value = "/request")
+public class RequestForwardController extends ControllerSupport {
+
+	@RequestMapping(value = "/{reviewerRequestId}/forward/form")
+	public String form(@PathVariable String reviewerRequestId, Model model) {
+		model.addAttribute("reviewerRequestId", reviewerRequestId);
+		return "forward";
+	}
+
+	@RequestMapping(value = "/forward")
+	public ModelAndView submit(ReviewForwardFormBean formBean, Model model)
+			throws UIException {
+		ResponseBean<ReviewForwardFormBean> respBean = validateFormBean(formBean);
+		if (!respBean.containsError()) {
+			Request forwardRequest = null;
+			try {
+				forwardRequest = requestService.forwardRequest(formBean);
+				if(forwardRequest != null){
+					model.addAttribute("forwardRequest",
+							requestBeanHelper.dataToView(forwardRequest));
+				}
+			} catch (Exception ex) {
+				respBean.addMessage("page", "please try later");
+			}
+		}
+		if (respBean.containsError()) {
+			model.addAttribute("messages", respBean.getMessages());
+			throw new RequestForwardException(model, "json");
+		}
+
+		return new ModelAndView("json", model.asMap());
+	}
+
+	@ExceptionHandler(value = RequestForwardException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ModelAndView handleException(UIException ex) {
+		ModelAndView modelAndView = new ModelAndView(ex.getViewName());
+		modelAndView.addAllObjects(ex.getModel().asMap());
+		return modelAndView;
+	}
+
+	private void validateForwardChainDepth(
+			ResponseBean<ReviewForwardFormBean> responseBean) {
+		try {
+			Reviewer reviewer = reviewerService.getReviewer(responseBean
+					.getBean().getReviewerRequestId(), true);
+			if (reviewer != null) {
+				Request request = reviewer.getRequest();
+				int forwardChainDepth = depth(request);
+				if (forwardChainDepth >= 3) {
+					Map<String, String> messages = new HashMap<String, String>();
+					messages.put("page", "Can not be forwarded to user");
+					responseBean.setMessages(messages);
+				}
+			} else {
+				Map<String, String> messages = new HashMap<String, String>();
+				messages.put("page", "security issue");
+				responseBean.setMessages(messages);
+			}
+		} catch (Exception ex) {
+			responseBean.addMessage("page", "please try later");
+		}
+	}
+
+	private void validateDuplicateInChain(
+			ResponseBean<ReviewForwardFormBean> responseBean) {
+		try {
+			Reviewer reviewer = reviewerService.getReviewer(responseBean
+					.getBean().getReviewerRequestId(), true);
+			if (reviewer != null) {
+				Request request = reviewer.getRequest();
+				Request root = root(request);
+				traverseAndCheckDuplicate(root, responseBean);
+			} else {
+				Map<String, String> messages = new HashMap<String, String>();
+				messages.put("page", "Security Exception");
+				responseBean.setMessages(messages);
+			}
+		} catch (Exception e) {
+			responseBean.addMessage("page", "please try later");
+		}
+	}
+
+	private void traverseAndCheckDuplicate(Request root,
+			ResponseBean<ReviewForwardFormBean> responseBean) {
+		Set<String> friends = friendsInSet(responseBean.getBean().getFriends());
+		if (checkDuplicate(friends, root)) {
+			Map<String, String> messages = new HashMap<String, String>();
+			messages.put("page", "Duplicate friend");
+			responseBean.setMessages(messages);
+		}
+	}
+
+	private boolean checkDuplicate(Set<String> friends, Request request) {
+		boolean duplicate = false;
+		// Visit all reviewers for this request.
+		for (Reviewer reviewer : request.getReviewers()) {
+			String providerId = reviewer.getReviewerID();
+			duplicate = friends.contains(providerId);
+			if (duplicate) {
+				break;
+			}
+		}
+		if (!duplicate) {
+			// Visit all child request for this request - in case if any
+			// reviewer forwarded
+			Set<Request> childern = request.getChildren();
+			if (childern != null && childern.size() > 0) {
+				for (Request child : childern) {
+					duplicate = checkDuplicate(friends, child);
+					if (duplicate) {
+						break;
+					}
+				}
+			}
+		}
+		return duplicate;
+	}
+
+	private Set<String> friendsInSet(String friends) {
+		Set<String> friendSet = new HashSet<String>();
+		String[] args = friends.split(",");
+		for (String friend : args) {
+			friendSet.add(friend.trim());
+		}
+		return friendSet;
+	}
+
+	private Request root(Request request) {
+		Request root = null;
+		while (request != null) {
+			root = request;
+			request = request.getParentRequest();
+		}
+
+		return root;
+	}
+
+	private int depth(Request request) {
+		int depth = 0;
+		while (request != null) {
+			++depth;
+			request = request.getParentRequest();
+		}
+
+		return depth;
+	}
+
+	private ResponseBean<ReviewForwardFormBean> validateFormBean(
+			ReviewForwardFormBean formBean) {
+		ResponseBean<ReviewForwardFormBean> respBean = new ResponseBean<ReviewForwardFormBean>(
+				formBean);
+		Collection<Constraint> errors = validate(formBean);
+		if (!CollectionHelper.isEmpty(errors)) {
+			respBean.setMessages(errorMap(errors));
+		}
+
+		if (!respBean.containsError()) {
+			// VALIDATE DEPTH
+			validateForwardChainDepth(respBean);
+		}
+		
+		return respBean;
+	}
+
+	@Autowired
+	private RequestService requestService;
+
+	@Autowired
+	private ReviewerService reviewerService;
+
+	@Autowired
+	private RequestBeanHelper requestBeanHelper;
+}

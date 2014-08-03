@@ -1,0 +1,105 @@
+<!doctype html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<%@ page session="false"%>
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>friendknows.com</title>
+<link rel="stylesheet"
+	href="<c:url value="/resources/css/foundation.css" />" />
+<link rel="stylesheet" href="<c:url value="/resources/page.css" />"
+	type="text/css" media="screen" />
+<link rel="stylesheet" href="<c:url value="/resources/form.css" />"
+	type="text/css" media="screen" />
+<link rel="stylesheet"
+	href="<c:url value="/resources/messages/messages.css" />"
+	type="text/css" media="screen" />
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet"
+	href="<c:url value="/resources/multiselect/token-input-facebook.css" />"
+	type="text/css" media="screen" />
+<link rel="stylesheet"
+	href="<c:url value="/resources/multiselect/token-input-mac.css" />"
+	type="text/css" media="screen" />
+<link rel="stylesheet"
+	href="<c:url value="/resources/multiselect/token-input.css" />"
+	type="text/css" media="screen" />
+<link
+	href="http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/css/jqueryui-editable.css"
+	rel="stylesheet" />
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script
+	src="<c:url value="/resources/multiselect/jquery.tokeninput.js" />"></script>
+<script
+	src="http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/js/jqueryui-editable.min.js"></script>
+<script src="<c:url value="/resources/application.js" />"></script>
+<script src="<c:url value="/resources/js/vendor/modernizr.js" />"></script>
+<%-- <script src="<c:url value="/resources/js/vendor/jquery.js" /> "></script>
+ --%>
+<script src="<c:url value="/resources/js/foundation.min.js"/> "></script>
+
+<style>
+.ui-autocomplete-category {
+	font-weight: bold;
+	padding: .2em .4em;
+	margin: .8em 0 .2em;
+	line-height: 1.5;
+}
+
+#header {
+	float: right;
+	width: 100%;
+	position: relative;
+}
+</style>
+<script>
+	$(document).foundation();
+</script>
+</head>
+<body>
+
+	<section>
+		<div class="row">
+			<div class="large-12 columns">
+				<nav class="top-bar" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h4>
+								<a href="<c:url value="/"/>"> FriendKnows.com</a>
+							</h4>
+						</li>
+					</ul>
+					<ul class="right">
+						<li class="active"><a href="#">Welcome !</a></li>
+						<li class="active has-dropdown"><a href="#"><h5>Welcome,
+									Tarun</h5> </a>
+							<ul class="dropdown">
+								<li><a href="<c:url value="/signout" />">logout</a></li>
+							</ul></li>
+					</ul>
+					<section class="top-bar-section"></section>
+				</nav>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="row">
+			<div class="large-3 columns ">
+				<div class="panel">
+					<tiles:insertTemplate template="menu.jsp" />
+				</div>
+			</div>
+			<div class="large-9 columns">
+				<tiles:insertAttribute name="content" />
+			</div>
+			<aside class="large-3 columns hide-for-small"></aside>
+		</div>
+	</section>
+</body>
+</html>
+

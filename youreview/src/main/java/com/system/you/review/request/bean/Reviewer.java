@@ -1,0 +1,172 @@
+package com.system.you.review.request.bean;
+
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.Basic;
+import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.core.style.ToStringCreator;
+
+import com.system.you.review.ApplicationEntity;
+import com.system.you.review.database.IConstants;
+
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Entity
+@Table(name = IConstants.ITable.INames.REVIEWER_REQUEST_TABLE)
+public class Reviewer implements ApplicationEntity, Comparator<Reviewer> {
+
+	@Id
+	@GenericGenerator(name = IConstants.GENERATOR_NAME, strategy = IConstants.GENERATOR_STRATEGY)
+	@GeneratedValue(generator = IConstants.GENERATOR_NAME)
+	@Column(name = IConstants.ITable.IReviewerRequest.ID)
+	public String getRequestID() {
+		return requestID;
+	}
+
+	public void setRequestID(String requestID) {
+		this.requestID = requestID;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = IConstants.ITable.IReviewerRequest.REVIEW_REQUEST_ID, nullable = false)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public Request getRequest() {
+		return request;
+	}
+
+	public void setRequest(Request reviewRequest) {
+		this.request = reviewRequest;
+	}
+
+	@Basic
+	public String getReviewerID() {
+		return reviewerID;
+	}
+
+	public void setReviewerID(String reviewerID) {
+		this.reviewerID = reviewerID;
+	}
+
+	@Enumerated(EnumType.STRING)
+	public Channel getChannel() {
+		return channel;
+	}
+
+	public void setChannel(Channel channel) {
+		this.channel = channel;
+	}
+
+	@Enumerated(EnumType.STRING)
+	public Request.Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Request.Status status) {
+		this.status = status;
+	}
+
+	@Basic
+	public Date getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public void setCreateDateTime(Date createDateTime) {
+		this.createDateTime = createDateTime;
+	}
+
+	@Basic
+	public Date getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(Date updateDateTime) {
+		this.updateDateTime = updateDateTime;
+	}
+
+	@OneToMany(mappedBy = "reviewerRequestId", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+	@Fetch(FetchMode.JOIN)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public Set<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(Set<Review> reviews) {
+		this.reviews = reviews;
+	}
+
+	@Override
+	@Transient
+	public String getId() {
+		return requestID;
+	}
+
+	@Override
+	@Transient
+	public String getDescription() {
+		return status.toString();
+	}
+
+	@Override
+	@Transient
+	public String getOwnerId() {
+		return reviewerID;
+	}
+
+	@Override
+	@Transient
+	public String getName() {
+		return this.getClass().getName();
+	}
+
+	@Override
+	@Transient
+	public int compare(Reviewer o1, Reviewer o2) {
+		return o2.getUpdateDateTime().compareTo(o1.getUpdateDateTime());
+	}
+
+	public String toString() {
+		return new ToStringCreator(this).append(requestID).append(request).append(reviewerID)
+				.append(channel).append(status).toString();
+	}
+
+	private String requestID;
+
+	private Request request;
+
+	private String reviewerID;
+
+	private Channel channel;
+
+	private Request.Status status;
+
+	private Set<Review> reviews;
+
+	private Date createDateTime;
+
+	private Date updateDateTime;
+
+	public static enum Channel {
+		MAIL, SMS
+	}
+}

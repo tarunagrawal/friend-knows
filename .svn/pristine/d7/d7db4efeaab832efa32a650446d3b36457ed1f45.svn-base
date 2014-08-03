@@ -1,0 +1,147 @@
+package com.system.you.review.web.reviewer;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.system.you.review.core.exception.UIException;
+import com.system.you.review.core.service.exception.AttemptToRemoveOnlyReviewerException;
+import com.system.you.review.core.service.exception.ReviewerAlreadyExist;
+import com.system.you.review.item.bean.helper.impl.ReviewerBeanHelper;
+import com.system.you.review.request.bean.Request;
+import com.system.you.review.request.bean.Reviewer;
+import com.system.you.review.request.service.RequestService;
+import com.system.you.review.web.beans.response.ResponseBean;
+import com.system.you.review.web.beans.view.ReviewerViewBean;
+import com.system.you.review.web.controller.ControllerSupport;
+import com.system.you.review.web.reviewer.exception.AddReviewerException;
+import com.system.you.review.web.reviewer.exception.RemoveReviewerException;
+
+@Controller
+@RequestMapping(value = "/reviewer")
+public class ReviewerController extends ControllerSupport {
+
+	@RequestMapping(value = "/remove/{requestId}/{reviewerId}")
+	public ModelAndView removeReviewer(@PathVariable String requestId,
+			@PathVariable String reviewerId, Model model)
+			throws RemoveReviewerException {
+		ResponseBean<String> responseBean = new ResponseBean<String>("");
+		// form validation
+		validateInputForBlank(requestId, reviewerId, responseBean);
+		if (!responseBean.containsError()) {
+			try {
+				Request request = requestService.get(requestId);
+				if (request != null) {
+					try {
+						requestService.removeReviewer(requestId, reviewerId);
+					} catch (AttemptToRemoveOnlyReviewerException ex) {
+						responseBean
+								.addMessage("page",
+										"Only single reviewer left, can not be removed");
+					} catch (Exception ex) {
+						responseBean.addMessage("page", "please try later");
+					}
+				}
+			} catch (Exception ex) {
+				responseBean.addMessage("page", "please try later");
+			}
+		}
+		// if error throw exception
+		if (responseBean.containsError()) {
+			model.addAttribute("messages", responseBean.getMessages());
+			throw new RemoveReviewerException(model, "json");
+		}
+
+		ModelAndView modelAndView = new ModelAndView("json");
+		modelAndView.addAllObjects(model.asMap());
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/add/{requestId}")
+	public String addReviewers(@PathVariable String requestId, Model model) {
+		model.addAttribute("requestId", requestId);
+		return "addReviewer";
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public ModelAndView addReviewers(@RequestParam String requestId,
+			@RequestParam String friends, Model model)
+			throws AddReviewerException {
+
+		Set<ReviewerViewBean> reviewers = new HashSet<ReviewerViewBean>();
+		ResponseBean<Set<ReviewerViewBean>> responseBean = new ResponseBean<Set<ReviewerViewBean>>(
+				reviewers);
+		validateInputForBlank(requestId, friends, responseBean);
+		if (!responseBean.containsError()) {
+			try {
+				Collection<Reviewer> newReviewers = requestService
+						.addReviewers(requestId, friends);
+				if (newReviewers != null && !newReviewers.isEmpty()) {
+					// create view beans
+					for (Reviewer reviewer : newReviewers) {
+						reviewers.add(reviewerBeanHelper.dataToView(reviewer));
+					}
+					model.addAttribute("reviewers", reviewers);
+				}
+			} catch (ReviewerAlreadyExist ex) {
+				responseBean.addMessage("page", getRequestor()
+						.getFacebookFriend(ex.getProviderId()).getName()
+						+ "already exist");
+			} catch (Exception ex) {
+				responseBean.addMessage("page",
+						"request can not be served, please try later");
+			}
+		}
+
+		if (responseBean.containsError()) {
+			model.addAttribute("messages", responseBean.getMessages());
+			throw new AddReviewerException(model, "json");
+		}
+		ModelAndView modelAndView = new ModelAndView("json");
+		modelAndView.addAllObjects(model.asMap());
+		return modelAndView;
+	}
+
+	@ExceptionHandler(value = { RemoveReviewerException.class,
+			AddReviewerException.class })
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ModelAndView handleException(UIException ex) {
+		return new ModelAndView(ex.getViewName(), ex.getModel().asMap());
+	}
+
+	private void validateInputForBlank(String requestId, String friends,
+			ResponseBean<?> responseBean) {
+		// validate input for null/blank check
+		if (StringUtils.isBlank(requestId)) {
+			responseBean.addMessage("request", "request is missing");
+		}
+		// validate input for null/blank check
+		if (StringUtils.isBlank(friends)) {
+			responseBean.addMessage("friends", "friend(s) are missing");
+		}
+	}
+
+	@Autowired
+	private RequestService requestService;
+
+	@Autowired
+	private ReviewerBeanHelper reviewerBeanHelper;
+
+	private static Logger log = LoggerFactory
+			.getLogger(ReviewerController.class);
+}

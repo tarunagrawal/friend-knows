@@ -1,0 +1,44 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
+<%@ page session="false"%>
+<style>
+div.token-input-dropdown-facebook {
+	z-index: 101;
+}
+
+div.ui-dialog {
+	border-width: 2px;
+	border-color: black;
+	border-style: outset;
+}
+
+div.ui-widget-overlay {
+	background-color: white;
+}
+
+div.border {
+	border: 1px solid #8496ba;
+}
+
+textarea {
+	border: none;
+}
+
+.editable-click {
+	border-bottom: none;
+}
+</style>
+<p>
+	Hello,
+	<c:out value="${profile.firstName}" />
+	!
+</p>
+
+<div class="wall">
+	<c:forEach items="${pending}" var="bean" varStatus="index">
+		<c:set var="bean" value="${bean}" scope="request" />
+		<jsp:include page="forwardRequest.jsp"></jsp:include>
+	</c:forEach>
+</div>
+

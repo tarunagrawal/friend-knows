@@ -1,0 +1,77 @@
+package com.system.you.review.web.request.controller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.system.you.review.core.exception.UIException;
+import com.system.you.review.request.bean.Request;
+import com.system.you.review.request.exception.EditDescriptionException;
+import com.system.you.review.request.service.RequestService;
+import com.system.you.review.web.beans.response.ResponseBean;
+import com.system.you.review.web.controller.ControllerSupport;
+
+@Controller
+@RequestMapping(value = "request/description")
+public class RequestDescriptionController extends ControllerSupport {
+
+	@RequestMapping(value = "/edit/{requestId}", method = RequestMethod.POST)
+	public ModelAndView editDescription(@PathVariable String requestId,
+			@RequestParam(value = "value") String description, Model model)
+			throws UIException {
+		ResponseBean<String> responseBean = validateValues(requestId,
+				description);
+		if (!responseBean.containsError()) {
+			Request request = null;
+			try {
+				request = requestService
+						.editDescription(requestId, description);
+				if (request != null) {
+					model.addAttribute("success", "done");
+				}
+			} catch (Exception ex) {
+				responseBean.addMessage("page",
+						"erorr occurred, please try later");
+			}
+		}
+
+		if (responseBean.containsError()) {
+			model.addAttribute("messages", responseBean.getMessages());
+			throw new EditDescriptionException(model, "json");
+		}
+		return new ModelAndView("json", model.asMap());
+	}
+
+	@ExceptionHandler(value = EditDescriptionException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ModelAndView handleEditDescriptionException(
+			EditDescriptionException ex) {
+		return new ModelAndView(ex.getViewName(), ex.getModel().asMap());
+	}
+
+	private ResponseBean<String> validateValues(String requestId,
+			String description) {
+		ResponseBean<String> response = new ResponseBean<String>("");
+		if (StringUtils.isBlank(requestId) || StringUtils.isBlank(description)) {
+			Map<String, String> errors = new HashMap<String, String>();
+			errors.put("page", "missing fields");
+			response.setMessages(errors);
+		}
+		return response;
+	}
+
+	@Autowired
+	private RequestService requestService;
+}

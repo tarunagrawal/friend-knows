@@ -1,0 +1,59 @@
+package com.system.you.review.category.bean;
+
+import javax.persistence.Basic;
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+import org.springframework.core.style.ToStringCreator;
+
+import com.system.you.review.database.IConstants;
+
+@Indexed
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Entity
+@Table(name = IConstants.ITable.INames.CATEGORY_TABLE)
+public class Category {
+
+	@Id
+	@GenericGenerator(name = IConstants.GENERATOR_NAME, strategy = IConstants.GENERATOR_STRATEGY)
+	@GeneratedValue(generator = IConstants.GENERATOR_NAME)
+	@Column(name = IConstants.ITable.ICategory.ID)
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	@Basic
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String toString() {
+		return new ToStringCreator(this).append(id).append("").toString();
+	}
+
+	private String id;
+
+	@Field(analyze = Analyze.YES, index = Index.YES, store = Store.NO)
+	private String description;
+}

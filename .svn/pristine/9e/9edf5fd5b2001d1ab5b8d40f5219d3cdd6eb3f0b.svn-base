@@ -1,0 +1,328 @@
+package com.system.you.review.request.service.impl;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.system.you.review.core.service.exception.AttemptToRemoveOnlyReviewerException;
+import com.system.you.review.core.service.exception.ReviewerAlreadyExist;
+import com.system.you.review.core.service.exception.ServiceException;
+import com.system.you.review.item.bean.Item;
+import com.system.you.review.item.bean.helper.impl.RequestBeanHelper;
+import com.system.you.review.item.bean.helper.impl.ReviewerBeanHelper;
+import com.system.you.review.item.service.ItemService;
+import com.system.you.review.request.bean.Request;
+import com.system.you.review.request.bean.Request.Status;
+import com.system.you.review.request.bean.Reviewer;
+import com.system.you.review.request.dao.ExternalReviewerDAO;
+import com.system.you.review.request.dao.RequestDAO;
+import com.system.you.review.request.dao.ReviewerDAO;
+import com.system.you.review.request.service.RequestService;
+import com.system.you.review.request.service.ServiceSupport;
+import com.system.you.review.user.bean.ReviewUser;
+import com.system.you.review.user.service.ReviewUserService;
+import com.system.you.review.web.beans.form.RequestFormBean;
+import com.system.you.review.web.beans.form.ReviewForwardFormBean;
+import com.system.you.review.web.beans.form.ReviewerFormBean;
+
+@Service
+public class RequestServiceImpl extends ServiceSupport implements
+		RequestService {
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Request> getAllRequestForUser(ReviewUser user)
+			throws ServiceException {
+		try {
+			return requestDAO.get(user);
+		} catch (Exception ex) {
+			logErrorAndThrowException(
+					"Error occured while retrieving requests of user "
+							+ user.getName(), ex);
+		}
+		return null;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public Request create(RequestFormBean formBean) throws ServiceException {
+		Request dbBean = null;
+		try {
+			dbBean = requestBeanHelper.formToData(formBean);
+			create(dbBean);
+		} catch (Exception ex) {
+			logErrorAndThrowException("error occured while creating request",
+					ex);
+		}
+		return dbBean;
+	}
+
+	private void logErrorAndThrowException(String message, Exception ex)
+			throws ServiceException {
+		logger.error(message, ex);
+		if (ex instanceof ServiceException) {
+			throw (ServiceException) ex;
+		}
+
+		throw new ServiceException(message, ex);
+	}
+
+	public Request create(Request dbBean) {
+		Item item = dbBean.getItem();
+		if (!alreadyExist(item)) {
+			itemService.createItem(item);
+		}
+		requestDAO.save(dbBean);
+		Collection<Reviewer> reviewers = dbBean.getReviewers();
+		for (Reviewer reviewer : reviewers) {
+			reviewer.setRequest(dbBean);
+			reviewerRequestDAO.addReviewer(reviewer);
+		}
+		return dbBean;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public Request forwardRequest(ReviewForwardFormBean formBean)
+			throws ServiceException {
+		String reviewerRequestId = formBean.getReviewerRequestId();
+		try {
+			Reviewer reviewerRequest = reviewerRequestDAO
+					.getReviewer(reviewerRequestId);
+			if (reviewerRequest != null) {
+				boolean onwer = isOnwer(reviewerRequest.getReviewerID());
+				if (onwer) {
+					Request parentRequest = reviewerRequest.getRequest();
+					Request dbBean = propagatedRequest(
+							getCurrentlyLoggedInUser(), parentRequest);
+					if (dbBean == null) {
+						// create a new forwarded request
+						RequestFormBean reqFromBean = createRequestFormBean(
+								formBean, parentRequest);
+						dbBean = requestBeanHelper.formToData(reqFromBean);
+						dbBean.setParentRequest(parentRequest);
+						dbBean = create(dbBean);
+						if (dbBean != null) {
+							reviewerRequest.setStatus(Status.PROPAGATED);
+							reviewerRequestDAO.update(reviewerRequest);
+						}
+						return dbBean;
+					}
+					onwer = isOnwer(dbBean.getReviewee().getProviderUserId());
+					if (onwer) {
+						// otherwise add reviewers to existing request
+						Collection<Reviewer> reviewers = addReviewers(
+								dbBean.getRequestID(), formBean.getFriends());
+						// If collection is empty that means reviewers was not
+						// added.
+						if (reviewers == null || reviewers.isEmpty()) {
+							dbBean = null;
+						}
+					}
+					return dbBean;
+				}
+			}
+		} catch (Exception ex) {
+			logErrorAndThrowException(
+					"error occured while forwarding request ", ex);
+		}
+		return null;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Request propagatedRequest(ReviewUser user, Request request) {
+		return requestDAO.get(user, request);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public boolean close(String requestId) {
+		boolean closed = false;
+		Request request = requestDAO.get(requestId);
+		if (request != null) {
+			boolean isOnwer = isOnwer(request.getReviewee().getProviderUserId());
+			if (isOnwer) {
+				if (requestDAO.close(requestId)) {
+					for (Reviewer reviewer : request.getReviewers()) {
+						reviewerRequestDAO.close(reviewer.getRequestID());
+					}
+					Set<Request> children = request.getChildren();
+					if (children != null && children.size() > 0) {
+						for (Request child : children) {
+							close(child.getRequestID());
+						}
+					}
+					closed = true;
+				}
+			}
+		}
+		return closed;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public Reviewer removeReviewer(String requestId, String reviewerId)
+			throws ServiceException {
+
+		validateLastReviewer(requestId);
+		try {
+			Reviewer reviewer = reviewerRequestDAO.getReviewer(reviewerId);
+			if (reviewer != null) {
+				Request request = reviewer.getRequest();
+				boolean isOnwer = isOnwer(request.getReviewee()
+						.getProviderUserId());
+				if (isOnwer) {
+					if (request.getRequestID().equals(requestId)) {
+						reviewer = reviewerRequestDAO.close(reviewerId);
+						if (reviewer != null) {
+							request.setUpdateDateTime(new Date());
+							requestDAO.save(request);
+							return reviewer;
+						}
+					}
+				}
+			}
+		} catch (Exception ex) {
+			logErrorAndThrowException("error while removing reviewer "
+					+ reviewerId + " for request " + requestId, ex);
+		}
+		return null;
+	}
+
+	private void validateLastReviewer(String requestId)
+			throws AttemptToRemoveOnlyReviewerException, ServiceException {
+		int totalReviewer = 0;
+		try {
+			totalReviewer = reviewerRequestDAO.getReviewerCount(requestId);
+		} catch (Exception ex) {
+			logErrorAndThrowException(
+					"error while retrieving count for reviewers for request "
+							+ requestId, ex);
+		}
+		if (totalReviewer == 1) {
+			throw new AttemptToRemoveOnlyReviewerException(
+					"attempt to remove only existing reviewer", null);
+		}
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public Request get(String requestId) {
+		return requestDAO.get(requestId);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public Collection<Reviewer> addReviewers(String requestId, String reviewers)
+			throws ServiceException, ReviewerAlreadyExist {
+		try {
+			Request request = get(requestId);
+			if (request != null) {
+				boolean isOnwer = isOnwer(request.getReviewee()
+						.getProviderUserId());
+				if (isOnwer) {
+					Collection<ReviewerFormBean> formBeans = reviewerBeanHelper
+							.stringToForms(reviewers);
+					validateDuplicate(requestId, formBeans);
+					try {
+						Collection<Reviewer> reviewerDBs = reviewerBeanHelper
+								.formToData(formBeans);
+						for (Reviewer reviewer : reviewerDBs) {
+							reviewer.setRequest(request);
+							reviewerRequestDAO.addReviewer(reviewer);
+							request.getReviewers().add(reviewer);
+						}
+						request.setUpdateDateTime(new Date());
+						requestDAO.save(request);
+						return reviewerDBs;
+					} catch (Exception ex) {
+						logErrorAndThrowException(
+								"error while adding reviewers for request "
+										+ requestId, ex);
+					}
+				}
+			}
+		} catch (Exception ex) {
+			logErrorAndThrowException(
+					"error while adding reviewers for request " + requestId, ex);
+		}
+		return null;
+	}
+
+	private void validateDuplicate(String requestId,
+			Iterable<ReviewerFormBean> formBeans) throws ReviewerAlreadyExist {
+		for (ReviewerFormBean reviewerFormBean : formBeans) {
+			if (reviewerRequestDAO.alreadyExist(requestId,
+					reviewerFormBean.getReviewerProviderId())) {
+				throw new ReviewerAlreadyExist(
+						reviewerFormBean.getReviewerProviderId());
+			}
+		}
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public Request editDescription(String requestId, String description)
+			throws ServiceException {
+		try {
+			Request request = get(requestId);
+			if (request != null) {
+				boolean isOnwer = isOnwer(request.getReviewee()
+						.getProviderUserId());
+				if (isOnwer) {
+					request.setDescription(description);
+					requestDAO.save(request);
+					return request;
+				}
+			}
+		} catch (Exception e) {
+			logErrorAndThrowException(
+					"Error occurred while updating the description for "
+							+ requestId, e);
+		}
+		return null;
+	}
+
+	private RequestFormBean createRequestFormBean(
+			ReviewForwardFormBean formBean, Request parentRequest) {
+		RequestFormBean bean = new RequestFormBean();
+		bean.setCategory(parentRequest.getItem().getCategory().getId());
+		bean.setDescription(parentRequest.getDescription());
+		bean.setFriends(formBean.getFriends());
+		bean.setItem(parentRequest.getItem().getId());
+		return bean;
+	}
+
+	@Autowired
+	private RequestDAO requestDAO;
+
+	@Autowired
+	private ItemService itemService;
+
+	@Autowired
+	private ReviewUserService reviewUserService;
+
+	@Autowired
+	private ReviewerDAO reviewerRequestDAO;
+
+	@Autowired
+	private ExternalReviewerDAO externalReviewerDAO;
+
+	@Autowired
+	private RequestBeanHelper requestBeanHelper;
+
+	@Autowired
+	private ReviewerBeanHelper reviewerBeanHelper;
+
+	private static Logger logger = LoggerFactory
+			.getLogger(RequestServiceImpl.class);
+
+}

@@ -1,0 +1,9 @@
+system.error= Please try later
+friend.already.exist = {0} already exist
+friends.field.missing = Friend(s) are missing
+request.id.field.missing = Request Id is missing 
+description.field.missing = Description is missing 
+request.close.error = Request could not be closed, please try later.
+friend.last.error= Last friend can not be removed
+review.id.field.missing = Review Id is missing
+review.verify.error = review not verified, please try later

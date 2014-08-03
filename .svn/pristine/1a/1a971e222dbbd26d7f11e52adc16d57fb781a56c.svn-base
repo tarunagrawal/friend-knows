@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+
+<%@ page session="false"%>
+<html>
+<head>
+<title>UReview</title>
+<link rel="stylesheet" href="<c:url value="/resources/page.css" />"
+	type="text/css" media="screen" />
+<link rel="stylesheet" href="<c:url value="/resources/form.css" />"
+	type="text/css" media="screen" />
+<link rel="stylesheet"
+	href="<c:url value="/resources/messages/messages.css" />"
+	type="text/css" media="screen" />
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet"
+	href="<c:url value="/resources/multiselect/token-input-facebook.css" />"
+	type="text/css" media="screen" />
+<link rel="stylesheet"
+	href="<c:url value="/resources/multiselect/token-input-mac.css" />"
+	type="text/css" media="screen" />
+<link rel="stylesheet"
+	href="<c:url value="/resources/multiselect/token-input.css" />"
+	type="text/css" media="screen" />
+<link
+	href="http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/css/jqueryui-editable.css"
+	rel="stylesheet" />
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script
+	src="<c:url value="/resources/multiselect/jquery.tokeninput.js" />"></script>
+<script
+	src="http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/js/jqueryui-editable.min.js"></script>
+
+<script src="<c:url value="/resources/application.js" />"></script>
+
+<style>
+.ui-autocomplete-category {
+	font-weight: bold;
+	padding: .2em .4em;
+	margin: .8em 0 .2em;
+	line-height: 1.5;
+}
+
+#header {
+	float: right;
+	width: 100%;
+	position: relative;
+}
+</style>
+<script>
+	function close() {
+		alert(requestId);
+	}
+</script>
+</head>
+<body>
+	<div id="header">
+		<div style="float: left;">
+			<h1>
+				<a href="<c:url value="/"/>">Review System</a>
+			</h1>
+		</div>
+		<div style="float: right;">
+			<a href="<c:url value="/signout" />">Sign Out</a>
+		</div>
+	</div>
+	<div id="leftNav">
+		<tiles:insertTemplate template="menu.jsp" />
+	</div>
+
+	<div id="content">
+		<tiles:insertAttribute name="content" />
+	</div>
+</body>
+</html>

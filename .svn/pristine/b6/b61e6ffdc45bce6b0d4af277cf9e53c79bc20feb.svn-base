@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<mvc:annotation-driven />
+
+	<mvc:resources location="/resources/" mapping="/resources/**" />
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:service</value>
+				<value>/WEB-INF/messages/messages</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean>
+
+	<bean id="headerContentNegotiationStrategy"
+		class="org.springframework.web.accept.HeaderContentNegotiationStrategy">
+	</bean>
+
+	<bean id="contentNegotiationManager"
+		class="org.springframework.web.accept.ContentNegotiationManager">
+		<constructor-arg name="strategies"
+			ref="headerContentNegotiationStrategy" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="contentNegotiationManager" ref="contentNegotiationManager" />
+		<property name="defaultViews">
+			<bean
+				class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+			</bean>
+		</property>
+	</bean>
+
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver"
+		p:viewClass="org.springframework.web.servlet.view.tiles2.TilesView" />
+
+	<bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"
+		p:definitions="/WEB-INF/layouts/tiles.xml,/WEB-INF/views/**/tiles.xml"
+		p:checkRefresh="true" />
+
+</beans>

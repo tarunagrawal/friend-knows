@@ -1,0 +1,36 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<form
+	action="<c:url value="/Request/${requestId}/Reviewer/${reviewerId}/Review/New/Submit"/>"
+	method="post">
+	<div class="row">
+		<div class="small-6 columns small-centered">
+			<div class="row collapse">
+				<div class="small-3 columns small-text-right">
+					<span class="prefix">Description</span>
+				</div>
+				<div class="small-3 columns small-text-left">
+					<textarea name="reviewDescription"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<table>
+		
+		<tr>
+			<td>Rating</td>
+			<td><select name="rating">
+					<option value="0">WORKS</option>
+					<option value="1">VALUE_FOR_MONEY</option>
+					<option value="2">AWESOME</option>
+					<option value="3">HORRIBLE</option>
+					<option value="4">WORTH_IT</option>
+			</select></td>
+		</tr>
+	</table>
+</form>

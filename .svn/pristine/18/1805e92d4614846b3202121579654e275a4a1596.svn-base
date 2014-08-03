@@ -1,0 +1,21 @@
+package com.system.you.review.web.domain.impl;
+
+import com.system.you.review.web.domain.Interaction;
+
+public class InteractionContainer {
+	
+	public static Interaction get(){
+		return interaction.get();
+	}
+	
+	public static void set(Interaction value){
+		interaction.set(value);
+	}
+	
+	public static void clear(){
+		interaction.set(null);
+	}
+	
+	private static ThreadLocal<Interaction> interaction 
+									= new ThreadLocal<Interaction>();
+}

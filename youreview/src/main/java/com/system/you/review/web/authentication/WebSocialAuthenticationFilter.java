@@ -1,0 +1,67 @@
+package com.system.you.review.web.authentication;
+
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.social.UserIdSource;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.security.SocialAuthenticationFilter;
+import org.springframework.social.security.SocialAuthenticationServiceLocator;
+import org.springframework.social.security.SocialAuthenticationToken;
+
+import com.system.you.review.web.domain.Requestor;
+import com.system.you.review.web.domain.impl.SessionUtils;
+
+public class WebSocialAuthenticationFilter extends SocialAuthenticationFilter {
+
+	public WebSocialAuthenticationFilter(AuthenticationManager authManager,
+			UserIdSource userIdSource,
+			UsersConnectionRepository usersConnectionRepository,
+			SocialAuthenticationServiceLocator authServiceLocator) {
+		super(authManager, userIdSource, usersConnectionRepository,
+				authServiceLocator);
+	}
+
+	@Override
+	protected void successfulAuthentication(HttpServletRequest request,
+			HttpServletResponse response, FilterChain chain,
+			Authentication authResult) throws IOException, ServletException {
+		super.successfulAuthentication(request, response, chain, authResult);
+		if (isAuthenticated(authResult) && isSupportedLoginPlatform(authResult)) {
+			Requestor requestor =   SessionUtils.getRequestor();
+			requestor.authenticateRequestor(authResult);
+		}
+	}
+	
+	private boolean isSupportedLoginPlatform(Authentication auth) {
+		Connection<?> connection = ((SocialAuthenticationToken) auth)
+				.getConnection();
+		if (isFacebookLogin(connection)) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isFacebookLogin(Connection<?> connection) {
+		return connection.getApi() instanceof Facebook;
+	}
+
+	private boolean isAuthenticated(Authentication authResult) {
+		if (authResult != null) {
+			if (authResult instanceof SocialAuthenticationToken) {
+				if (authResult.isAuthenticated()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+}

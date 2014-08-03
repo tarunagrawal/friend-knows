@@ -1,0 +1,53 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
+<%@ page session="false"%>
+<div class="request-header">
+	<span id="${bean.category.id}" class="heading highlight">${bean.category.description}</span>
+	<span>&nbsp;&nbsp;&nbsp;</span> <span id="${bean.item.id}"
+		class="heading highlight"> ${bean.item.description}</span> <span>&nbsp;&nbsp;&nbsp;</span>
+
+	<span class="detail">${bean.createDateTime}</span> <span class="detail">${bean.updateDatetime}</span>
+	<span> <a href="<c:url value="/reviewer/add"/>/${bean.id}"
+		class="add_reviewer_link">Add Reviewers</a> <a
+		href="<c:url value="/request/close"/>/${bean.id}"
+		class="remove_request_link">Remove</a> <%-- 
+		<a
+		onclick="javascript:doClose('${bean.id}');">Close</a>
+		--%>
+	</span>
+
+</div>
+<div id="myname">
+	<%-- <p class="detail editable" id="desc-${bean.id}">${bean.description}</p> --%>
+
+	<a href="#" class="editable-in-place" data-type="textarea"
+		data-url="http://localhost:8080/review/request/description/edit/${bean.id}" data-inputclass="detail">${bean.description}</a>
+
+
+	<%-- <a onclick="javascript:editdescription('${bean.id}')">Edit
+		Description</a> --%>
+</div>
+
+<div>
+	<span class="detail">All Tags:</span> <span class="detail"> <c:forEach
+			items="${bean.item.rating.popularTags}" var="weightTag">
+			<c:if test="${weightTag ne null}">
+				<span class="detail"> ${weightTag.tag.name}</span>
+				<span>&nbsp;&nbsp;&nbsp; </span>
+			</c:if>
+		</c:forEach>
+	</span>
+
+</div>
+
+<div>
+	<span class="detail">Connected Tags:</span> <span> <c:forEach
+			items="${bean.item.connectedRating.popularTags}" var="weightTag">
+			<c:if test="${weightTag ne null}">
+				<span class="detail"> ${weightTag.tag.name}</span>
+				<span>&nbsp;&nbsp;&nbsp; </span>
+			</c:if>
+		</c:forEach>
+	</span>
+</div>

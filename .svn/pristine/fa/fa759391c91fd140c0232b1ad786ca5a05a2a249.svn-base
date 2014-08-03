@@ -1,0 +1,100 @@
+package com.system.you.review.web.signout;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionKey;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.social.security.SocialAuthenticationToken;
+
+import com.system.you.review.web.domain.impl.InteractionContainer;
+import com.system.you.review.web.utils.HttpHelper;
+
+public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
+
+	public LogoutSuccessHandlerImpl(
+			UsersConnectionRepository usersConnectionRepository) {
+		this.usersConnectionRepository = usersConnectionRepository;
+	}
+
+	@Override
+	public void onLogoutSuccess(HttpServletRequest request,
+			HttpServletResponse response, Authentication authentication)
+			throws IOException, ServletException {
+		String accessToken = null;
+		if (authentication != null) {
+			String providerId = getProviderId(authentication);
+			if (logger.isInfoEnabled()) {
+				logger.info("Deauthorization request received for Facebook User ID: "
+						+ providerId + "; Removing connections.");
+			}
+			accessToken = removeActiveConnection(providerId);
+			authentication.setAuthenticated(false);
+		}
+		String redirectURL = redirectURL(request, accessToken);
+		if (logger.isInfoEnabled()) {
+			logger.info("Logging out: redirecting to " + redirectURL);
+		}
+		InteractionContainer.get().getRequestor().destroy();
+		response.sendRedirect(redirectURL);
+	}
+
+	private String redirectURL(HttpServletRequest request, String accessToken) {
+		String redirectURL = "";
+		if (accessToken == null) {
+			redirectURL = request.getContextPath();
+		} else {
+			redirectURL = "https://www.facebook.com/logout.php?next="
+					+ HttpHelper.getHomeURL(request) + "&access_token="
+					+ accessToken;
+		}
+		return redirectURL;
+	}
+
+	private String removeActiveConnection(String providerId) {
+		String accessToken = null;
+		Set<String> providerUserIds = new HashSet<String>();
+		providerUserIds.add(providerId);
+		Set<String> localUserIds = usersConnectionRepository
+				.findUserIdsConnectedTo("facebook", providerUserIds);
+		for (String localUserId : localUserIds) {
+			ConnectionRepository connectionRepository = usersConnectionRepository
+					.createConnectionRepository(localUserId);
+			if (logger.isInfoEnabled()) {
+				logger.info("  Removing Facebook connection for local user '"
+						+ localUserId + "'");
+			}
+			ConnectionKey connectionKey = new ConnectionKey("facebook",
+					providerId);
+			ConnectionData connectionData = connectionRepository.getConnection(
+					connectionKey).createData();
+			accessToken = connectionData.getAccessToken();
+			connectionRepository.removeConnection(connectionKey);
+		}
+		return accessToken;
+	}
+
+	private String getProviderId(Authentication authentication) {
+		String providerId = authentication.getName();
+		if (authentication instanceof SocialAuthenticationToken) {
+			providerId = ((SocialAuthenticationToken) authentication)
+					.getConnection().getKey().getProviderUserId();
+		}
+		return providerId;
+	}
+
+	private Logger logger = LoggerFactory.getLogger(LogoutSuccessHandler.class);
+	private final UsersConnectionRepository usersConnectionRepository;
+
+}

@@ -1,0 +1,25 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<div class="row">
+	<div class="small-12 columns medium-text-right small-centered">
+		<c:forEach items="${interestedFriends}" var="friend">
+			<div class="row fk-border">
+				<div class="small-2 columns medium-text-center">
+					<img src="${friend.user.imageUrl}" />
+				</div>
+				<div class="small-2 columns medium-text-left">
+					<img src="${friend.user.name}" />
+				</div>
+				<div class="small-1 columns medium-text-left fk-header-fill end">
+					<h3>
+						<span class="fk-color-white fk-padding-top">${friend.toalReviews}</span>
+					</h3>
+				</div>
+			</div>
+		</c:forEach>
+	</div>
+</div>

@@ -1,0 +1,37 @@
+package com.system.you.review.core;
+
+
+public enum Tag {
+
+	WORKS(0), VALUE_FOR_MONEY(1), AWESOME(2), HORRIBLE(3), WORTH_IT(4), DEFAULT(-1);
+	
+	private Tag(int value){
+		this.value = value;
+	}
+
+	public int getValue() {
+		return value;
+	}
+	
+	public String getName(){
+		return this.toString();
+	}
+
+	public String getDescription(){
+		return this.toString();
+	}
+	
+	public static Tag getTag(int value){
+		Tag ratingValue = null ;
+		for (Tag rating : values()) {
+			if(rating.getValue() == value){
+				ratingValue = rating;
+				break ;
+			}
+		}
+		return ratingValue;
+	}
+
+	private int value ;
+
+}

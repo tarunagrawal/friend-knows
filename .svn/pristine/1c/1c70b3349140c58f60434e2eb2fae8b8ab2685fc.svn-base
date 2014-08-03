@@ -1,0 +1,211 @@
+package com.system.you.review.web.controller;
+
+import java.util.Collection;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.system.you.review.core.constraint.Constraint;
+import com.system.you.review.core.exception.UIException;
+import com.system.you.review.core.helper.CollectionHelper;
+import com.system.you.review.item.bean.helper.impl.ReviewBeanHelper;
+import com.system.you.review.request.bean.Review;
+import com.system.you.review.request.bean.Reviewer;
+import com.system.you.review.request.service.ReviewService;
+import com.system.you.review.request.service.ReviewerService;
+import com.system.you.review.web.beans.form.ReviewFormBean;
+import com.system.you.review.web.beans.response.ResponseBean;
+import com.system.you.review.web.review.ReviewCreateException;
+import com.system.you.review.web.review.ReviewDeleteException;
+import com.system.you.review.web.review.ReviewEditException;
+import com.system.you.review.web.review.ReviewVerifyException;
+
+@Controller
+@RequestMapping(value = "/reply")
+public class ReviewController extends ControllerSupport {
+
+	@RequestMapping(value = "/form/{reviewerRequestId}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public String addForm(@PathVariable String reviewerRequestId, Model model) {
+		model.addAttribute("reviewerRequestId", reviewerRequestId);
+		return "addReview";
+	}
+
+	@RequestMapping(value = "/submit")
+	@ResponseStatus(value = HttpStatus.OK)
+	public ModelAndView submit(ReviewFormBean formBean, Model model)
+			throws ReviewCreateException {
+		ResponseBean<ReviewFormBean> respBean = new ResponseBean<ReviewFormBean>(
+				formBean);
+		try {
+			validateFormBean(formBean, respBean);
+			if (!respBean.containsError()) {
+				Reviewer reviewerRecord = reviewerService.getReviewer(
+						formBean.getReviewerRequestId(), true);
+				if (reviewerRecord != null) {
+					Review review = reviewService.addReview(formBean,
+							reviewerRecord);
+					if (review != null) {
+						reviewerService.updateReviewer(reviewerRecord);
+						model.addAttribute("review",
+								reviewBeanHelper.dbToView(review));
+					} else {
+						respBean.addMessage("page", "please try later");
+					}
+				}
+			}
+		} catch (Exception ex) {
+			respBean.addMessage("page", "please try later");
+		}
+		if (respBean.containsError()) {
+			model.addAttribute("messages", respBean.getMessages());
+			throw new ReviewCreateException(model, "json");
+		}
+
+		return new ModelAndView("json", model.asMap());
+	}
+
+	@RequestMapping(value = "/edit/{reviewId}/form")
+	@ResponseStatus(value = HttpStatus.OK)
+	public String editForm(@PathVariable String reviewId, Model model)
+			throws ReviewEditException {
+		try {
+			Review review = reviewService.get(reviewId);
+			model.addAttribute("viewBean", reviewBeanHelper.dbToView(review));
+			model.addAttribute("rating", review.getRating());
+		} catch (Exception ex) {
+			throw new ReviewEditException(model, "editReview",
+					"error occured while getting review edit form", ex);
+		}
+		return "editReview";
+	}
+
+	@RequestMapping(value = "/edit")
+	@ResponseStatus(value = HttpStatus.OK)
+	public ModelAndView edit(ReviewFormBean formBean, Model model)
+			throws ReviewEditException {
+		// Using reviewer Request Id as review id for edit purpose. Saves us a
+		// formBean
+		String reviewId = formBean.getReviewerRequestId();
+		ResponseBean<ReviewFormBean> respBean = new ResponseBean<ReviewFormBean>(
+				formBean);
+		try {
+			validateFormBean(formBean, respBean);
+			if (!respBean.containsError()) {
+				Review review = reviewService.edit(reviewId, formBean);
+				if (review != null) {
+					model.addAttribute("review",
+							reviewBeanHelper.dbToView(review));
+				} else {
+					respBean.addMessage("page", "please try later");
+				}
+			}
+		} catch (Exception ex) {
+			respBean.addMessage("page", "please try later");
+		}
+		if (respBean.containsError()) {
+			model.addAttribute("message", respBean.getMessages());
+		}
+
+		return new ModelAndView("json", model.asMap());
+	}
+
+	@RequestMapping(value = "/delete/{reviewId}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public ModelAndView delete(@PathVariable String reviewId, Model model)
+			throws ReviewDeleteException {
+		ResponseBean<String> responseBean = new ResponseBean<String>("");
+		try {
+			if (StringUtils.isBlank(reviewId)) {
+				responseBean.addMessage("page", "not removed");
+			}
+			if (!responseBean.containsError()) {
+				Review deletedReview = reviewService.delete(reviewId);
+				if (deletedReview != null) {
+					Reviewer reviewer = reviewerService
+							.getReviewer(deletedReview.getreviewerRequestId());
+					reviewerService.updateReviewer(reviewer);
+				} else {
+					responseBean.addMessage("page", "not removed");
+				}
+			}
+		} catch (Exception ex) {
+			responseBean.addMessage("page", "please try later");
+		}
+
+		if (responseBean.containsError()) {
+			model.addAttribute("messages", responseBean.getMessages());
+			throw new ReviewDeleteException(model, "json");
+		}
+		return new ModelAndView("json", model.asMap());
+	}
+
+	@RequestMapping(value = "/verify/{reviewId}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public ModelAndView verify(@PathVariable String reviewId, Model model)
+			throws ReviewVerifyException {
+		ResponseBean<String> responseBean = new ResponseBean<String>("");
+		try {
+			if (StringUtils.isBlank(reviewId)) {
+				responseBean.addMessage("page", "review id not supplied");
+			}
+			if (!responseBean.containsError()) {
+				if (reviewService.verify(reviewId) == null) {
+					responseBean.addMessage("page",
+							"review not verified, please try later");
+				}
+			}
+		} catch (Exception ex) {
+			responseBean.addMessage("page",
+					"review not verified, please try later");
+		}
+
+		if (responseBean.containsError()) {
+			model.addAttribute("messages", responseBean.getMessages());
+			throw new ReviewVerifyException(model, "json");
+		}
+
+		return new ModelAndView("json", model.asMap());
+	}
+
+	@ExceptionHandler(value = { ReviewCreateException.class,
+			ReviewEditException.class, ReviewDeleteException.class })
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ModelAndView handleUIException(UIException uiException) {
+		String message = uiException.getMessage();
+		Throwable cause = uiException.getCause();
+		logger.error((StringUtils.isBlank(message)) ? "" : message, cause);
+		return new ModelAndView(uiException.getViewName(), uiException
+				.getModel().asMap());
+	}
+
+	private void validateFormBean(ReviewFormBean formBean,
+			ResponseBean<ReviewFormBean> respBean) {
+		Collection<Constraint> errors = validate(formBean);
+		if (CollectionHelper.hasElements(errors)) {
+			respBean.setMessages(errorMap(errors));
+		}
+	}
+
+	@Autowired
+	private ReviewService reviewService;
+
+	@Autowired
+	private ReviewerService reviewerService;
+
+	@Autowired
+	private ReviewBeanHelper reviewBeanHelper;
+
+	private static Logger logger = LoggerFactory
+			.getLogger(ReviewController.class);
+}

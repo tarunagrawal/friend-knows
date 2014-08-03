@@ -1,0 +1,56 @@
+package com.system.you.review.item.bean.helper.impl;
+
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.system.you.review.core.service.TagService;
+import com.system.you.review.item.bean.Item;
+import com.system.you.review.item.bean.helper.BeanHelper;
+import com.system.you.review.user.bean.ReviewUser;
+import com.system.you.review.web.beans.view.ItemViewBean;
+import com.system.you.review.web.domain.impl.InteractionContainer;
+
+@Service
+public class ItemBeanHelper extends BeanHelper {
+
+	public Item formToData(String categoryId, String id) {
+		Item item = new Item();
+		String description = null;
+		if(StringUtils.isNotBlank(id)){
+			if(id.startsWith("new:")){
+				String[] values = id.split(":");
+				description = values[1];
+				id = null;
+			}
+		}
+		item.setId(id);
+		item.setDescription(description);
+		item.setCreateDateTime(current());
+		item.setUpdateDateTime(current());
+		if (StringUtils.isBlank(id)) {
+			item.setCategory(categoryBeanHelper.formToData(categoryId));
+		}
+		return item;
+	}
+
+	public ItemViewBean dataToView(Item dbBean) {
+		checkNulls(dbBean);
+		ItemViewBean viewBean = new ItemViewBean();
+		viewBean.setDescription(dbBean.getDescription());
+		viewBean.setId(dbBean.getId());
+		viewBean.setRating(ratingService.getPopularTag(dbBean.getId()));
+		List<ReviewUser> connectedFriends = InteractionContainer.get().getRequestor().getConnectedFriends();
+		viewBean.setConnectedRating(ratingService.getPopularConnectedTags(dbBean.getId(), connectedFriends));
+		return viewBean;
+	}
+	
+
+	@Autowired
+	private CategoryBeanHelper categoryBeanHelper;
+	
+	@Autowired
+	private TagService ratingService;
+}

@@ -1,0 +1,21 @@
+package com.system.you.review.web.exception.handler;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import com.system.you.review.web.beans.form.RequestFormBean;
+import com.system.you.review.web.beans.response.ResponseBean;
+import com.system.you.review.web.exception.RequestValidationConstraintException;
+
+
+public class RequestExceptionHandler {
+
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value=RequestValidationConstraintException.class)
+	public @ResponseBody ResponseBean<RequestFormBean> handle(RequestValidationConstraintException ex){
+		
+		return null;
+	}
+}

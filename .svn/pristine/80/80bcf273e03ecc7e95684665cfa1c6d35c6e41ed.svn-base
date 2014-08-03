@@ -1,0 +1,66 @@
+package com.system.you.review.web.facebook;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.FacebookProfile;
+
+import com.system.you.review.core.service.ServiceLocator.ServiceName;
+import com.system.you.review.user.bean.ReviewUser;
+import com.system.you.review.user.service.ReviewUserService;
+import com.system.you.review.web.domain.impl.InteractionContainer;
+
+public class FacebookAPIHelper {
+
+	public static List<FacebookProfile> getFacebookFriends(
+			HttpSession httpSession, Facebook facebook) {
+		@SuppressWarnings("unchecked")
+		List<FacebookProfile> list = (List<FacebookProfile>) httpSession
+				.getAttribute("friends");
+		if (list == null) {
+			list = facebook.friendOperations().getFriendProfiles();
+		}
+		return list;
+	}
+
+	public static List<FacebookProfile> getFacebookFriends(Facebook facebook) {
+		return facebook.friendOperations().getFriendProfiles();
+	}
+
+	public static List<FacebookProfile> getFacebookFriends(
+			HttpSession httpSession, Facebook facebook, int count) {
+		List<FacebookProfile> facebookFriends = getFacebookFriends(httpSession,
+				facebook);
+		List<FacebookProfile> list = null;
+		if (facebookFriends != null) {
+			list = new ArrayList<FacebookProfile>();
+			Object[] array = facebookFriends.toArray();
+			if (array != null && array.length > 0) {
+				for (Object object : array) {
+					if (object instanceof FacebookProfile) {
+						FacebookProfile profile = (FacebookProfile) object;
+						list.add(profile);
+						if (list.size() == count) {
+							break;
+						}
+					}
+				}
+			}
+		}
+		return list;
+	}
+
+	public static List<ReviewUser> getConnectedFriends(
+			List<String> providerIds) {
+		ReviewUserService userService = (ReviewUserService) InteractionContainer
+				.get().getServiceLocator().getService(ServiceName.USER_SERVICE);
+		if (userService != null) {
+			return userService.getUsersByProviderIds(providerIds);
+		}
+		return null;
+	}
+
+}

@@ -1,0 +1,41 @@
+package com.system.you.review.web.beans.response;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class ResponseBean<T> {
+
+	public ResponseBean(T bean) {
+		this.messages = new HashMap<String, String>();
+		this.bean = bean;
+	}
+
+	public T getBean() {
+		return bean;
+	}
+
+	public Map<String, String> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Map<String, String> messages) {
+		this.messages = messages;
+	}
+
+	public void addMessage(String key, String message) {
+		this.messages.put(key, message);
+	}
+
+	public boolean containsError() {
+		if (messages != null && messages.size() > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private T bean;
+
+	private Map<String, String> messages;
+
+}

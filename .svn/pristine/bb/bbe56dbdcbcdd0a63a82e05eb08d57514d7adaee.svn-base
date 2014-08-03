@@ -1,0 +1,132 @@
+package com.system.you.review.web.domain.impl;
+
+import java.security.SecureRandom;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.FacebookProfile;
+import org.springframework.social.security.SocialAuthenticationToken;
+
+import com.system.you.review.user.bean.ReviewUser;
+import com.system.you.review.web.domain.Interaction;
+import com.system.you.review.web.domain.Requestor;
+import com.system.you.review.web.facebook.FacebookAPIHelper;
+import com.system.you.review.web.utils.HttpHelper;
+
+public class WebRequestorImpl implements Requestor {
+
+	public WebRequestorImpl(String id) {
+		this.id = id;
+	}
+
+	@Override
+	public Locale getLocale() {
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
+	@Override
+	public ReviewUser getUser() {
+		return reviewUser;
+	}
+
+	public ReviewUser getReviewUser() {
+		return reviewUser;
+	}
+
+	public void setReviewUser(ReviewUser reviewUser) {
+		this.reviewUser = reviewUser;
+	}
+
+	@Override
+	public boolean isAuthenticated() {
+		return SecurityContextHolder.getContext().getAuthentication()
+				.isAuthenticated();
+	}
+
+	@Override
+	public List<FacebookProfile> getFriends() {
+		return friends;
+	}
+
+	public String getContextPath() {
+		return contextPath;
+	}
+
+	public void setContextPath(String contextPath) {
+		this.contextPath = contextPath;
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public FacebookProfile getFacebookFriend(String providerId) {
+		FacebookProfile facebookProfile = null;
+		if (StringUtils.isNotBlank(providerId)) {
+			for (FacebookProfile profile : friends) {
+				if (profile.getId().equalsIgnoreCase(providerId)) {
+					facebookProfile = profile;
+					break;
+				}
+			}
+		}
+		return facebookProfile;
+	}
+
+	public static Requestor createRequestor(String id) {
+		WebRequestorImpl requestor = new WebRequestorImpl(id);
+		return requestor;
+	}
+
+	@Override
+	public boolean isDestroyed() {
+		return this.destroy;
+	}
+
+	@Override
+	public void destroy() {
+		this.destroy = true;
+	}
+
+	public void authenticateRequestor() {
+		HttpServletRequest httpServletRequest = (HttpServletRequest) InteractionContainer
+				.get().getAttribute(Interaction.REQUEST);
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
+		this.facebook = ((Facebook) ((SocialAuthenticationToken) authentication)
+				.getConnection().getApi());
+		
+		friends = FacebookAPIHelper.getFacebookFriends(facebook);
+		reviewUser = (ReviewUser) authentication.getPrincipal();
+		contextPath = HttpHelper.getHomeURL(httpServletRequest);
+		locale = httpServletRequest.getLocale();
+		connectedFriends = FacebookAPIHelper.getConnectedFriends(facebook.friendOperations().getFriendIds());
+	}
+
+	@Override
+	public List<ReviewUser> getConnectedFriends() {
+		return connectedFriends;
+	}
+
+	private String id;
+	private Locale locale;
+	private ReviewUser reviewUser;
+	private List<FacebookProfile> friends;
+	private List<ReviewUser> connectedFriends;
+	private String contextPath;
+	private Facebook facebook;
+	private SecureRandom secureRandom;
+	private boolean destroy;
+}

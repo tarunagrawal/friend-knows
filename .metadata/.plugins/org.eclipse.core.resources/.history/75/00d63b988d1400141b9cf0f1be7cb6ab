@@ -1,0 +1,560 @@
+/**
+ * 
+ */
+
+function displayDetails(requestid) {
+	var detailId = "#details-" + requestid;
+	$(".fk-selected").removeClass("fk-selected");
+	$("#summary_" + requestid).addClass("fk-selected");
+	$(".fk-details").hide();
+	$(detailId).show("slow");
+}
+function verify(requestId, reviewerId, reviewId) {
+	$.ajax(
+			{
+				url : "http://localhost:8080/review/Request/" + requestId
+						+ "/Reviewer/" + reviewerId + "/Review/" + reviewId
+						+ "/Verify",
+				success : function(data) {
+				},
+				error : function(data) {
+					alert(data);
+				}
+			}).done(function(data) {
+		alert(data);
+	});
+}
+
+$(function() {
+
+	$("#fk_item_search_box").tokenInput("/review/item/search/", {
+		theme : "facebook",
+		preventDuplicates : true,
+		tokenLimit : 1,
+	});
+
+	$(".add_reviewer_link")
+			.bind(
+					"click",
+					function(event) {
+						event.preventDefault();
+						var $link = $(this);
+						var $dialog = $("<div></div");
+						$dialog
+								.load(
+										$link.attr("href"),
+										function() {
+											var $searchBox = $dialog
+													.find("#search-box");
+											$dialog
+													.dialog({
+														autoOpen : false,
+														modal : true,
+														draggable : false,
+														width : 700,
+														buttons : {
+															"Add" : function() {
+																$
+																		.ajax(
+																				{
+																					method : "post",
+																					headers : {
+																						Accept : "application/json"
+																					},
+																					url : $(
+																							this)
+																							.find(
+																									"form")
+																							.attr(
+																									"action"),
+																					data : $(
+																							this)
+																							.find(
+																									"form")
+																							.serialize(),
+																					dataType : 'json',
+																					error : function(
+																							response) {
+																						var obj = JSON
+																								.parse(response.responseText);
+																						$
+																								.each(
+																										obj.messages,
+																										function(
+																												key,
+																												value) {
+																											alert(key
+																													+ ":"
+																													+ value);
+																										});
+																					},
+																					success : function(
+																							response) {
+																						var obj = response;
+																						$
+																								.each(
+																										obj.view,
+																										function(
+																												index,
+																												reviewer) {
+																											var $namespan = $("<span></span>");
+																											$namespan
+																													.attr(
+																															"class",
+																															"detail");
+																											$namespan
+																													.text(reviewer.user.name);
+
+																											var $status = $("<span></span>");
+																											$status
+																													.attr(
+																															"class",
+																															"detail");
+																											$status
+																													.text(reviewer.status);
+
+																											var $href = "http://localhost:8080/review"
+																													+ "/reviewer/remove/"
+																													+ reviewer.requestId
+																													+ "/"
+																													+ reviewer.id;
+																											var $removelink = $("<a></a>");
+																											$removelink
+																													.attr(
+																															"href",
+																															$href);
+																											$removelink
+																													.attr(
+																															"class",
+																															"remove_reviewer_link");
+																											$removelink
+																													.text("Remove");
+
+																											var $innerDiv = $("<div></div>");
+																											$innerDiv
+																													.attr(
+																															"id",
+																															reviewer.id);
+
+																											$innerDiv
+																													.append($namespan);
+																											$innerDiv
+																													.append($status);
+																											$innerDiv
+																													.append($removelink);
+
+																											var $reviewer = $("<div></div>");
+																											$reviewer
+																													.attr(
+																															"class",
+																															"reviewer");
+																											$reviewer
+																													.append($innerDiv);
+
+																											$link
+																													.closest(
+																															".fk-request")
+																													.find(
+																															".fk-reviewers")
+																													.append(
+																															$reviewer);
+																										});
+																						$dialog
+																								.dialog("close");
+																						$dialog
+																								.dialog("destroy");
+																					}
+																				})
+																		.done(
+																				function(
+																						data) {
+																					$dialog
+																							.dialog("close");
+																					$dialog
+																							.dialog("destroy");
+																				});
+
+															},
+															"Cancel" : function() {
+																$searchBox
+																		.tokenInput("clear");
+																$dialog
+																		.trigger("reset");
+																$dialog
+																		.dialog("close");
+																$dialog
+																		.dialog("destroy");
+															}
+														},
+														close : function() {
+															$searchBox
+																	.tokenInput("clear");
+															$(this).trigger(
+																	"reset");
+														}
+													});
+
+											$dialog
+													.on(
+															"dialogopen",
+															function(event, ui) {
+																$searchBox
+																		.tokenInput(
+																				"/review/facebook/search/",
+																				{
+																					theme : "facebook",
+																					preventDuplicates : true,
+																				});
+
+															});
+
+											$dialog.dialog("open");
+
+										});
+
+					});
+
+	$("body")
+			.on(
+					"click",
+					"a.add_review_link",
+					function(event) {
+						event.preventDefault();
+						var $link = $(this);
+						var $dialog = $("<div></div");
+						$dialog
+								.load(
+										$link.attr("href"),
+										function() {
+											$dialog
+													.dialog({
+														autoOpen : false,
+														modal : true,
+														draggable : false,
+														width : 700,
+														buttons : [
+																{
+																	text : "Add",
+																	click : function() {
+																		$
+																				.ajax(
+																						{
+																							method : "post",
+																							url : $dialog
+																									.find(
+																											"form")
+																									.attr(
+																											"action"),
+																							data : $dialog
+																									.find(
+																											"form")
+																									.serialize(),
+																							success : function(
+																									response) {
+																								$dialog
+																										.dialog("close");
+																							},
+																							error : function(
+																									response) {
+																								var jsonResponse = JSON
+																										.parse(response.responseText);
+																								$(
+																										jsonResponse.messages)
+																										.each(
+																												function(
+																														key,
+																														value) {
+																													alert(key
+																															+ ":"
+																															+ value);
+																												});
+																							}
+
+																						})
+																				.done(
+																						function(
+																								data) {
+																							$dialog
+																									.dialog("close");
+																						});
+																	}
+																},
+																{
+																	text : "Cancel",
+																	click : function() {
+																		$dialog
+																				.find(
+																						"form")
+																				.trigger(
+																						"reset");
+																		$dialog
+																				.dialog("close");
+																	}
+																} ],
+														close : function() {
+															$dialog
+																	.trigger("reset");
+															$dialog
+																	.trigger("destroy");
+														}
+													});
+
+											$dialog.dialog("open");
+										});
+					});
+
+	$("body")
+			.on(
+					"click",
+					"a.edit_review_link",
+					function(event) {
+						event.preventDefault();
+						var $link = $(this);
+						var $dialog = $("<div></div");
+						$dialog
+								.load(
+										$link.attr("href"),
+										function() {
+											$dialog
+													.dialog({
+														autoOpen : false,
+														modal : true,
+														draggable : false,
+														width : 700,
+														buttons : [
+																{
+																	text : "Update",
+																	click : function() {
+																		$
+																				.ajax(
+																						{
+																							method : "post",
+																							url : $dialog
+																									.find(
+																											"form")
+																									.attr(
+																											"action"),
+																							data : $dialog
+																									.find(
+																											"form")
+																									.serialize(),
+																							success : function(
+																									response) {
+																								$dialog
+																										.dialog("close");
+																								$dialog
+																										.trigger("destroy");
+
+																							},
+																							error : function(
+																									response) {
+																								var jsonResponse = JSON
+																										.parse(response.responseText);
+																								$(
+																										jsonResponse.messages)
+																										.each(
+																												function(
+																														key,
+																														value) {
+																													alert(key
+																															+ ":"
+																															+ value);
+																												});
+																							}
+
+																						})
+																				.done(
+																						function(
+																								data) {
+																							$dialog
+																									.dialog("close");
+																						});
+																	}
+																},
+																{
+																	text : "Cancel",
+																	click : function() {
+																		$dialog
+																				.find(
+																						"form")
+																				.trigger(
+																						"reset");
+																		$dialog
+																				.dialog("close");
+																	}
+																} ],
+														close : function() {
+															$dialog
+																	.trigger("reset");
+															$dialog
+																	.trigger("destroy");
+														}
+													});
+
+											$dialog.dialog("open");
+										});
+					});
+
+	$("body").on("click", ".fk-remove-reviewer-link", function(event) {
+		event.preventDefault();
+		var $link = $(this);
+		$.ajax({
+			method : "post",
+			headers : {
+				Accept : "application/json"
+			},
+			url : $link.attr("href"),
+			data : $(this).find("form").serialize(),
+			dataType : 'json',
+			error : function(response) {
+				var obj = JSON.parse(response.responseText);
+				$.each(obj.messages, function(key, value) {
+					alert(key + ":" + value);
+				});
+			},
+			success : function(response) {
+				var $reviewer = $link.closest(".fk-reviewer");
+				$reviewer.hide("slow", function(){
+					$reviewer.remove();
+				});
+			}
+		});
+		return false;
+	});
+
+	$("body").on("click", ".fk-remove-request-link", function(event) {
+		event.preventDefault();
+		var $link = $(this);
+		$.ajax({
+			method : "post",
+			headers : {
+				Accept : "application/json"
+			},
+			url : $link.attr("href"),
+			data : $(this).find("form").serialize(),
+			dataType : 'json',
+			error : function(response) {
+				var obj = JSON.parse(response.responseText);
+				$.each(obj.messages, function(key, value) {
+					alert(key + ":" + value);
+				});
+			},
+			success : function(response) {
+				$link.closest(".fk-request").remove();
+			}
+		});
+		return false;
+	});
+
+	$("body").on("click", "a.remove_review_link", function(event) {
+		event.preventDefault();
+		var $link = $(this);
+		$.ajax({
+			method : "post",
+			headers : {
+				Accept : "application/json"
+			},
+			url : $link.attr("href"),
+			data : $(this).find("form").serialize(),
+			dataType : 'json',
+			error : function(response) {
+				var obj = JSON.parse(response.responseText);
+				$.each(obj.messages, function(key, value) {
+					alert(key + ":" + value);
+				});
+			},
+			success : function(response) {
+				$link.closest(".review").remove();
+			}
+		});
+		return false;
+	});
+
+	$(".forward_review_link").bind("click", function(event) {
+		event.preventDefault();
+		var $link = $(this);
+		var $dialog = $("<div></div");
+		$dialog.load($link.attr("href"), function() {
+			var $searchBox = $dialog.find("#search-box");
+			$dialog.dialog({
+				autoOpen : false,
+				modal : true,
+				draggable : false,
+				width : 700,
+				buttons : {
+					"Add" : function() {
+						$.ajax({
+							method : "post",
+							headers : {
+								Accept : "application/json"
+							},
+							url : $(this).find("form").attr("action"),
+							data : $(this).find("form").serialize(),
+							dataType : 'json',
+							error : function(response) {
+								var obj = JSON.parse(response.responseText);
+								$.each(obj.messages, function(key, value) {
+									alert(key + ":" + value);
+								});
+							},
+							success : function(response) {
+							}
+						}).done(function(data) {
+							$dialog.dialog("close");
+							$dialog.dialog("destroy");
+						});
+
+					},
+					"Cancel" : function() {
+						$searchBox.tokenInput("clear");
+						$dialog.trigger("reset");
+						$dialog.dialog("close");
+						$dialog.dialog("destroy");
+					}
+				},
+				close : function() {
+					$searchBox.tokenInput("clear");
+					$(this).trigger("reset");
+				}
+			});
+
+			$dialog.on("dialogopen", function(event, ui) {
+				$searchBox.tokenInput("/review/facebook/search/", {
+					theme : "facebook",
+					preventDuplicates : true,
+				});
+
+			});
+
+			$dialog.dialog("open");
+
+		});
+
+	});
+
+	$(".editable-in-place").each(
+			function() {
+				var $appnedId = $(this).attr("data-append");
+				var $shortDescription = $("#" + $appnedId).find(
+						".fk-short-description");
+				$(this).editable({
+					mode : 'inline',
+					showbuttons : false,
+					onblur : 'submit',
+					send : 'always',
+					ajaxOptions : {
+						method : "post",
+						headers : {
+							Accept : "application/json",
+						},
+						dataType : 'json',
+						success : function(response) {
+							$shortDescription.hide("slow");
+							$shortDescription.empty();
+							$shortDescription.text(response.view);
+							$shortDescription.show("slow");
+						},
+					}
+				});
+			});
+});

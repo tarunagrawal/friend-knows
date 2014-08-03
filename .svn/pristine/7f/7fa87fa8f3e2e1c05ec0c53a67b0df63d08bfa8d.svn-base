@@ -1,0 +1,10 @@
+package com.system.you.review.core.service;
+
+public interface ServiceLocator {
+	
+	public Object getService(ServiceName serviceName);
+
+	public enum ServiceName{
+			USER_SERVICE, 
+	} 
+}

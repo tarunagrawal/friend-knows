@@ -1,0 +1,82 @@
+package com.system.you.review.item.bean.helper;
+
+import java.util.Date;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.social.facebook.api.FacebookProfile;
+import org.springframework.util.Assert;
+
+import com.system.you.review.user.bean.ReviewUser;
+import com.system.you.review.web.domain.impl.InteractionContainer;
+
+public class BeanHelper {
+
+	protected void checkNulls(Object... beans) {
+		Assert.notNull(beans);
+		Assert.notEmpty(beans);
+		for (Object bean : beans) {
+			Assert.notNull(bean);
+		}
+	}
+
+	protected void checkBlank(String... beans) {
+		Assert.notNull(beans);
+		for (String bean : beans) {
+			Assert.isTrue(StringUtils.isNotBlank(bean));
+		}
+	}
+
+	protected String date(Date date) {
+		return (date == null) ? new Date().toString() : date.toString();
+	}
+
+	protected Date current() {
+		return new Date();
+	}
+
+	protected ReviewUser currentUser() {
+		return InteractionContainer.get().getRequestor().getUser();
+	}
+
+	protected String name(String providerId) {
+		FacebookProfile profile =  InteractionContainer.get().getRequestor().getFacebookFriend(providerId) ;
+		if(profile != null){
+			return profile.getName();
+		}
+		return "";
+	}
+
+	protected String mail(String providerId) {
+		FacebookProfile profile =  InteractionContainer.get().getRequestor().getFacebookFriend(providerId) ;
+		if(profile != null){
+			return profile.getUsername()+ "@facebook.com";
+		}
+		return "";
+	}
+
+	protected ReviewUser user(String providerId) {
+		FacebookProfile profile = InteractionContainer.get().getRequestor()
+				.getFacebookFriend(providerId);
+		ReviewUser user = new ReviewUser();
+		user.setExternal(true);
+		user.setProviderUserId(providerId);
+		
+		if (profile != null) {
+			user.setMailID(mail(providerId));
+			user.setName(profile.getName());
+			user.setProviderId("facebook");
+		}else{
+			System.out.println("error: provider id is not a friend:" + providerId );
+			user.setMailID("not avl");
+			user.setName("not avl");
+			user.setProviderId("facebook");
+		}
+		
+		return user;
+	}
+
+	protected String contactNumber(String providerId) {
+		return "91999999999";
+	}
+	
+}

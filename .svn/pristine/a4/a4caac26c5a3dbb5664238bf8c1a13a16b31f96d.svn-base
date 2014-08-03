@@ -1,0 +1,28 @@
+
+
+body {
+	padding-left: 10px;
+	padding-right: 10px;
+	font-family: Helvetica, Arial, "lucida grande", tahoma, verdana, arial,
+		sans-serif;
+}
+
+.fk-operation-link {
+	text-decoration: none;
+	font-size: 12px;
+	font-family: Helvetica, Arial, "lucida grande", tahoma, verdana, arial,
+		sans-serif;
+}
+
+.fk-operation-link:hover {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.fk-description{
+	padding:5px;
+}
+
+.fk-padding{
+	padding:5px;
+}

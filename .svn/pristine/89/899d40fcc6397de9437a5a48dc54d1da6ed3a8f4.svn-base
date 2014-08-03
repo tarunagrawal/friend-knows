@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<beans:bean id="appSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" depends-on="instance">
+		<beans:property name="dataSource" ref="dataSource" />
+		
+		<beans:property name="configLocation"
+			value="/WEB-INF/spring/hibernate-config.xml" />
+		<beans:property name="hibernateProperties">
+			<beans:props>
+				<beans:prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</beans:prop>
+				<beans:prop key="hibernate.show_sql">true</beans:prop>
+				<beans:prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.FSDirectoryProvider
+				</beans:prop>
+				<beans:prop key="hibernate.cache.use_second_level_cache">true</beans:prop>
+				<beans:prop key="hibernate.cache.hazelcast.instance_name">review-hazelcast-instance</beans:prop>
+				<beans:prop key="hibernate.cache.use_query_cache">true</beans:prop>
+                <beans:prop key="hibernate.cache.region.factory_class">com.hazelcast.hibernate.HazelcastCacheRegionFactory</beans:prop>
+				<beans:prop key="hibernate.search.default.indexBase">D:\Personal\Projects\index</beans:prop>
+			</beans:props>
+		</beans:property>
+
+	</beans:bean>
+
+	<beans:bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<beans:property name="sessionFactory" ref="appSessionFactory" />
+	</beans:bean>
+
+</beans:beans>

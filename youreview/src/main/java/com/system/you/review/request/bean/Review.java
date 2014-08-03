@@ -1,0 +1,163 @@
+package com.system.you.review.request.bean;
+
+import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.core.style.ToStringCreator;
+
+import com.system.you.review.ApplicationEntity;
+import com.system.you.review.database.IConstants;
+import com.system.you.review.item.bean.Item;
+import com.system.you.review.user.bean.ReviewUser;
+
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Entity
+@Table(name = IConstants.ITable.INames.REVIEW_TABLE)
+public class Review implements ApplicationEntity {
+
+	@Id
+	@GenericGenerator(name = IConstants.GENERATOR_NAME, strategy = IConstants.GENERATOR_STRATEGY)
+	@GeneratedValue(generator = IConstants.GENERATOR_NAME)
+	@Column(name = IConstants.ITable.IReview.ID)
+	public String getReviewID() {
+		return reviewID;
+	}
+
+	public void setReviewID(String reviewID) {
+		this.reviewID = reviewID;
+	}
+
+	@Basic
+	public String getreviewerRequestId() {
+		return reviewerRequestId;
+	}
+
+	public void setReviewerRequestId(String reviewerRequestId) {
+		this.reviewerRequestId = reviewerRequestId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = IConstants.ITable.IReview.ITEM_ID, nullable = false)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = IConstants.ITable.IReview.REVIEWER_ID, nullable = false)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public ReviewUser getReviewer() {
+		return reviewer;
+	}
+
+	public void setReviewer(ReviewUser reviewer) {
+		this.reviewer = reviewer;
+	}
+
+	@Basic
+	public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
+	@Basic
+	public String getReviewDescription() {
+		return reviewDescription;
+	}
+
+	public void setReviewDescription(String reviewDescription) {
+		this.reviewDescription = reviewDescription;
+	}
+
+	@Basic
+	public char getVerified() {
+		return verified;
+	}
+
+	public void setVerified(char verified) {
+		this.verified = verified;
+	}
+
+	@Basic
+	public Date getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public void setCreateDateTime(Date createDateTime) {
+		this.createDateTime = createDateTime;
+	}
+
+	@Basic
+	public Date getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(Date updateDateTime) {
+		this.updateDateTime = updateDateTime;
+	}
+
+	@Override
+	@Transient
+	public String getId() {
+		return reviewID;
+	}
+
+	@Override
+	@Transient
+	public String getDescription() {
+		return reviewDescription;
+	}
+
+	@Override
+	@Transient
+	public String getOwnerId() {
+		return reviewer.getProviderUserId();
+	}
+
+	@Override
+	@Transient
+	public String getName() {
+		return this.getClass().getName();
+	}
+
+	
+	public String toString() {
+		return new ToStringCreator(this).append(reviewID)
+				.append(reviewerRequestId).append(item).append(reviewer)
+				.append(rating).append(reviewDescription).toString();
+	}
+
+	private String reviewID;
+	private String reviewerRequestId;
+	private Item item;
+	private ReviewUser reviewer;
+	private int rating;
+	private String reviewDescription;
+	private Date createDateTime;
+	private Date updateDateTime;
+	private char verified;
+	public static char VERIFED = 'Y';
+	public static char NOT_VERIFED = 'N';
+}
