@@ -24,7 +24,7 @@
 	</div>
 </form>
 <SCRIPT type="text/javascript">
-	$("#search-box").tokenInput("/review/facebook/search/", {
+	$("#search-box").tokenInput("/friendknows/facebook/search/", {
 		theme : "facebook",
 		preventDuplicates : true,
 	});

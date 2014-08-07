@@ -170,3 +170,29 @@ body {
 	vertical-align: middle;
 	text-align: center;
 }
+
+.fk-top-bar{
+	margin: 0px;
+	background-color: rgb(240, 92, 38);
+	padding:0.4rem;
+	z-index: 100;
+}
+
+.fk-top-bar .fk-search-box{
+	margin: 0px;
+}
+
+.fk-top-bar .fk-logo-and-name{
+	padding: 0.25rem;
+	font-size: 1.3rem;
+	color: white;
+}
+
+.fk-full-height{
+	display: table;
+}
+
+.fk-sidebar{
+	display: table-cell;
+	height: 100%;
+}

@@ -65,7 +65,7 @@ textarea {
 					<c:if test="${not empty bean.reviews}">
 						<div class="fk-reviews">
 							<c:forEach items="${bean.reviews}" var="review">
-								<ul class="inline-list">
+								<ul class="inline-list fk-review">
 									<li><img src="${bean.user.imageUrl}" /></li>
 									<li><div class="row">
 											<div class="small-12 columns">${review.description}</div>
@@ -88,12 +88,20 @@ textarea {
 												${review.dateTime}</div>
 											<div
 												class="small-2 columns fk-padding-top small-text-left fk-operation-link">
-												<a class="edit_review_link"
-													href="<c:url value="/Request/${bean.requestId}/Reviewer/{${bean.id}}/Review/${review.id}/Edit"/>">edit</a>
+												<a class=""
+													href="<c:url value="/Request/${bean.requestId}/Reviewer/{${bean.id}}/Review/${review.id}/Edit"/>"
+													data-reveal-id="edit_review_${bean.id}"
+													data-reveal-ajax="true">edit</a>
+
+												<div id="edit_review_${bean.id}" class="reveal-modal small"
+													data-append="details-${bean.id}"
+													data-options="close_on_background_click:false" data-reveal>
+												</div>
+
 											</div>
 											<div
 												class="small-3 columns fk-padding-top small-text-left fk-operation-link end">
-												<a class="remove_review_link"
+												<a class="fk-remove-review-link"
 													href="<c:url value="/Request/${bean.requestId}/Reviewer/{${bean.id}}/Review/${review.id}/Remove"/>">remove</a>
 											</div>
 										</div></li>
@@ -125,7 +133,7 @@ textarea {
 											<div class="small-2 columns fk-padding-top small-text-left fk-operation-link">
 												<a class="edit_review_link"
 													href="<c:url value="/Request/${bean.requestId}/Reviewer/{${bean.id}}/Review/${review.id}/Edit"/>">edit</a>
-											</div>
+											</div> 
 											<div
 												class="small-3 columns fk-padding-top small-text-left fk-operation-link end">
 												<a class="remove_review_link"
@@ -138,7 +146,12 @@ textarea {
 						</div>
 					</c:if>
 					<c:if test="${bean.status eq 'Forwarded to friends'}">
-						<jsp:include page="forwardRequestDetails.jsp"></jsp:include>
+						<div>
+							<span>You have forwarded to following friends : <c:forEach
+									items="${bean.forwardRequest.reviewers}" var="reviewer">${reviewer.user.name} &nbsp;</c:forEach>
+							</span>
+						</div>
+
 					</c:if>
 					<div class="row fk-padding-top">
 						<div class="small-1 columns  small-text-left">
@@ -153,8 +166,15 @@ textarea {
 							</div>
 						</div>
 						<div class="small-2 columns  small-text-left end">
-							<a class="forward_review_link fk-operation-link"
-								href="<c:url value="/Request/${bean.requestId}/Reviewer/${bean.id}/Forward/New"/>/">forward</a>
+							<a class="fk-forward-review-link fk-operation-link"
+								href="<c:url value="/Request/${bean.requestId}/Reviewer/${bean.id}/Forward/New"/>/"
+								data-reveal-id="forward_review_${bean.id}"
+								data-reveal-ajax="true">forward</a>
+							<div id="forward_review_${bean.id}" class="reveal-modal small"
+								data-append="details-${bean.id}"
+								data-options="close_on_background_click:false" data-reveal>
+							</div>
+
 						</div>
 
 					</div>

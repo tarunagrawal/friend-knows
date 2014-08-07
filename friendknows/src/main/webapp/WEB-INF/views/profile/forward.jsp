@@ -3,26 +3,58 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-</head>
-<body>
-	<form
-		action="<c:url value="/Request/${requestId}/Reviewer/${reviewerId}/Forward/New/Submit"/>"
-		method="post" class="form">
-		<table>
-			<tr>
-				<td align="left" colspan="2"><input type="hidden"
-					name="reviewerRequestId" value="${reviewerId}" /></td>
-			</tr>
-			<tr>
-				<td width="30%" align="right">Friends:</td>
-				<td align="left"><input id="search-box" type="text"
-					name="friends" /></td>
-			</tr>
-		</table>
-	</form>
-</body>
-</html>
+<div class="row fk-error hide"></div>
+<form
+	action="<c:url value="/Request/${requestId}/Reviewer/${reviewerId}/Forward/New/Submit"/>"
+	method="post" class="form">
+	<div class="row fk-padding-top">
+		<input type="hidden" name="reviewerRequestId" value="${reviewerId}" />
+		<div
+			class="small-2 columns text-center fk-padding-top fk-label-heading">Friends</div>
+		<div class="small-6 columns end">
+			<input id="search-box" type="text" name="friends" />
+		</div>
+	</div>
+	<div class="row fk-padding-top">
+		<div class="small-2 columns small-centered">
+			<input type="button" id="forward_request_button"
+				class="button fk-no-margin" value="submit" />
+		</div>
+	</div>
+</form>
+<SCRIPT type="text/javascript">
+	$("#search-box").tokenInput("/friendknows/facebook/search/", {
+		theme : "facebook",
+		preventDuplicates : true,
+	});
+
+	$("#forward_request_button").bind(
+			"click",
+			function(event) {
+				event.preventDefault();
+				$button = $(this);
+				$dialog = $button.closest(".reveal-modal");
+				$dialogId = $dialog.attr("id");
+				$errorDiv = $dialog.find(".fk-error");
+				$errorDiv.hide();
+				$errorDiv.empty();
+				$.ajax({
+					method : "post",
+					headers : {
+						Accept : "text/html"
+					},
+					url : $button.closest("form").attr("action"),
+					data : $button.closest("form").serialize(),
+					error : function(response) {
+						$errorDiv.append(response.responseText);
+						$errorDiv.show("slow");
+					},
+					success : function(response) {
+						var requestParentId = $dialog.attr("data-append");
+						$("#" + requestParentId).find(".fk-reviewers").append(
+								response);
+						$("#" + $dialogId).foundation('reveal', 'close');
+					}
+				});
+			});
+</SCRIPT>

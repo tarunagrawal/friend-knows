@@ -272,7 +272,7 @@ $(function() {
 		return false;
 	});
 
-	$("body").on("click", "a.remove_review_link", function(event) {
+	$("body").on("click", "a.fk-remove-review-link", function(event) {
 		event.preventDefault();
 		var $link = $(this);
 		$.ajax({
@@ -290,7 +290,10 @@ $(function() {
 				});
 			},
 			success : function(response) {
-				$link.closest(".review").remove();
+				var $review =   $link.closest(".fk-review");
+				$review.hide("slow", function(){
+					$review.remove();
+				});
 			}
 		});
 		return false;

@@ -23,14 +23,14 @@
 					function() {
 
 						$("#friend-search").tokenInput(
-								"/review/facebook/search/", {
+								"/friendknows/facebook/search/", {
 									theme : "facebook",
 									preventDuplicates : true,
 								});
 
 						$("#item-search")
 								.tokenInput(
-										"/review/item/search/",
+										"/friendknows/item/search/",
 										{
 											theme : "facebook",
 											tokenLimit : 1,
@@ -47,7 +47,7 @@
 											},
 
 											onAdd : function() {
-												var url = "/review/item/"
+												var url = "/friendknows/item/"
 														+ $("#item-search")
 																.val()
 														+ "/friends/interested";
@@ -87,7 +87,7 @@
 										});
 
 						$("#category-search").tokenInput(
-								"/review/category/search/", {
+								"/friendknows/category/search/", {
 									theme : "facebook",
 									tokenLimit : 1,
 								});

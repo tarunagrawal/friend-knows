@@ -45,12 +45,46 @@
 <script src="<c:url value="/resources/application.js" />"></script>
 </head>
 <body class="fk-background">
-	<nav class="top-bar" data-topbar="is_hover=true,">
+	<section>
+		<div class="row fk-no-margin fk-top-bar">
+			<div class="small-12 columns">
+				<div class="row">
+					<div class="small-3 columns fk-logo-and-name">FriendKnows</div>
+					<div class="small-6 columns hide-for-small">
+						<div class="row">
+							<div class="small-9 columns small-centered">
+								<input type="text" class="fk-search-box"
+									placeholder="search existing products..">
+							</div>
+						</div>
+					</div>
+					<div class="small-3 columns text-right">
+						<a href="<c:url value="/signout" />">Signout</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<%-- <nav class="top-bar" data-topbar="is_hover=true,">
 		<ul class="title-area ">
 			<li class="name"><h1>
 					<a href="<c:url value="/"/>"> <span class="fk-logo-color">FriendKnows.com</span></a>
 				</h1></li>
 		</ul>
+
+		<section class="top-bar-section">
+			<ul class="left">
+				<li class="has-form">
+					<div class="row collapse">
+						<div class="large-12 small-12 columns">
+							<input type="text" placeholder="Find Stuff">
+						</div>
+					</div>
+				</li>
+			</ul>
+		</section>
+
 		<section class="top-bar-section">
 			<ul class="right">
 				<li class="has-dropdown"><a href="#">${user.name}</a>
@@ -59,13 +93,13 @@
 					</ul></li>
 			</ul>
 		</section>
-	</nav>
-	<section>
+	</nav> --%>
+	<section style="position: relative;">
 		<div class="row">
 			<div class="small-12 columns ">
 				<div class="row">
-					<div class="small-1 columns" style="padding: 0px;">
-						<div class="icon-bar vertical six-up">
+					<div class="small-1 columns fk-full-height hide-for-small" style="padding: 0px;">
+						<div class="icon-bar vertical six-up fk-sidebar">
 							<a class="item" href="<c:url value="/Request/New"/>"> <label
 								class="fi-plus fk-navigation-icon-size"></label>
 							</a> <a class="item" href="<c:url value="/request/assigned"/>"> <label
@@ -87,6 +121,7 @@
 		<script src="<c:url value="/resources/js/vendor/modernizr.js"/> "></script>
 		<script>
 			$(document).foundation();
+			$(".fk-full-height").height($("body").height() - $(".fk-top-bar").height()-2); 
 		</script>
 	</section>
 </body>
