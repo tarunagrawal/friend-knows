@@ -19,8 +19,8 @@ public class AddReviewHelper extends ControllerHelper {
 
 	public RequestContext<ReviewFormBean, ReviewViewBean> submit(
 			ReviewFormBean formBean) {
-		RequestContext<ReviewFormBean, ReviewViewBean> respBean = 
-					new RequestContext<ReviewFormBean, ReviewViewBean>(formBean);
+		RequestContext<ReviewFormBean, ReviewViewBean> respBean = new RequestContext<ReviewFormBean, ReviewViewBean>(
+				formBean);
 		try {
 			validate(formBean, respBean);
 			if (!respBean.containsMessage()) {
@@ -35,6 +35,7 @@ public class AddReviewHelper extends ControllerHelper {
 				}
 			}
 		} catch (Exception ex) {
+			LOGGER.error("exception occured while submitting review", ex);
 			addSystemErrorMessage(respBean);
 		}
 
@@ -50,6 +51,6 @@ public class AddReviewHelper extends ControllerHelper {
 	@Autowired
 	private ReviewBeanHelper reviewBeanHelper;
 
-	private static Logger logger = LoggerFactory
+	private static Logger LOGGER = LoggerFactory
 			.getLogger(AddReviewHelper.class);
 }

@@ -98,10 +98,13 @@
 
 <form:form commandName="form" id="initateReview" method="POST"
 	action="${formActionURL}">
+	<div class="row">
+		<div class="small-2 columns fk-full-height hide-for-small end"
+			style="padding-left: 0px; padding-right: 0px;">
+			<jsp:include page="../profile/iconbar.jsp"></jsp:include>
+		</div>
 
-
-	<div class="row fk-padding">
-		<div class="small-6 columns">
+		<div class="small-6 columns fk-padding">
 			<div class="row">
 				<div class="small-12 large-12 columns fk-error">
 					<c:forEach var="error" items="${messages}">
@@ -161,7 +164,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="small-4 columns end" id="interested_friend"></div>
+		<div class="small-4 columns end fk-padding" id="interested_friend"></div>
 	</div>
 
 </form:form>

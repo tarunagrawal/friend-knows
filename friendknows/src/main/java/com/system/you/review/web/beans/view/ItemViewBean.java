@@ -1,5 +1,7 @@
 package com.system.you.review.web.beans.view;
 
+import java.util.List;
+
 import com.system.you.review.core.PopularTags;
 
 public class ItemViewBean {
@@ -20,24 +22,24 @@ public class ItemViewBean {
 		this.description = description;
 	}
 
-	public PopularTags getRating() {
+	public List<TagViewBean> getRating() {
 		return rating;
 	}
 
-	public void setRating(PopularTags rating) {
+	public void setRating(List<TagViewBean> rating) {
 		this.rating = rating;
 	}
 
-	public PopularTags getConnectedRating() {
+	public List<TagViewBean> getConnectedRating() {
 		return connectedRating;
 	}
 
-	public void setConnectedRating(PopularTags connectedRating) {
+	public void setConnectedRating(List<TagViewBean> connectedRating) {
 		this.connectedRating = connectedRating;
 	}
 
 	private String id;
 	private String description;
-	private PopularTags rating;
-	private PopularTags connectedRating;
+	private List<TagViewBean> rating;
+	private List<TagViewBean> connectedRating;
 }

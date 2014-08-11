@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.system.you.review.item.bean.Item;
 import com.system.you.review.item.bean.helper.BeanHelper;
 import com.system.you.review.request.bean.Request;
+import com.system.you.review.request.bean.Request.Status;
 import com.system.you.review.request.bean.Review;
 import com.system.you.review.request.bean.Reviewer;
 import com.system.you.review.request.service.RequestService;
@@ -23,7 +25,8 @@ import com.system.you.review.web.beans.view.ReviewerViewBean;
 @Service
 public class ReviewerBeanHelper extends BeanHelper {
 
-	public Collection<Reviewer> formToData(Collection<ReviewerFormBean> formBeans) {
+	public Collection<Reviewer> formToData(
+			Collection<ReviewerFormBean> formBeans) {
 		Collection<Reviewer> dbBeans = new HashSet<Reviewer>();
 		for (ReviewerFormBean formBean : formBeans) {
 			dbBeans.add(formToData(formBean));
@@ -68,13 +71,18 @@ public class ReviewerBeanHelper extends BeanHelper {
 		Item item = dbBean.getRequest().getItem();
 		viewBean.setId(dbBean.getRequestID());
 		viewBean.setRequestId(dbBean.getRequest().getRequestID());
-		viewBean.setStatus(getStatusDescription(dbBean));
+		viewBean.setStatus(getStatusDescription(dbBean.getStatus()));
 		viewBean.setItem(itemBeanHelper.dataToView(item));
 		viewBean.setCategory(categoryBeanHelper.dataToView(item.getCategory()));
 		ReviewUser user = user(dbBean);
 		viewBean.setUser(userBeanHelper.dataToView(user));
-		viewBean.setInitiatedUser(userBeanHelper.dataToView(dbBean.getRequest().getReviewee()));
-		viewBean.setReviews(reviews(dbBean.getReviews(), onlyVerified));
+		viewBean.setInitiatedUser(userBeanHelper.dataToView(dbBean.getRequest()
+				.getReviewee()));
+		Set<Review> directReplies = dbBean.getReviews();
+		viewBean.setReviews(reviews(directReplies, onlyVerified));
+		if (directReplies != null && directReplies.size() > 0) {
+			viewBean.setShowReply(false);
+		}
 		viewBean.setCreateDateTime(date(dbBean.getCreateDateTime()));
 		viewBean.setRequestDescription(dbBean.getRequest().getDescription());
 		if (dbBean.getStatus().equals(Request.Status.PROPAGATED)) {
@@ -86,7 +94,8 @@ public class ReviewerBeanHelper extends BeanHelper {
 				ex.printStackTrace();
 			}
 			if (forwardRequest != null) {
-				viewBean.setForwardRequest(requestBeanHelper.dataToView(forwardRequest, true));
+				viewBean.setForwardRequest(requestBeanHelper.dataToView(
+						forwardRequest, true));
 			}
 		}
 
@@ -98,9 +107,9 @@ public class ReviewerBeanHelper extends BeanHelper {
 		return dataToView(dbBean, false);
 	}
 
-	private String getStatusDescription(Reviewer dbBean) {
+	public String getStatusDescription(Status status) {
 		String description = "";
-		switch (dbBean.getStatus()) {
+		switch (status) {
 		case INITIATED:
 			description = "Pending Answer";
 			break;
@@ -109,8 +118,15 @@ public class ReviewerBeanHelper extends BeanHelper {
 			description = "Forwarded to friends";
 			break;
 
+		case ANSWERED:
+			description = "Answered";
+			break;
+
+		case ASWERED_FORWARED:
+			description = "Answered and forwared to friends";
+			break;
 		default:
-			description = dbBean.getStatus().toString();
+			description = status.toString();
 			break;
 		}
 
@@ -121,7 +137,8 @@ public class ReviewerBeanHelper extends BeanHelper {
 		return Arrays.asList(friends.split(","));
 	}
 
-	private Collection<ReviewViewBean> reviews(Collection<Review> reviews, boolean onlyVerified) {
+	private Collection<ReviewViewBean> reviews(Collection<Review> reviews,
+			boolean onlyVerified) {
 		Collection<ReviewViewBean> reviewViewBeans = new ArrayList<ReviewViewBean>();
 		if (reviews != null && !reviews.isEmpty()) {
 			for (Review review : reviews) {
@@ -136,7 +153,8 @@ public class ReviewerBeanHelper extends BeanHelper {
 	}
 
 	private ReviewUser user(Reviewer dbBean) {
-		ReviewUser user = reviewUserService.getByProviderId(dbBean.getReviewerID());
+		ReviewUser user = reviewUserService.getByProviderId(dbBean
+				.getReviewerID());
 		if (user == null) {
 			// means external user.
 			user = user(dbBean.getReviewerID());

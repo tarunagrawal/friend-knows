@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.system.you.review.core.service.exception.ServiceException;
 import com.system.you.review.item.bean.helper.impl.ReviewBeanHelper;
+import com.system.you.review.request.bean.Request.Status;
 import com.system.you.review.request.bean.Review;
 import com.system.you.review.request.bean.Reviewer;
 import com.system.you.review.request.dao.ReviewDAO;
@@ -31,7 +32,8 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 			hasRight(reviewerRequest);
 			Review bean = reviewBean(review, reviewerRequest);
 			reviewDAO.addReview(bean);
-			updateReviewerLastUpdatedTime(reviewerRequest);
+			reviewerRequest.setStatus(Status.ANSWERED);
+			updateReviewer(reviewerRequest);
 			triggerAddChange(bean);
 			return bean;
 		} catch (Exception e) {
@@ -41,7 +43,7 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 		return null;
 	}
 
-	private void updateReviewerLastUpdatedTime(Reviewer reviewerRequest) {
+	private void updateReviewer(Reviewer reviewerRequest) {
 		reviewerRequest.setUpdateDateTime(new Date());
 		reviewerDAO.update(reviewerRequest);
 	}
@@ -54,8 +56,10 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 			if (review != null) {
 				hasRight(review);
 				reviewDAO.delete(id);
-				updateReviewerLastUpdatedTime(reviewerDAO.getReviewer(review
-						.getreviewerRequestId()));
+				Reviewer reviewer = reviewerDAO.getReviewer(review
+						.getreviewerRequestId());
+				reviewer.setStatus(Status.INITIATED);
+				updateReviewer(reviewer);
 				triggerDeleteChange(review);
 				return review;
 			}

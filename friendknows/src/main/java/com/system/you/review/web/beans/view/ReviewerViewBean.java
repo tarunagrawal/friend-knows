@@ -92,7 +92,13 @@ public class ReviewerViewBean {
 		this.requestId = requestId;
 	}
 
+	public boolean getShowReply() {
+		return showReply;
+	}
 
+	public void setShowReply(boolean showReply) {
+		this.showReply = showReply;
+	}
 
 	private String id;
 	private String status;
@@ -105,4 +111,8 @@ public class ReviewerViewBean {
 	private ItemViewBean item;
 	private CategoryViewBean category;
 	private Collection<ReviewViewBean> reviews;
+	
+	private boolean showReply = true ; 
+
 }
+

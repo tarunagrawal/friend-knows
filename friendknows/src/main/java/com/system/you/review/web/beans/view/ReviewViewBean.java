@@ -1,6 +1,5 @@
 package com.system.you.review.web.beans.view;
 
-import com.system.you.review.core.PopularTags;
 
 
 public class ReviewViewBean {
@@ -28,12 +27,12 @@ public class ReviewViewBean {
 	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
 	}
-	
-	public PopularTags getTag() {
+
+	public TagViewBean getTag() {
 		return tag;
 	}
 
-	public void setTag(PopularTags tag) {
+	public void setTag(TagViewBean tag) {
 		this.tag = tag;
 	}
 
@@ -48,6 +47,12 @@ public class ReviewViewBean {
 	private String id;
 	private String description;
 	private String dateTime;
-	private PopularTags tag;
+	private TagViewBean tag;
 	private int rating ;
+	
+	
+	class MetaData{
+		public String showReplyButton ;
+		
+	}
 }

@@ -70,8 +70,17 @@
 				$errorDiv.show("slow");
 			},
 			success : function(response) {
-				var requestParentId = $dialog.attr("data-append");
-				$("#" + requestParentId).find(".fk-reviews").html(response);
+				var $requestParentId = $dialog.attr("data-append");
+				var $reviewData = $("#"+$requestParentId);
+				var $descriptionData = $reviewData.find(".fk-review-text-data");
+				$descriptionData.hide("slow", function(){
+					$descriptionData.empty();
+					$descriptionData.html(response.view.description);
+					$descriptionData.show("slow");
+				});
+				alert(response.view.tag.popularTags[0].tag);
+				$reviewData.find(".fk-tag-viewName");
+				
 				$("#" + $dialogId).foundation('reveal', 'close');
 			}
 		});

@@ -2,6 +2,7 @@ package com.system.you.review.web.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -30,7 +31,7 @@ public class ProfileController extends ControllerSupport {
 	}
 
 	private Collection<RequestViewBean> initiated(Iterable<Request> dbRequests) {
-		Collection<RequestViewBean> viewBean = new ArrayList<RequestViewBean>();
+		List<RequestViewBean> viewBean = new ArrayList<RequestViewBean>();
 		if (dbRequests != null) {
 			for (Request dbRequest : dbRequests) {
 				// null check to filter only initiated requests (not forward
@@ -39,6 +40,9 @@ public class ProfileController extends ControllerSupport {
 					viewBean.add(requestBeanHelper.dataToView(dbRequest));
 				}
 			}
+			
+			/*Collections
+					.sort(viewBean, new DateUtils.AscSortByViewBeanCreateDate<RequestViewBean>());*/
 		}
 		return viewBean;
 	}

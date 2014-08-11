@@ -24,39 +24,49 @@
 	</div>
 </form>
 <SCRIPT type="text/javascript">
-	$("#search-box").tokenInput("/friendknows/facebook/search/", {
-		theme : "facebook",
-		preventDuplicates : true,
-	});
-
-	$("#add_reviewer_button").bind(
-			"click",
-			function(event) {
-				event.preventDefault();
-				$button = $(this);
-				$dialog = $button.closest(".reveal-modal");
-				$dialogId = $dialog.attr("id");
-				$errorDiv = $dialog.find(".fk-error");
-				$errorDiv.hide();
-				$errorDiv.empty();
-				$.ajax({
-					method : "post",
-					headers : {
-						Accept : "text/html"
-					},
-					url : $button.closest("form").attr("action"),
-					data : $button.closest("form").serialize(),
-					error : function(response) {
-						$errorDiv.append(response.responseText);
-						$errorDiv.show("slow");
-					},
-					success : function(response) {
-						var requestParentId = $dialog.attr("data-append");
-						$("#" + requestParentId).find(".fk-reviewers").append(
-								response);
-						$("#" + $dialogId).foundation('reveal', 'close');
-					}
+	$(document).ready(
+			function() {
+				$("#search-box").tokenInput("/friendknows/facebook/search/", {
+					theme : "facebook",
+					preventDuplicates : true,
 				});
+
+				$("#add_reviewer_button").bind(
+						"click",
+						function(event) {
+							event.preventDefault();
+							$button = $(this);
+							$dialog = $button.closest(".reveal-modal");
+							$dialogId = $dialog.attr("id");
+							$errorDiv = $dialog.find(".fk-error");
+							$errorDiv.hide();
+							$errorDiv.empty();
+							$.ajax({
+								method : "post",
+								headers : {
+									Accept : "text/html"
+								},
+								url : $button.closest("form").attr("action"),
+								data : $button.closest("form").serialize(),
+								error : function(response) {
+									$errorDiv.append(response.responseText);
+									$errorDiv.show("slow");
+								},
+								success : function(response) {
+									var requestParentId = $dialog
+											.attr("data-append");
+									$("#" + requestParentId).find(
+											".fk-reviewers").find(
+											".fk-reviewers-rows").append(
+											response);
+									$("#" + $dialogId).foundation('reveal',
+											'close');
+								}
+							});
+						});
+
+				$(".fk-full-height").height(
+						$("body").height() - $(".fk-top-bar").height());
 			});
 </SCRIPT>
 <a class="close-reveal-modal">&#215;</a>

@@ -56,30 +56,27 @@
 	padding-bottom: 0.35rem;
 	font-size: 0.75rem;
 }
+
+.icon-bar>* label {
+	color: rgb(115, 110, 110);
+}
+
+.icon-bar>*:hover {
+	background-color: #333333;
+	color: white;
+}
+
+.icon-bar>* label:hover {
+	color: white;
+}
+
+.editable-click,a.editable-click,a.editable-click:hover {
+	color: black;
+	border-bottom: none;
+}
 </style>
 </head>
 <body class="fk-background">
-	<%-- 	<section>
-		<div class="row fk-no-margin fk-top-bar">
-			<div class="small-12 columns">
-				<div class="row">
-					<div class="small-3 columns fk-logo-and-name">FriendKnows</div>
-					<div class="small-6 columns hide-for-small">
-						<div class="row">
-							<div class="small-9 columns small-centered">
-								<input type="text" class="fk-search-box" id="item_search_box"
-									placeholder="search existing products..">
-							</div>
-						</div>
-					</div>
-					<div class="small-3 columns text-right">
-						<a href="<c:url value="/signout" />">Signout</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section> --%>
-
 	<nav class="top-bar" data-topbar="is_hover=true,">
 		<ul class="title-area ">
 			<li class="name"><h1>
@@ -100,20 +97,21 @@
 						</div>
 					</div>
 				</li>
-				<li><a href="#">${user.name}</a></li>
+				
+				<li><a href="#" class="fi-torso">&nbsp;${user.name}</a></li>
 				<li><a href="<c:url value="/signout" />">Signout</a></li>
 			</ul>
 		</section>
 	</nav>
 	<!-- rgb(234, 73, 15) - final top bar -->
-	<section style="position: relative;">
+	<section>
 		<div class="row">
 			<div class="small-12 columns ">
 				<div class="row">
-					<div class="small-1 columns "
-						style="padding: 0px;">
+					<%-- <div class="small-1 columns " style="padding: 0px;">
 						<div class="row">
-							<div class="small-12 columns fk-full-height hide-for-small end" style="padding: 0px;">
+							<div class="small-12 columns fk-full-height hide-for-small end"
+								style="padding: 0px;">
 								<div class="icon-bar vertical six-up fk-sidebar">
 									<a class="item" href="<c:url value="/Request/New"/>"> <label
 										class="fi-plus fk-navigation-icon-size"></label>
@@ -124,11 +122,10 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="small-10 columns">
+					</div> --%>
+					<div class="small-11 columns end">
 						<tiles:insertAttribute name="content" />
 					</div>
-					<div class="small-1 columns end"></div>
 				</div>
 			</div>
 		</div>
@@ -139,7 +136,7 @@
 		<script>
 			$(document).foundation();
 			$(".fk-full-height").height(
-					$("body").height() - $(".fk-top-bar").height() - 2);
+					$("body").height() - $(".fk-top-bar").height());
 			$(document).ready(
 					function() {
 						$("#item_search_box").tokenInput(
@@ -156,6 +153,8 @@
 						$("#product_search_box").autocomplete({
 							source : availableTags
 						});
+						
+						$(".fk-requests-bar .fk-request-summary:first-child").find(".fk-clickable").trigger("click");
 					});
 		</script>
 	</section>

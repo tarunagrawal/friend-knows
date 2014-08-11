@@ -32,7 +32,10 @@ public class SessionUtils {
 	}
 
 	public static Requestor getRequestor() {
-		return interaction.get().getRequestor();
+		if (interaction.get() != null) {
+			return interaction.get().getRequestor();
+		}
+		return null;
 	}
 
 	public static ServiceLocator getServiceLocator() {

@@ -5,17 +5,20 @@
 	pageEncoding="ISO-8859-1"%>
 
 <c:forEach items="${view}" var="reviewer" varStatus="count">
-	<div class="row fk-reviewer">
-		<div class="small-1 columns medium-text-right">
-			<img src="${reviewer.user.imageUrl}" class="fk-padding-except-right" />
+	<div class="row fk-reviewer fk-no-margin fk-padding-top fk-bottom-border">
+		<div class="small-1 columns fk-no-margin fk-no-padding">
+			<img src="${reviewer.user.imageUrl}" />
 		</div>
-		<div class="small-9 columns medium-text-left end">
-			<div class="row fk-padding-top">
+		<div class="small-11 columns medium-text-left fk-no-left-padding end">
+			<div class="row">
 				<div class="small-4 columns medium-text-left fk-bold">${reviewer.user.name}</div>
-				<div class="small-8 columns medium-text-right end">
-					<span>[${reviewer.status}]</span> <a
+				<div class="small-4 columns medium-text-left ">
+					<span class="fk-operation-link"> ${reviewer.status}</span>
+				</div>
+				<div class="small-4 columns medium-text-right end">
+					<a
 						href="<c:url value="Request/${reviewer.requestId}/Reviewer/${reviewer.id}/Remove"/>"
-						class="fk-remove-reviewer-link fk-operation-link">[Remove]</a>
+						class="fk-remove-reviewer-link fk-operation-link fi-trash"></a>
 				</div>
 			</div>
 			<c:if test="${not empty reviewer.reviews}">

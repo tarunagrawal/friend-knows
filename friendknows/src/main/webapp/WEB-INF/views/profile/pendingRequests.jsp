@@ -30,157 +30,24 @@ textarea {
 }
 </style>
 
-<c:forEach items="${pending}" var="bean" varStatus="index">
-	<div class="row">
-		<div class="small-8 columns fk-padding-top  end">
-			<div class="row fk-border fk-padding-top fk-padding-bottom">
-				<div class="small-12 columns fk-padding-top end">
-					<div class="row ">
-						<div class="small-1 columns">
-							<img src="${bean.initiatedUser.imageUrl}" />
-						</div>
-						<div class="small-5 columns small-text-left ">
-							<span class="detail">${bean.initiatedUser.name}</span> <span
-								class="detail">is looking for your help</span>
-						</div>
-						<div class="small-3 columns small-text-center">
-							<span>${bean.status}</span>
-						</div>
-						<div class="small-3 columns small-text-right">
-							<span class="fk-date">${bean.createDateTime}</span>
-						</div>
-					</div>
-					<div class="row fk-padding-top">
-						<div class="small-8 columns ">
-							<span class="fk-label fk-radius">${bean.category.description}</span>
-							<span class="fk-label fk-radius">${bean.item.description}</span>
-						</div>
-					</div>
 
-					<div class="row fk-padding-top">
-						<div class="small-12 columns end">
-							<span class="detail">${bean.requestDescription}</span>
-						</div>
-					</div>
-					<c:if test="${not empty bean.reviews}">
-						<div class="fk-reviews">
-							<c:forEach items="${bean.reviews}" var="review">
-								<ul class="inline-list fk-review">
-									<li><img src="${bean.user.imageUrl}" /></li>
-									<li><div class="row">
-											<div class="small-12 columns">${review.description}</div>
-										</div>
-										<div class="row fk-padding-top">
-											<div class="small-10 columns  end">
-												<c:forEach items="${review.tag.popularTags}" var="weightTag">
-													<c:if test="${weightTag ne null}">
-														<span class="fk-label fk-header-fill fk-color-white">T</span>
-														<span class="fk-label fk-radius">
-															${weightTag.tag.viewName}</span>
-														<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-													</c:if>
-												</c:forEach>
-											</div>
-										</div>
-										<div class="row">
-											<div
-												class="small-2 columns fk-padding-top small-text-left fk-date">
-												${review.dateTime}</div>
-											<div
-												class="small-2 columns fk-padding-top small-text-left fk-operation-link">
-												<a class=""
-													href="<c:url value="/Request/${bean.requestId}/Reviewer/{${bean.id}}/Review/${review.id}/Edit"/>"
-													data-reveal-id="edit_review_${bean.id}"
-													data-reveal-ajax="true">edit</a>
-
-												<div id="edit_review_${bean.id}" class="reveal-modal small"
-													data-append="details-${bean.id}"
-													data-options="close_on_background_click:false" data-reveal>
-												</div>
-
-											</div>
-											<div
-												class="small-3 columns fk-padding-top small-text-left fk-operation-link end">
-												<a class="fk-remove-review-link"
-													href="<c:url value="/Request/${bean.requestId}/Reviewer/{${bean.id}}/Review/${review.id}/Remove"/>">remove</a>
-											</div>
-										</div></li>
-								</ul>
-
-								<%-- <div class="row fk-review fk-padding-top ">
-									<div class="small-1 columns small-text-right fk-no-margin">
-										<img src="${bean.user.imageUrl}" />
-									</div>
-									<div class="small-10 columns fk-no-margin end">
-										<div class="row">
-											<div class="small-12 columns">${review.description}</div>
-										</div>
-										<div class="row fk-padding-top">
-											<div class="small-10 columns  end">
-												<c:forEach items="${review.tag.popularTags}" var="weightTag">
-													<c:if test="${weightTag ne null}">
-														<span class="fk-label fk-header-fill fk-color-white">T</span>
-														<span class="fk-label fk-radius">
-															${weightTag.tag.viewName}</span>
-														<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-													</c:if>
-												</c:forEach>
-											</div>
-										</div>
-										<div class="row">
-											<div class="small-2 columns fk-padding-top small-text-left fk-date">
-												${review.dateTime}</div>
-											<div class="small-2 columns fk-padding-top small-text-left fk-operation-link">
-												<a class="edit_review_link"
-													href="<c:url value="/Request/${bean.requestId}/Reviewer/{${bean.id}}/Review/${review.id}/Edit"/>">edit</a>
-											</div> 
-											<div
-												class="small-3 columns fk-padding-top small-text-left fk-operation-link end">
-												<a class="remove_review_link"
-													href="<c:url value="/Request/${bean.requestId}/Reviewer/{${bean.id}}/Review/${review.id}/Remove"/>">remove</a>
-											</div>
-										</div>
-									</div>
-								</div> --%>
-							</c:forEach>
-						</div>
-					</c:if>
-					<c:if test="${bean.status eq 'Forwarded to friends'}">
-						<div>
-							<span>You have forwarded to following friends : <c:forEach
-									items="${bean.forwardRequest.reviewers}" var="reviewer">${reviewer.user.name} &nbsp;</c:forEach>
-							</span>
-						</div>
-
-					</c:if>
-					<div class="row fk-padding-top">
-						<div class="small-1 columns  small-text-left">
-
-							<a class="fk_add_review_link fk-operation-link"
-								href="<c:url value="/Request/${bean.requestId}/Reviewer/${bean.id}/Review/New"/>/"
-								data-reveal-id="add_review_${bean.id}" data-reveal-ajax="true">Reply</a>
-
-							<div id="add_review_${bean.id}" class="reveal-modal small"
-								data-append="details-${bean.id}"
-								data-options="close_on_background_click:false" data-reveal>
-							</div>
-						</div>
-						<div class="small-2 columns  small-text-left end">
-							<a class="fk-forward-review-link fk-operation-link"
-								href="<c:url value="/Request/${bean.requestId}/Reviewer/${bean.id}/Forward/New"/>/"
-								data-reveal-id="forward_review_${bean.id}"
-								data-reveal-ajax="true">forward</a>
-							<div id="forward_review_${bean.id}" class="reveal-modal small"
-								data-append="details-${bean.id}"
-								data-options="close_on_background_click:false" data-reveal>
-							</div>
-
-						</div>
-
-					</div>
+<div class="row">
+	<div class="small-12 large-7 columns"
+		style="padding-left: 0px; padding-right: 0px;">
+		<div class="small-1 columns fk-full-height hide-for-small end"
+			style="padding-left: 0px; padding-right: 0px;">
+			<jsp:include page="iconbar.jsp"></jsp:include>
+		</div>
+		<div class="small-11 columns fk-padding-top  end">
+			<c:forEach items="${pending}" var="bean" varStatus="index">
+				<c:set var="bean" value="${bean}" scope="request"></c:set>
+				<div>
+				<jsp:include page="reviewerData.jsp"></jsp:include>
 				</div>
-			</div>
+				
+			</c:forEach>
 		</div>
 	</div>
-</c:forEach>
+</div>
+
 

@@ -38,7 +38,7 @@ body {
 }
 
 .fk-padding-bottom {
-    padding-bottom: 0.8rem
+	padding-bottom: 0.8rem
 }
 
 .fk-header-fill {
@@ -51,7 +51,6 @@ body {
 
 .fk-logo-color {
 	color: white;
-	'
 }
 
 .fk-content-display {
@@ -96,8 +95,9 @@ body {
 }
 
 .fk-review-display {
-	border-bottom: 0.1rem;
-	border-bottom-style: dotted;
+	/* border-bottom: 0.1rem;
+	border-bottom-style: dotted; */
+	
 }
 
 .fk-clickable:hover {
@@ -128,7 +128,7 @@ body {
 }
 
 .fk-navigation-icon-size {
-	font-size: 2rem;
+	font-size: 16px;
 }
 
 .fk-selected {
@@ -136,8 +136,8 @@ body {
 }
 
 .fk-background {
-/* 	background-color: #F3EEF9;
- */}
+	background-color: #FBF7FF;
+}
 
 .fk-label-heading {
 	font-size: 1rem;
@@ -146,6 +146,10 @@ body {
 
 .fk-no-margin {
 	margin: 0 !important;
+}
+
+.fk-no-padding {
+	padding: 0 !important;
 }
 
 .fk-reviewers {
@@ -162,37 +166,67 @@ body {
 	border-style: solid;
 	border-color: black;
 }
-.fk-suggested-friend-background{
+
+.fk-suggested-friend-background {
 	background-color: #CBCBCB;
 }
 
-.fk-center-align{
+.fk-center-align {
 	vertical-align: middle;
 	text-align: center;
 }
 
-.fk-top-bar{
+.fk-top-bar {
 	margin: 0px;
 	background-color: rgb(240, 92, 38);
-	padding:0.4rem;
+	padding: 0.4rem;
 	z-index: 100;
 }
 
-.fk-top-bar .fk-search-box{
+.fk-top-bar .fk-search-box {
 	margin: 0px;
 }
 
-.fk-top-bar .fk-logo-and-name{
+.fk-top-bar .fk-logo-and-name {
 	padding: 0.25rem;
 	font-size: 1.3rem;
 	color: white;
 }
 
-.fk-full-height{
+.fk-full-height {
 	display: table;
 }
 
-.fk-sidebar{
+.fk-sidebar {
 	display: table-cell;
 	height: 100%;
+}
+
+.fk-no-left-padding {
+	padding-left: 0px !important;
+}
+
+.fk-reviewer {
+	background-color: somkywhite;
+}
+
+.fk-answered {
+	background-color: rgba(117, 225, 141, 1);
+	border-color: rgba(117, 225, 141, 1);
+	color: white;
+	font-weight: bold;
+}
+
+.fk-pending-answer {
+	background-color: rgba(230, 116, 55, 1);
+	border-color: rgba(230, 116, 55, 1);
+	color: white;
+	font-weight: bold;
+}
+
+.fk-forwarded {
+	background-color: #A2A514;
+	border-color: #A2A514;
+	color: white;
+	font-weight: bold;
 }

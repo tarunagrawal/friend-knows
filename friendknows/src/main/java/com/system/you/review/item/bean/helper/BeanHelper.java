@@ -59,15 +59,15 @@ public class BeanHelper {
 	}
 
 	private boolean isMoreThanAHour(int currentDay, int dateHourOfTheDay) {
-		return currentDay - dateHourOfTheDay > 1;
+		return (currentDay - dateHourOfTheDay) > 0;
 	}
 
 	private boolean isMoreThanAYear(int currentYear, int dateYear) {
-		return isMoreThanAHour(currentYear, dateYear);
+		return (currentYear - dateYear) > 0 ;
 	}
 
 	private boolean moreThanADay(int currentDay, int dateDay) {
-		return isMoreThanAYear(currentDay, dateDay);
+		return (currentDay-dateDay) > 0 ;
 	}
 
 	private Calendar getCurrentCalendar() {

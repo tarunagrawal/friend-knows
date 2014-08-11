@@ -27,8 +27,8 @@ import com.system.you.review.web.utils.HttpHelper;
 public class ContextInitializationFilter extends GenericFilterBean {
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response,
+			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		try {
@@ -40,6 +40,11 @@ public class ContextInitializationFilter extends GenericFilterBean {
 	}
 
 	private void resetContext(HttpServletRequest servletRequest) {
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("reseting context");
+		}
+
 		Requestor requestor = SessionUtils.getRequestor();
 		if (requestor != null && requestor.isDestroyed()) {
 			requestorService.removeRequestor(requestor.getId());
@@ -48,8 +53,13 @@ public class ContextInitializationFilter extends GenericFilterBean {
 		SessionUtils.clearCurrent();
 	}
 
-	private void establishContext(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	private void establishContext(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("establishing context");
+		}
+
 		Requestor requestor = null;
 		try {
 			requestor = findRequestor(request);
@@ -64,7 +74,8 @@ public class ContextInitializationFilter extends GenericFilterBean {
 		return new InteractionImpl(requestor, serviceLocator);
 	}
 
-	private Requestor findRequestor(HttpServletRequest request) throws RequestorNoFoundException {
+	private Requestor findRequestor(HttpServletRequest request)
+			throws RequestorNoFoundException {
 		Requestor requestor = null;
 		// this synchronization make sure that two parallel request in same
 		// session should not create two Requestor
@@ -85,7 +96,8 @@ public class ContextInitializationFilter extends GenericFilterBean {
 	}
 
 	private void setSession(HttpServletRequest request, Requestor requestor) {
-		request.getSession().setAttribute(Requestor.REQUESTOR_ID, requestor.getId());
+		request.getSession().setAttribute(Requestor.REQUESTOR_ID,
+				requestor.getId());
 	}
 
 	private Requestor getExistingRequestor(String requestorId) {
@@ -98,7 +110,8 @@ public class ContextInitializationFilter extends GenericFilterBean {
 		if (session.isNew()) {
 			return Requestor.NEW_REQUESTOR;
 		}
-		String requestorId = (String) session.getAttribute(Requestor.REQUESTOR_ID);
+		String requestorId = (String) session
+				.getAttribute(Requestor.REQUESTOR_ID);
 		return requestorId;
 	}
 
@@ -116,5 +129,6 @@ public class ContextInitializationFilter extends GenericFilterBean {
 	@Autowired
 	private RequestorService requestorService;
 
-	private static Logger logger = LoggerFactory.getLogger(ContextInitializationFilter.class);
+	private static Logger LOGGER = LoggerFactory
+			.getLogger(ContextInitializationFilter.class);
 }

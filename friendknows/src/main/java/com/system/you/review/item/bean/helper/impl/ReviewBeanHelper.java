@@ -5,11 +5,14 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.system.you.review.core.PopularTags;
+import com.system.you.review.core.WeightedTag;
 import com.system.you.review.core.service.TagService;
 import com.system.you.review.item.bean.helper.BeanHelper;
 import com.system.you.review.request.bean.Review;
 import com.system.you.review.web.beans.form.ReviewFormBean;
 import com.system.you.review.web.beans.view.ReviewViewBean;
+import com.system.you.review.web.beans.view.TagViewBean;
 
 @Service
 public class ReviewBeanHelper extends BeanHelper {
@@ -34,7 +37,15 @@ public class ReviewBeanHelper extends BeanHelper {
 		viewBean.setDescription(dbBean.getReviewDescription());
 		viewBean.setDateTime(date(dbBean.getCreateDateTime()));
 		viewBean.setRating(dbBean.getRating());
-		viewBean.setTag(tagService.getPopularReviewTag(dbBean));
+		PopularTags popularTag =	tagService.getPopularReviewTag(dbBean);
+		WeightedTag [] weightedTags = popularTag.getPopularTags() ;
+		if(weightedTags != null){
+			TagViewBean tagViewBean = new TagViewBean();
+			WeightedTag weightedTag = weightedTags[0];
+			tagViewBean.setTagName(weightedTag.getTag().getViewName());	
+			tagViewBean.setCount(weightedTag.getCount());
+			viewBean.setTag(tagViewBean);
+		}
 		return viewBean;
 	}
 	

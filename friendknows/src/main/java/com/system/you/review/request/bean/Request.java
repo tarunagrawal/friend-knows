@@ -186,7 +186,7 @@ public class Request implements ApplicationEntity, Comparable<Request> {
 	private Set<Request> children;
 
 	public static enum Status {
-		INITIATED, PENDING, PROPAGATED, CLOSED
+		INITIATED, PENDING, PROPAGATED, CLOSED, ANSWERED, ASWERED_FORWARED
 	}
 
 }

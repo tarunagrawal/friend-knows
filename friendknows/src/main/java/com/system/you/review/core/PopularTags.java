@@ -13,6 +13,7 @@ public class PopularTags implements Serializable {
 	}
 
 	private WeightedTag[] popularTags;
+	
 	private static final long serialVersionUID = -2981002501572592106L;
 
 }

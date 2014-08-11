@@ -2,7 +2,7 @@ package com.system.you.review.web.beans.view;
 
 import java.util.Collection;
 
-public class RequestViewBean {
+public class RequestViewBean extends ViewBean{
 
 	public CategoryViewBean getCategory() {
 		return category;
