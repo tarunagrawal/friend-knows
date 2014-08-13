@@ -7,19 +7,22 @@ import org.springframework.stereotype.Service;
 
 import com.system.you.review.core.service.exception.ReviewerAlreadyExist;
 import com.system.you.review.item.bean.helper.impl.RequestBeanHelper;
+import com.system.you.review.item.bean.helper.impl.ReviewerBeanHelper;
 import com.system.you.review.request.bean.Request;
+import com.system.you.review.request.bean.Reviewer;
 import com.system.you.review.request.service.RequestService;
+import com.system.you.review.request.service.ReviewerService;
 import com.system.you.review.web.beans.form.ReviewForwardFormBean;
 import com.system.you.review.web.beans.response.RequestContext;
-import com.system.you.review.web.beans.view.RequestViewBean;
+import com.system.you.review.web.beans.view.ReviewerViewBean;
 import com.system.you.review.web.domain.impl.SessionUtils;
 
 @Service
 public class RequestForwardHelper extends ControllerHelper {
 
-	public RequestContext<ReviewForwardFormBean, RequestViewBean> submit(
+	public RequestContext<ReviewForwardFormBean, ReviewerViewBean> submit(
 			ReviewForwardFormBean formBean) {
-		RequestContext<ReviewForwardFormBean, RequestViewBean> requestContext = new RequestContext<ReviewForwardFormBean, RequestViewBean>(
+		RequestContext<ReviewForwardFormBean, ReviewerViewBean> requestContext = new RequestContext<ReviewForwardFormBean, ReviewerViewBean>(
 				formBean);
 		validate(formBean, requestContext);
 		if (!requestContext.containsMessage()) {
@@ -29,8 +32,9 @@ public class RequestForwardHelper extends ControllerHelper {
 				if (fwdRequest != null) {
 					// retrieving the request again as it should have all the
 					// nested object
-					fwdRequest = requestService.get(fwdRequest.getId());
-					RequestViewBean viewBean = getViewBean(fwdRequest);
+					//fwdRequest = requestService.get(fwdRequest.getId());
+					Reviewer reviewer = reviewerService.getReviewer(formBean.getReviewerRequestId());
+					ReviewerViewBean viewBean = getViewBean(reviewer);
 					requestContext.setViewBean(viewBean);
 				} else {
 					addSystemErrorMessage(requestContext);
@@ -39,18 +43,18 @@ public class RequestForwardHelper extends ControllerHelper {
 				addFriendAlreadyExistMessage(requestContext, ex);
 			} catch (Exception ex) {
 				addSystemErrorMessage(requestContext);
-				logger.error("error while forwarding request", ex);
+				LOGGER.error("error while forwarding request", ex);
 			}
 		}
 		return requestContext;
 	}
 
-	private RequestViewBean getViewBean(Request forwardRequest) {
-		return requestBeanHelper.dataToView(forwardRequest);
+	private ReviewerViewBean getViewBean(Reviewer reviewer) {
+		return reviewerBeanHelper.dataToView(reviewer);
 	}
 
 	private void addFriendAlreadyExistMessage(
-			RequestContext<ReviewForwardFormBean, RequestViewBean> requestContext,
+			RequestContext<ReviewForwardFormBean, ReviewerViewBean> requestContext,
 			ReviewerAlreadyExist ex) {
 		requestContext.addMessage("friend.already.exist",
 				getMessage("friend.already.exist", new Object[] { getFriendName(ex) }));
@@ -66,7 +70,12 @@ public class RequestForwardHelper extends ControllerHelper {
 	@Autowired
 	private RequestBeanHelper requestBeanHelper;
 
-	private static Logger logger = LoggerFactory.getLogger(RequestForwardHelper.class);
+	@Autowired
+	private ReviewerService reviewerService;
+	
+	@Autowired
+	private ReviewerBeanHelper reviewerBeanHelper;
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(RequestForwardHelper.class);
 
-	private static String FWD_REQUEST = "fwdRequest";
 }

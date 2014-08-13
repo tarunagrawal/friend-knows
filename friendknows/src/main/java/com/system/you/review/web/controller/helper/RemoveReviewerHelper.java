@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.system.you.review.core.service.exception.AttemptToRemoveOnlyReviewerException;
+import com.system.you.review.item.bean.helper.impl.ReviewerBeanHelper;
 import com.system.you.review.request.bean.Request;
+import com.system.you.review.request.bean.Reviewer;
 import com.system.you.review.request.service.RequestService;
+import com.system.you.review.request.service.ReviewerService;
 import com.system.you.review.web.beans.response.RequestContext;
+import com.system.you.review.web.beans.view.ReviewerViewBean;
 import com.system.you.review.web.reviewer.exception.RemoveReviewerException;
 
 @Service
@@ -15,8 +19,8 @@ public class RemoveReviewerHelper extends ControllerHelper {
 
 	public RequestContext<String[], String> removeReviewer(String requestId,
 			String reviewerId) throws RemoveReviewerException {
-		RequestContext<String[],String> responseBean = getResponseBean(requestId,
-				reviewerId);
+		RequestContext<String[], String> responseBean = getResponseBean(
+				requestId, reviewerId);
 		validate(responseBean);
 		if (!responseBean.containsMessage()) {
 			try {
@@ -38,13 +42,41 @@ public class RemoveReviewerHelper extends ControllerHelper {
 		return responseBean;
 	}
 
-	private RequestContext<String[], String> getResponseBean(String requestId,
-			String reviewerId) {
-		return new RequestContext<String[], String>(
-				new String[] { requestId, reviewerId }, "");
+	public RequestContext<String[], ReviewerViewBean> removeForwaredReviewer(
+			String reviewerId, String requestId, String fwdReviewerId)
+			throws RemoveReviewerException {
+		RequestContext<String[], ReviewerViewBean> responseBean = new RequestContext<String[], ReviewerViewBean>(
+				new String[] { requestId, reviewerId });
+		validate(responseBean);
+		if (!responseBean.containsMessage()) {
+			try {
+				Request request = requestService.get(requestId);
+				if (request != null) {
+					try {
+						requestService.removeFwdReviewer(reviewerId, requestId,
+								fwdReviewerId);
+						Reviewer reviewer = reviewerService
+								.getReviewer(reviewerId);
+						responseBean.setViewBean(reviewerBeanHelper
+								.dataToView(reviewer));
+					} catch (Exception ex) {
+						addSystemErrorMessage(responseBean);
+					}
+				}
+			} catch (Exception ex) {
+				addSystemErrorMessage(responseBean);
+			}
+		}
+		return responseBean;
 	}
 
-	private void validate(RequestContext<String[], String> responseBean) {
+	private RequestContext<String[], String> getResponseBean(String requestId,
+			String reviewerId) {
+		return new RequestContext<String[], String>(new String[] { requestId,
+				reviewerId }, "");
+	}
+
+	private void validate(RequestContext<String[], ?> responseBean) {
 		String requestId = responseBean.getFormBean()[0];
 		String friends = responseBean.getFormBean()[1];
 		// validate input for null/blank check
@@ -62,4 +94,9 @@ public class RemoveReviewerHelper extends ControllerHelper {
 	@Autowired
 	private RequestService requestService;
 
+	@Autowired
+	private ReviewerBeanHelper reviewerBeanHelper;
+
+	@Autowired
+	private ReviewerService reviewerService;
 }

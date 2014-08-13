@@ -73,7 +73,7 @@ public class Request implements ApplicationEntity, Comparable<Request> {
 		this.reviewee = reviewee;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = IConstants.ITable.IReviewRequest.PARENT_REQ_ID, nullable = true)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public Request getParentRequest() {

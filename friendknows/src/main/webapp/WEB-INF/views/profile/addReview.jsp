@@ -55,17 +55,23 @@
 		$.ajax({
 			method : "post",
 			headers : {
-				Accept : "application/json"
+				Accept : "text/html"
 			},
 			url : $button.closest("form").attr("action"),
 			data : $button.closest("form").serialize(),
 			error : function(response) {
-				$errorDiv.append(response.responseText);
+				$errorDiv.html(response);
 				$errorDiv.show("slow");
 			},
 			success : function(response) {
-				var requestParentId = $dialog.attr("data-append");
-				$("#" + requestParentId).find(".fk-reviews").html(response);
+				var $containerId = $dialog.attr("data-append");
+				var $container = $("#" + $containerId);
+
+				$container.hide("slow", function() {
+					$container.empty();
+					$container.html(response);
+					$container.show("slow");
+				});
 				$("#" + $dialogId).foundation('reveal', 'close');
 			}
 		});

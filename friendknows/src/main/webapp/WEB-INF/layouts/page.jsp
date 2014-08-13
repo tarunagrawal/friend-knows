@@ -7,8 +7,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>friendknows.com</title>
-
-
 <link rel="stylesheet" href="<c:url value="/resources/page.css" />"
 	type="text/css" media="screen" />
 <link rel="stylesheet" href="<c:url value="/resources/form.css" />"
@@ -74,58 +72,71 @@
 	color: black;
 	border-bottom: none;
 }
+
+body {
+	line-height: 1.5rem;
+	font-size: 0.8rem;
+}
+
+#footer {
+	position: fixed;
+	z-index: 98;
+	bottom: 0px;
+	width: 100%;
+	margin: 0px !important;
+	padding: 0px !important;
+	background-color: rgba(162, 162, 162, 0.49);
+	height: 45px;
+}
+
+.fk-request-summary-container {
+}
 </style>
 </head>
 <body class="fk-background">
-	<nav class="top-bar" data-topbar="is_hover=true,">
-		<ul class="title-area ">
-			<li class="name"><h1>
-					<a href="<c:url value="/"/>"> <span
-						class="fk-logo-color fk-bold">FriendKnows.com</span></a>
-				</h1></li>
-		</ul>
-		<section class="top-bar-section">
-			<ul class="right">
-				<li class="has-form">
-					<div class="row collapse">
-						<div class="large-9 small-9 columns">
-							<input type="text" id="product_search_box"
-								placeholder="search exiting items...">
-						</div>
-						<div class="large-3 small-3 columns">
-							<a href="#" class="alert button expand">Search</a>
-						</div>
-					</div>
-				</li>
-				
-				<li><a href="#" class="fi-torso">&nbsp;${user.name}</a></li>
-				<li><a href="<c:url value="/signout" />">Signout</a></li>
+	<div class="fixed">
+		<nav class="top-bar" data-topbar="is_hover=false" class="sticky">
+			<ul class="title-area ">
+				<li class="name"><h1>
+						<a href="<c:url value="/"/>"> <span
+							class="fk-logo-color fk-bold">FriendKnows.com</span></a>
+					</h1></li>
 			</ul>
-		</section>
-	</nav>
-	<!-- rgb(234, 73, 15) - final top bar -->
-	<section>
-		<div class="row">
-			<div class="small-12 columns ">
-				<div class="row">
-					<%-- <div class="small-1 columns " style="padding: 0px;">
-						<div class="row">
-							<div class="small-12 columns fk-full-height hide-for-small end"
-								style="padding: 0px;">
-								<div class="icon-bar vertical six-up fk-sidebar">
-									<a class="item" href="<c:url value="/Request/New"/>"> <label
-										class="fi-plus fk-navigation-icon-size"></label>
-									</a> <a class="item" href="<c:url value="/request/assigned"/>">
-										<label class="fi-anchor fk-navigation-icon-size"></label>
-									</a> <a class="item"> <label>RVC</label>
-									</a> <a class="item"><label>PVC</label> </a>
-								</div>
+			<section class="top-bar-section">
+				<ul class="right">
+					<li class="has-form">
+						<div class="row collapse">
+							<div class="large-9 small-9 columns">
+								<input type="text" id="product_search_box"
+									placeholder="search exiting items...">
+							</div>
+							<div class="large-3 small-3 columns">
+								<a href="#" class="alert button expand">Search</a>
 							</div>
 						</div>
-					</div> --%>
-					<div class="small-11 columns end">
-						<tiles:insertAttribute name="content" />
-					</div>
+					</li>
+
+					<li><a href="#" class="fi-torso">&nbsp;${user.name}</a></li>
+					<li><a href="<c:url value="/signout" />">Signout</a></li>
+				</ul>
+			</section>
+		</nav>
+	</div>
+	<section>
+		<div class="row" style="">
+			<div class="small-12 columns " style="padding: 0px;">
+				<div class="small-11 columns end">
+					<tiles:insertAttribute name="content" />
+				</div>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="row">
+			<div class="small-12 columns hide-for-small" id="footer">
+				<div class="row">
+					<div class="small-6 columns small-centered text-center">
+						&#169; friendknows.com</div>
 				</div>
 			</div>
 		</div>
@@ -135,27 +146,33 @@
 		<script src="<c:url value="/resources/js/vendor/modernizr.js"/> "></script>
 		<script>
 			$(document).foundation();
-			$(".fk-full-height").height(
-					$("body").height() - $(".fk-top-bar").height());
-			$(document).ready(
-					function() {
-						$("#item_search_box").tokenInput(
-								"/friendknows/category/search/", {
-									tokenLimit : 1,
+			$(document)
+					.ready(
+							function() {
+								$("#item_search_box").tokenInput(
+										"/friendknows/category/search/", {
+											tokenLimit : 1,
+										});
+
+								var availableTags = [ "ActionScript",
+										"AppleScript", "Asp", "BASIC", "C",
+										"C++", "Clojure", "COBOL",
+										"ColdFusion", "Erlang", "Fortran",
+										"Groovy", "Haskell", "Java",
+										"JavaScript", "Lisp", "Perl", "PHP",
+										"Python", "Ruby", "Scala", "Scheme" ];
+								$("#product_search_box").autocomplete({
+									source : availableTags
 								});
 
-						var availableTags = [ "ActionScript", "AppleScript",
-								"Asp", "BASIC", "C", "C++", "Clojure", "COBOL",
-								"ColdFusion", "Erlang", "Fortran", "Groovy",
-								"Haskell", "Java", "JavaScript", "Lisp",
-								"Perl", "PHP", "Python", "Ruby", "Scala",
-								"Scheme" ];
-						$("#product_search_box").autocomplete({
-							source : availableTags
-						});
-						
-						$(".fk-requests-bar .fk-request-summary:first-child").find(".fk-clickable").trigger("click");
-					});
+								$(
+										".fk-requests-bar .fk-request-summary:first-child")
+										.find(".fk-clickable").trigger("click");
+
+								$(".fk-full-height").height(
+										$("body").height()
+												- $(".fk-top-bar").height());
+							});
 		</script>
 	</section>
 </body>

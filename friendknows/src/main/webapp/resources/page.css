@@ -1,6 +1,7 @@
 body {
 	font-family: Helvetica, Arial, "lucida grande", tahoma, verdana, arial,
 		sans-serif;
+	line-height: 1.5rem;
 }
 
 .fk-date {
@@ -68,6 +69,14 @@ body {
 
 .fk-label.fk-radius {
 	border-radius: 0.25rem;
+}
+
+.fk-label.fk-radius-left {
+	
+}
+
+.fk-label.fk-radius-right {
+	
 }
 
 .fk-request-description {

@@ -2,6 +2,7 @@ package com.system.you.review.web.beans.form;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.core.style.ToStringCreator;
 
@@ -61,6 +62,7 @@ public class RequestFormBean {
 
 	@NotNull
 	@NotBlank
+	@Length(max=500, message="Description should not exceeds 500 chars")
 	private String description;
 
 	@NotNull

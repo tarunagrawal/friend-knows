@@ -18,6 +18,7 @@ import com.system.you.review.web.UIExceptionFactory;
 import com.system.you.review.web.beans.form.ReviewFormBean;
 import com.system.you.review.web.beans.response.RequestContext;
 import com.system.you.review.web.beans.view.ReviewViewBean;
+import com.system.you.review.web.beans.view.ReviewerViewBean;
 import com.system.you.review.web.controller.helper.AddReviewHelper;
 import com.system.you.review.web.controller.helper.DeleteReviewHelper;
 import com.system.you.review.web.controller.helper.EditReviewHelper;
@@ -42,10 +43,10 @@ public class ReviewController extends ControllerSupport {
 	@RequestMapping(value = "/New/Submit")
 	@ResponseStatus(value = HttpStatus.OK)
 	public ModelAndView addSubmit(ReviewFormBean formBean, Model model) throws UIException {
-		RequestContext<ReviewFormBean, ReviewViewBean> requestContext = addReviewHelper
+		RequestContext<ReviewFormBean, ReviewerViewBean> requestContext = addReviewHelper
 				.submit(formBean);
-		requestContext.setSuccessView(JSON);
-		requestContext.setErrorView(JSON);
+		requestContext.setSuccessView("reviewerData");
+		requestContext.setErrorView("erorr");
 		requestContext.setModel(model);
 		model.addAttribute(FORM_BEAN, requestContext.getFormBean());
 		return handleResponse(requestContext, new UIExceptionFactory() {
@@ -78,10 +79,10 @@ public class ReviewController extends ControllerSupport {
 	public ModelAndView edit(ReviewFormBean formBean, Model model) throws UIException {
 		// Using reviewer Request Id as review id for edit purpose. Saves us a
 		// formBean
-		RequestContext<ReviewFormBean, ReviewViewBean> requestContext = editReviewHelper
+		RequestContext<ReviewFormBean, ReviewerViewBean> requestContext = editReviewHelper
 				.edit(formBean);
-		String viewName = "editReview";
-		requestContext.setErrorView(viewName);
+		String viewName = "reviewerData";
+		requestContext.setErrorView("error");
 		requestContext.setSuccessView(viewName);
 		requestContext.setModel(model);
 		return handleResponse(requestContext, new UIExceptionFactory() {
@@ -95,9 +96,9 @@ public class ReviewController extends ControllerSupport {
 	@RequestMapping(value = "/{reviewId}/Remove")
 	@ResponseStatus(value = HttpStatus.OK)
 	public ModelAndView delete(@PathVariable String reviewId, Model model) throws UIException {
-		RequestContext<String, String> requestContext = deleteReviewHelper.delete(reviewId);
-		requestContext.setErrorView(JSON);
-		requestContext.setSuccessView(JSON);
+		RequestContext<String, ReviewerViewBean> requestContext = deleteReviewHelper.delete(reviewId);
+		requestContext.setErrorView("error");
+		requestContext.setSuccessView("reviewerData");
 		requestContext.setModel(model);
 		return handleResponse(requestContext, new UIExceptionFactory() {
 			@Override

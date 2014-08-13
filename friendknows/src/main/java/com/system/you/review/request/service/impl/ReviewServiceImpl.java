@@ -32,7 +32,13 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 			hasRight(reviewerRequest);
 			Review bean = reviewBean(review, reviewerRequest);
 			reviewDAO.addReview(bean);
-			reviewerRequest.setStatus(Status.ANSWERED);
+			
+			Status status = reviewerRequest.getStatus() ;
+			Status newStatus = Status.ANSWERED;
+			if(status == Status.PROPAGATED){
+				newStatus = Status.ASWERED_FORWARED;
+			}
+			reviewerRequest.setStatus(newStatus);
 			updateReviewer(reviewerRequest);
 			triggerAddChange(bean);
 			return bean;
@@ -43,6 +49,7 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 		return null;
 	}
 
+	
 	private void updateReviewer(Reviewer reviewerRequest) {
 		reviewerRequest.setUpdateDateTime(new Date());
 		reviewerDAO.update(reviewerRequest);
@@ -57,8 +64,13 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 				hasRight(review);
 				reviewDAO.delete(id);
 				Reviewer reviewer = reviewerDAO.getReviewer(review
-						.getreviewerRequestId());
-				reviewer.setStatus(Status.INITIATED);
+						.getReviewerRequestId());
+				Status newStatus = Status.INITIATED;
+				Status existingStatus = reviewer.getStatus() ;
+				if(existingStatus == Status.ASWERED_FORWARED){
+					newStatus = Status.PROPAGATED;
+				}
+				reviewer.setStatus(newStatus);
 				updateReviewer(reviewer);
 				triggerDeleteChange(review);
 				return review;

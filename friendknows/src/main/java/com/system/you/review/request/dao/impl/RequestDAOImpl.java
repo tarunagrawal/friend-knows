@@ -67,7 +67,7 @@ public class RequestDAOImpl extends DAOSupport<Request> implements RequestDAO {
 		if (request != null) {
 			getSession().delete(request);
 			return true;
-		}
+		} 
 		return false;
 	}
 

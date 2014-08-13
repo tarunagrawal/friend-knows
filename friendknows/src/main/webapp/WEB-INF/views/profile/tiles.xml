@@ -36,6 +36,12 @@
 			value="/WEB-INF/views/profile/editReview.jsp" />
 	</definition>
 
+
+	<definition name="reviewerData" extends="blank">
+		<put-attribute name="content"
+			value="/WEB-INF/views/profile/reviewerData.jsp" />
+	</definition>
+
 	<definition name="forward" extends="blank">
 		<put-attribute name="content" value="/WEB-INF/views/profile/forward.jsp" />
 	</definition>

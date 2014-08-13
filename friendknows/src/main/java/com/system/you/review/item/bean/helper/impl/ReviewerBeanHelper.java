@@ -85,7 +85,8 @@ public class ReviewerBeanHelper extends BeanHelper {
 		}
 		viewBean.setCreateDateTime(date(dbBean.getCreateDateTime()));
 		viewBean.setRequestDescription(dbBean.getRequest().getDescription());
-		if (dbBean.getStatus().equals(Request.Status.PROPAGATED)) {
+		if (dbBean.getStatus().equals(Request.Status.PROPAGATED)
+				|| dbBean.getStatus().equals(Request.Status.ASWERED_FORWARED)) {
 			Request request = dbBean.getRequest();
 			Request forwardRequest = null;
 			try {
@@ -95,7 +96,7 @@ public class ReviewerBeanHelper extends BeanHelper {
 			}
 			if (forwardRequest != null) {
 				viewBean.setForwardRequest(requestBeanHelper.dataToView(
-						forwardRequest, true));
+						forwardRequest, false));
 			}
 		}
 

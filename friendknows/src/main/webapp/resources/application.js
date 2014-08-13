@@ -278,27 +278,54 @@ $(function() {
 		$.ajax({
 			method : "post",
 			headers : {
-				Accept : "application/json"
+				Accept : "text/html"
 			},
 			url : $link.attr("href"),
 			data : $(this).find("form").serialize(),
-			dataType : 'json',
 			error : function(response) {
-				var obj = JSON.parse(response.responseText);
-				$.each(obj.messages, function(key, value) {
-					alert(key + ":" + value);
-				});
+				alert(response);
 			},
 			success : function(response) {
-				var $review =   $link.closest(".fk-review");
-				$review.hide("slow", function(){
-					$review.remove();
+				var $container =   $link.closest(".fk-reviewer-data-container");
+				$container.hide("slow", function(){
+					$container.empty();
+					$container.html(response);
+					$container.show("slow");
 				});
 			}
 		});
 		return false;
 	});
 
+	
+
+	$("body").on("click", "a.fk-remove-fwd-reviewer-link", function(event) {
+		event.preventDefault();
+		var $link = $(this);
+		$.ajax({
+			method : "post",
+			headers : {
+				Accept : "text/html"
+			},
+			url : $link.attr("href"),
+			data : $(this).find("form").serialize(),
+			error : function(response) {
+				alert(response.responseText);
+			},
+			success : function(response) {
+				var $containerId =   $link.attr("data-append");
+				var $container = $("#" + $containerId);
+				$container.hide("slow", function(){
+					$container.empty();
+					$container.html(response);
+					$container.show("slow");
+				});
+			}
+		});
+		return false;
+	});
+
+	
 	$(".forward_review_link").bind("click", function(event) {
 		event.preventDefault();
 		var $link = $(this);

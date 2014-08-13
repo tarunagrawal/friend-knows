@@ -43,7 +43,7 @@ public class Review implements ApplicationEntity {
 	}
 
 	@Basic
-	public String getreviewerRequestId() {
+	public String getReviewerRequestId() {
 		return reviewerRequestId;
 	}
 

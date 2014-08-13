@@ -83,15 +83,23 @@ public class ContextInitializationFilter extends GenericFilterBean {
 			String requestorId = getRequestorId(request);
 			if (Requestor.NEW_REQUESTOR.equalsIgnoreCase(requestorId)
 					|| StringUtils.isBlank(requestorId)) {
-				requestor = requestorService.create(requestorId);
-				setSession(request, requestor);
+				requestor = createRequestor(request, requestorId);
 				return requestor;
 			}
 			requestor = getExistingRequestor(requestorId);
 			if (requestor == null) {
-				throw new RequestorNoFoundException(requestorId);
+				// in any case existing requestor in null
+				requestor = createRequestor(request, requestorId);
 			}
 		}
+		return requestor;
+	}
+
+	private Requestor createRequestor(HttpServletRequest request,
+			String requestorId) {
+		Requestor requestor;
+		requestor = requestorService.create(requestorId);
+		setSession(request, requestor);
 		return requestor;
 	}
 

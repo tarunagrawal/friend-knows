@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
-
+<div class="row fk-error hide"></div>
 <form
 	action="<c:url value="/Request/${requestId}/Reviewer/${reviewerId}/Review/${view.id}/Edit/Submit"/>"
 	method="post">
@@ -61,7 +61,7 @@
 		$.ajax({
 			method : "post",
 			headers : {
-				Accept : "application/json"
+				Accept : "text/html"
 			},
 			url : $button.closest("form").attr("action"),
 			data : $button.closest("form").serialize(),
@@ -70,7 +70,15 @@
 				$errorDiv.show("slow");
 			},
 			success : function(response) {
-				var $requestParentId = $dialog.attr("data-append");
+				var $containerId = $dialog.attr("data-append");
+				var $container = $("#" + $containerId);
+				$container.hide("slow", function() {
+					$container.empty();
+					$container.html(response);
+					$container.show("slow");
+				});
+
+				/* var $requestParentId = $dialog.attr("data-append");
 				var $reviewData = $("#"+$requestParentId);
 				var $descriptionData = $reviewData.find(".fk-review-text-data");
 				$descriptionData.hide("slow", function(){
@@ -79,8 +87,8 @@
 					$descriptionData.show("slow");
 				});
 				alert(response.view.tag.popularTags[0].tag);
-				$reviewData.find(".fk-tag-viewName");
-				
+				$reviewData.find(".fk-tag-viewName"); */
+
 				$("#" + $dialogId).foundation('reveal', 'close');
 			}
 		});

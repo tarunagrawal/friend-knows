@@ -36,4 +36,7 @@ public interface RequestService {
 
 	public Request editDescription(String requestId, String description)
 			throws ServiceException;
+	
+	public Reviewer removeFwdReviewer(String reviewerId, String requestId, String fwdReviewerId)
+			throws ServiceException;
 }

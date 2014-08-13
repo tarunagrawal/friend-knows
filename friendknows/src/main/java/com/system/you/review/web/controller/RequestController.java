@@ -29,7 +29,6 @@ import com.system.you.review.web.URLGenerator;
 import com.system.you.review.web.beans.form.RequestFormBean;
 import com.system.you.review.web.beans.form.ReviewForwardFormBean;
 import com.system.you.review.web.beans.response.RequestContext;
-import com.system.you.review.web.beans.view.RequestViewBean;
 import com.system.you.review.web.beans.view.ReviewerViewBean;
 import com.system.you.review.web.controller.helper.AddReviewerHelper;
 import com.system.you.review.web.controller.helper.CloseRequestHelper;
@@ -166,11 +165,11 @@ public class RequestController extends ControllerSupport {
 	@RequestMapping(value = "/{requestId}/Reviewer/{reviewerId}/Forward/New/Submit")
 	public ModelAndView forwardRequestSubmit(ReviewForwardFormBean formBean,
 			Model model) throws UIException {
-		RequestContext<ReviewForwardFormBean, RequestViewBean> requestContext = forwardHelper
+		RequestContext<ReviewForwardFormBean, ReviewerViewBean> requestContext = forwardHelper
 				.submit(formBean);
-		String viewName = "forward";
+		String viewName = "reviewerData";
 		requestContext.setSuccessView(viewName);
-		requestContext.setErrorView(viewName);
+		requestContext.setErrorView("error");
 		requestContext.setModel(model);
 		return handleResponse(requestContext, new UIExceptionFactory() {
 			@Override

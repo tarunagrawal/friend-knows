@@ -22,39 +22,42 @@
 		</div>
 	</div>
 </form>
+<a class="close-reveal-modal">&#215;</a>
 <SCRIPT type="text/javascript">
 	$("#search-box").tokenInput("/friendknows/facebook/search/", {
 		theme : "facebook",
 		preventDuplicates : true,
 	});
 
-	$("#forward_request_button").bind(
-			"click",
-			function(event) {
-				event.preventDefault();
-				$button = $(this);
-				$dialog = $button.closest(".reveal-modal");
-				$dialogId = $dialog.attr("id");
-				$errorDiv = $dialog.find(".fk-error");
-				$errorDiv.hide();
-				$errorDiv.empty();
-				$.ajax({
-					method : "post",
-					headers : {
-						Accept : "text/html"
-					},
-					url : $button.closest("form").attr("action"),
-					data : $button.closest("form").serialize(),
-					error : function(response) {
-						$errorDiv.append(response.responseText);
-						$errorDiv.show("slow");
-					},
-					success : function(response) {
-						var requestParentId = $dialog.attr("data-append");
-						$("#" + requestParentId).find(".fk-reviewers").append(
-								response);
-						$("#" + $dialogId).foundation('reveal', 'close');
-					}
+	$("#forward_request_button").bind("click", function(event) {
+		event.preventDefault();
+		$button = $(this);
+		$dialog = $button.closest(".reveal-modal");
+		$dialogId = $dialog.attr("id");
+		$errorDiv = $dialog.find(".fk-error");
+		$errorDiv.hide();
+		$errorDiv.empty();
+		$.ajax({
+			method : "post",
+			headers : {
+				Accept : "text/html"
+			},
+			url : $button.closest("form").attr("action"),
+			data : $button.closest("form").serialize(),
+			error : function(response) {
+				$errorDiv.append(response.responseText);
+				$errorDiv.show("slow");
+			},
+			success : function(response) {
+				var $containerId = $dialog.attr("data-append");
+				var $container = $("#" + $containerId);
+				$container.hide("slow", function() {
+					$container.empty();
+					$container.html(response);
+					$container.show("slow");
 				});
-			});
+				$("#" + $dialogId).foundation('reveal', 'close');
+			}
+		});
+	});
 </SCRIPT>
