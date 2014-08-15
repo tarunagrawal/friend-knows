@@ -159,17 +159,6 @@ public class RequestServiceImpl extends ServiceSupport implements
 							// if only one reviewer is left then close the
 							// request
 							close(requestId);
-							// update parent requests children
-							Request parentRequest = request.getParentRequest();
-							Iterator<Request> iterator = parentRequest
-									.getChildren().iterator();
-							while (iterator.hasNext()) {
-								Request child = (Request) iterator.next();
-								if (child.getId().equalsIgnoreCase(requestId)) {
-									iterator.remove();
-									break;
-								}
-							}
 							Reviewer parentReviewer = reviewerDAO
 									.getReviewer(reviewerId);
 							Status newStatus = Status.INITIATED;
@@ -207,33 +196,9 @@ public class RequestServiceImpl extends ServiceSupport implements
 						}
 					}
 				}
-
-				// do not validate last reviewer for propagated request
-				if (request.getStatus() == Status.PROPAGATED) {
-					int totalReviewer = reviewerDAO.getReviewerCount(requestId);
-					if (totalReviewer == 1) {
-						// if only one reviewer is left then close the request
-						requestDAO.close(requestId);
-						Reviewer parentReviewer = reviewerDAO
-								.getReviewer(reviewerId);
-						Status newStatus = Status.INITIATED;
-						Status existing = parentReviewer.getStatus();
-						if (existing == Status.PROPAGATED) {
-							newStatus = Status.INITIATED;
-						} else if (existing == Status.ASWERED_FORWARED) {
-							newStatus = Status.ANSWERED;
-						}
-						parentReviewer.setStatus(newStatus);
-						parentReviewer.setUpdateDateTime(new Date());
-						reviewerDAO.update(parentReviewer);
-						return null;
-					} else {
-						{
-						}
-					}
-				}
 			}
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			logErrorAndThrowException("error while removing reviewer "
 					+ reviewerId + " for request " + requestId, ex);
 		}

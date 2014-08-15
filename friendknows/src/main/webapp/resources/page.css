@@ -239,3 +239,17 @@ body {
 	color: white;
 	font-weight: bold;
 }
+
+.fk-header-fill-trusted {
+	background-color: rgb(70, 152, 221);
+	border-color: rgb(70, 152, 221);
+}
+
+.fk-label-trusted {
+	font-size: 0.8rem;
+	padding: 0.25rem;
+	border: 0.1rem;
+	border-style: solid;
+	border-color: rgb(70, 152, 221);
+	text-align: center;
+}

@@ -34,6 +34,9 @@ public interface Requestor {
 
 	public List<String> getFriendsIds();
 
+	public boolean isFriend(String providerId);
+	
+	
 	public static String REQUESTOR_ID = "requestorID";
 
 	public static String NEW_REQUESTOR = "";

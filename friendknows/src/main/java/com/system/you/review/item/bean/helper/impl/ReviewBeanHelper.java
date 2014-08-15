@@ -17,7 +17,7 @@ import com.system.you.review.web.beans.view.TagViewBean;
 @Service
 public class ReviewBeanHelper extends BeanHelper {
 
-	public Review formToDB(ReviewFormBean formBean){
+	public Review formToDB(ReviewFormBean formBean) {
 		checkNulls(formBean);
 		Review dbBean = new Review();
 		dbBean.setReviewDescription(formBean.getReviewDescription());
@@ -29,26 +29,30 @@ public class ReviewBeanHelper extends BeanHelper {
 		dbBean.setReviewer(currentUser());
 		return dbBean;
 	}
-	
-	public ReviewViewBean dbToView(Review dbBean){
+
+	public ReviewViewBean dbToView(Review dbBean) {
 		checkNulls(dbBean);
 		ReviewViewBean viewBean = new ReviewViewBean();
 		viewBean.setId(dbBean.getReviewID());
 		viewBean.setDescription(dbBean.getReviewDescription());
 		viewBean.setDateTime(date(dbBean.getCreateDateTime()));
 		viewBean.setRating(dbBean.getRating());
-		PopularTags popularTag =	tagService.getPopularReviewTag(dbBean);
-		WeightedTag [] weightedTags = popularTag.getPopularTags() ;
-		if(weightedTags != null){
+		viewBean.setReviewUser(userBeanHelper.dataToView(dbBean.getReviewer()));
+		PopularTags popularTag = tagService.getPopularReviewTag(dbBean);
+		WeightedTag[] weightedTags = popularTag.getPopularTags();
+		if (weightedTags != null) {
 			TagViewBean tagViewBean = new TagViewBean();
 			WeightedTag weightedTag = weightedTags[0];
-			tagViewBean.setTagName(weightedTag.getTag().getViewName());	
+			tagViewBean.setTagName(weightedTag.getTag().getViewName());
 			tagViewBean.setCount(weightedTag.getCount());
 			viewBean.setTag(tagViewBean);
 		}
 		return viewBean;
 	}
-	
+
 	@Autowired
 	private TagService tagService;
+
+	@Autowired
+	private UserBeanHelper userBeanHelper;
 }

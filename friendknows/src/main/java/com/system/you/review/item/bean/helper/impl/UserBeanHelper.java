@@ -14,6 +14,7 @@ public class UserBeanHelper extends BeanHelper {
 		checkNulls(dbBean);
 		UserViewBean viewBean = new UserViewBean();
 		viewBean.setId(dbBean.getId());
+		viewBean.setProviderId(dbBean.getProviderUserId());
 		viewBean.setMailId(dbBean.getMailID());
 		viewBean.setName(dbBean.getName());
 		viewBean.setNickName(nickName(dbBean));

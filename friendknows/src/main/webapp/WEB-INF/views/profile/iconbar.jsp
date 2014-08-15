@@ -7,11 +7,14 @@
 
 <div class="icon-bar vertical six-up fk-sidebar fixed "
 	style="width: auto; margin-top: 2.8rem;">
-	<a class="item" href="<c:url value="/Request/New"/>"> <label
+
+	<a class="item" href="<c:url value="/"/>"> <label
+		class="fi-clipboard-notes fk-navigation-icon-size"></label></a> <a
+		class="item" href="<c:url value="/Request/New"/>"> <label
 		class="fi-plus fk-navigation-icon-size"></label>
 	</a> <a class="item" href="<c:url value="/request/assigned"/>"> <label
 		class="fi-anchor fk-navigation-icon-size"></label>
-	</a> <a class="item"> <label class="fk-navigation-icon-size">rc</label>
-	</a> <a class="item"><label class="fk-navigation-icon-size">pv</label>
+	</a> <a class="item has-tip tip-right radius " data-tooltip title="your reviews list"> <label class="fi-lightbulb fk-navigation-icon-size"></label>
+	</a> <a class="item"><label class="fi-results-demographics fk-navigation-icon-size"></label>
 	</a>
 </div>

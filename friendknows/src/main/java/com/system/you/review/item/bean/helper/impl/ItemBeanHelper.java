@@ -45,6 +45,7 @@ public class ItemBeanHelper extends BeanHelper {
 		ItemViewBean viewBean = new ItemViewBean();
 		viewBean.setDescription(StringUtils.upperCase(dbBean.getDescription()));
 		viewBean.setId(dbBean.getId());
+		viewBean.setCategory(categoryBeanHelper.dataToView(dbBean.getCategory()));
 		PopularTags popularTags = ratingService.getPopularTag(dbBean.getId());
 		List<TagViewBean> publicTags = getTagViewBeans(popularTags);
 		viewBean.setRating(publicTags);

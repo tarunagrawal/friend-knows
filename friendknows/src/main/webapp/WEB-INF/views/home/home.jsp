@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
@@ -6,6 +7,11 @@
 	uri="http://www.springframework.org/spring-social/facebook/tags"
 	prefix="facebook"%>
 <%@ page session="false"%>
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>friendknows.com</title>
 <link rel="stylesheet"
 	href="<c:url value="/resources/css/foundation.css" />" />
 <link rel="stylesheet"
@@ -56,34 +62,35 @@ body {
 	border-style: solid;
 }
 </style>
-<section>
-	<div class="container">
-		<div class="row banner fk-no-margin">
-			<div class="small-10 columns small-centered">
-				<div class="row">
-					<div class="small-12 columns small-centered logoPanel">
-						<div class="left">
-							<div>
-								<span class="logo fk-prefix">Friend</span><span class="logo">Knows</span><span
-									class="com logo">.com</span>
-							</div>
-							<div style="margin-top: 2rem;">
-								<a href="<c:url value="/auth/facebook"/>" class="button small">Signin
-									with Facebook </a>
+</head>
+<body>
+	<section>
+		<div class="container">
+			<div class="row banner fk-no-margin">
+				<div class="small-10 columns small-centered">
+					<div class="row">
+						<div class="small-12 columns small-centered logoPanel">
+							<div class="left">
+								<div>
+									<span class="logo fk-prefix">Friend</span><span class="logo">Knows</span><span
+										class="com logo">.com</span>
+								</div>
+								<div style="margin-top: 2rem;">
+									<a href="<c:url value="/auth/facebook"/>" class="button small">Signin
+										with Facebook </a>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="small-6 columns small-centered logopanel">
-				<div class="left fk-label text-center"
-					style="color: white; height: 10rem; border-color: white;">Looking
-					for review, opinion online ?</div>
+			<div class="row">
+				<div class="small-6 columns small-centered logopanel">
+					<div class="left fk-label text-center"
+						style="color: white; height: 10rem; border-color: white;">Looking
+						for review, opinion online ?</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</section>
-
-
+	</section>
+</body>

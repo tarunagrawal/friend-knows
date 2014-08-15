@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.system.you.review.core.service.exception.ServiceException;
 import com.system.you.review.item.bean.helper.impl.ReviewBeanHelper;
+import com.system.you.review.request.bean.Request;
 import com.system.you.review.request.bean.Request.Status;
 import com.system.you.review.request.bean.Review;
 import com.system.you.review.request.bean.Reviewer;
@@ -32,10 +33,10 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 			hasRight(reviewerRequest);
 			Review bean = reviewBean(review, reviewerRequest);
 			reviewDAO.addReview(bean);
-			
-			Status status = reviewerRequest.getStatus() ;
+
+			Status status = reviewerRequest.getStatus();
 			Status newStatus = Status.ANSWERED;
-			if(status == Status.PROPAGATED){
+			if (status == Status.PROPAGATED) {
 				newStatus = Status.ASWERED_FORWARED;
 			}
 			reviewerRequest.setStatus(newStatus);
@@ -49,7 +50,6 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 		return null;
 	}
 
-	
 	private void updateReviewer(Reviewer reviewerRequest) {
 		reviewerRequest.setUpdateDateTime(new Date());
 		reviewerDAO.update(reviewerRequest);
@@ -66,8 +66,8 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 				Reviewer reviewer = reviewerDAO.getReviewer(review
 						.getReviewerRequestId());
 				Status newStatus = Status.INITIATED;
-				Status existingStatus = reviewer.getStatus() ;
-				if(existingStatus == Status.ASWERED_FORWARED){
+				Status existingStatus = reviewer.getStatus();
+				if (existingStatus == Status.ASWERED_FORWARED) {
 					newStatus = Status.PROPAGATED;
 				}
 				reviewer.setStatus(newStatus);
@@ -146,6 +146,63 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 		return null;
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Review copyToReviewer(String reviewId, String reviewerId)
+			throws ServiceException {
+		try {
+			Reviewer reviewer = reviewerDAO.getReviewer(reviewerId);
+			hasRight(reviewer);
+			Review review = reviewDAO.getReview(reviewId);
+			if (anyConnection(reviewer, review)) {
+				Review copied = copy(review, reviewer);
+				reviewDAO.addReview(copied);
+
+				Status newStatus = Status.ANSWERED;
+				Status existingStatus = reviewer.getStatus();
+				if (existingStatus == Status.PROPAGATED) {
+					newStatus = Status.ASWERED_FORWARED;
+				}
+				reviewer.setStatus(newStatus);
+				updateReviewer(reviewer);
+				triggerAddChange(review);
+				return copied;
+			}
+		} catch (Exception ex) {
+			logErrorAndThrowException("error occured while copying review "
+					+ reviewId + " reviewer " + reviewerId, ex);
+		}
+		return null;
+	}
+
+	private Review copy(Review review, Reviewer newReviewer) {
+		Review copied = new Review();
+		Date now = new Date();
+		copied.setCreateDateTime(now);
+		copied.setItem(review.getItem());
+		copied.setRating(review.getRating());
+		copied.setReviewDescription(review.getDescription());
+		copied.setReviewer(getCurrentUser());
+		copied.setReviewerRequestId(newReviewer.getId());
+		copied.setUpdateDateTime(now);
+		copied.setVerified(Review.NOT_VERIFED);
+		return copied;
+	}
+
+	private boolean anyConnection(Reviewer reviewer, Review review) {
+		String reviewerId = review.getReviewerRequestId();
+		Reviewer reviewOnwer = reviewerDAO.getReviewer(reviewerId);
+		if (reviewOnwer == reviewer) {
+			return true;
+		}
+
+		Request onwerParentRequest = reviewOnwer.getRequest()
+				.getParentRequest();
+		Request parentRequest = reviewer.getRequest();
+
+		return onwerParentRequest == parentRequest;
+	}
+
 	private Review reviewBean(ReviewFormBean formBean, Reviewer reviewerRequest) {
 		Review review = reviewBeanHelper.formToDB(formBean);
 		review.setReviewerRequestId(reviewerRequest.getRequestID());
@@ -170,5 +227,4 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 
 	private static Logger logger = LoggerFactory
 			.getLogger(ReviewServiceImpl.class);
-
 }

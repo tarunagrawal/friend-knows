@@ -81,9 +81,8 @@
 						<div class="small-11 columns medium-text-left">
 							<c:forEach items="${bean.item.rating}" var="tagView">
 								<c:if test="${tagView ne null}">
-									<span class="fk-label fk-header-fill fk-color-white">P</span>
-									<span class="fk-label fk-radius">
-										${tagView.tagName}[${tagView.count}] </span>
+									<span class="fk-label fk-header-fill fk-color-white">P</span><span class="fk-label ">
+										${tagView.tagName}</span><span class="fk-label fk-header-fill fk-color-white">${tagView.count}</span>
 									<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 								</c:if>
 							</c:forEach>
@@ -93,9 +92,9 @@
 						<div class="small-11 columns medium-text-left">
 							<c:forEach items="${bean.item.connectedRating}" var="tagView">
 								<c:if test="${tagView ne null}">
-									<span class="fk-label fk-header-fill fk-color-white">T</span>
-									<span class="fk-label fk-radius">
-										${tagView.tagName}[${tagView.count}] </span>
+									<span class="fk-label fk-header-fill-trusted fk-color-white">T</span><span class="fk-label-trusted">
+										${tagView.tagName}</span><span 
+										class="fk-label fk-header-fill-trusted fk-color-white">${tagView.count}</span>
 									<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 								</c:if>
 							</c:forEach>
@@ -112,7 +111,7 @@
 									</div>
 									<div
 										class="small-11 columns medium-text-left fk-no-left-padding end ">
-										<div class="row ">
+										<div class="row fk-no-margin">
 											<div class="small-3 columns medium-text-left fk-bold">${reviewer.user.name}
 											</div>
 											<div class="small-5 columns medium-text-left ">
@@ -129,13 +128,6 @@
 													<span class="fk-label fk-radius fk-forwarded">${reviewer.status}</span>
 												</c:if>
 											</div>
-											<c:if test="${fn:contains(reviewer.status, 'Answered')}">
-												<div class="small-3 columns">
-													<span class="fk-label fk-header-fill fk-color-white">T</span><span
-														class="fk-label">
-														${reviewer.reviews[0].tag.tagName}</span>
-												</div>
-											</c:if>
 											<div class="small-1 columns medium-text-right ">
 												<a
 													href="<c:url value="Request/${bean.id}/Reviewer/${reviewer.id}/Remove"/>"
@@ -144,7 +136,8 @@
 										</div>
 										<c:if test="${not empty reviewer.reviews}">
 											<c:forEach items="${reviewer.reviews}" var="review">
-												<div class="row  fk-padding-top">
+												<div class="row fk-no-margin fk-padding-top"
+													style="margin-top: 0.4rem !important; margin-bottom: 0.4rem !important; background-color: whitesmoke;">
 													<div class="small-10 columns end fk-review-display">
 														<div class="row">
 															<div class="small-12 columns">
@@ -152,6 +145,10 @@
 															</div>
 														</div>
 														<div class="row">
+															<div class="small-4 columns">
+																<span class="fk-label fk-header-fill fk-color-white">T</span><span
+																	class="fk-label"> ${review.tag.tagName}</span>
+															</div>
 															<div class="small-6 columns medium-text-left end ">
 																<ul class="inline-list fk-padding">
 																	<li><a class="fk-operation-link"
@@ -175,3 +172,6 @@
 	</div>
 </div>
 
+<script type="text/javascript">
+	
+</script>

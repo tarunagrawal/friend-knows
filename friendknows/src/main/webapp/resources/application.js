@@ -33,7 +33,6 @@ $(function() {
 		tokenLimit : 1,
 	});
 
-	
 	$("body")
 			.on(
 					"click",
@@ -234,7 +233,7 @@ $(function() {
 			},
 			success : function(response) {
 				var $reviewer = $link.closest(".fk-reviewer");
-				$reviewer.hide("slow", function(){
+				$reviewer.hide("slow", function() {
 					$reviewer.remove();
 				});
 			}
@@ -262,11 +261,11 @@ $(function() {
 			},
 			success : function(response) {
 				var $requestSummary = $link.closest(".fk-request-summary");
-				$requestSummary.hide("slow", function(){
+				$requestSummary.hide("slow", function() {
 					$requestSummary.remove();
-					$("#"+$details).remove();
+					$("#" + $details).remove();
 				});
-				
+
 			}
 		});
 		return false;
@@ -286,8 +285,8 @@ $(function() {
 				alert(response);
 			},
 			success : function(response) {
-				var $container =   $link.closest(".fk-reviewer-data-container");
-				$container.hide("slow", function(){
+				var $container = $link.closest(".fk-reviewer-data-container");
+				$container.hide("slow", function() {
 					$container.empty();
 					$container.html(response);
 					$container.show("slow");
@@ -296,8 +295,6 @@ $(function() {
 		});
 		return false;
 	});
-
-	
 
 	$("body").on("click", "a.fk-remove-fwd-reviewer-link", function(event) {
 		event.preventDefault();
@@ -313,9 +310,9 @@ $(function() {
 				alert(response.responseText);
 			},
 			success : function(response) {
-				var $containerId =   $link.attr("data-append");
+				var $containerId = $link.attr("data-append");
 				var $container = $("#" + $containerId);
-				$container.hide("slow", function(){
+				$container.hide("slow", function() {
 					$container.empty();
 					$container.html(response);
 					$container.show("slow");
@@ -325,7 +322,62 @@ $(function() {
 		return false;
 	});
 
-	
+	$("body").on("click", "a.fk-propagated-back-link", function(event) {
+		event.preventDefault();
+		var $link = $(this);
+		$.ajax({
+			method : "post",
+			headers : {
+				Accept : "text/html"
+			},
+			url : $link.attr("href"),
+			error : function(response) {
+				alert(response.responseText);
+			},
+			success : function(response) {
+				var $containerId = $link.attr("data-append");
+				var $container = $("#" + $containerId);
+				$container.hide("slow", function() {
+					$container.empty();
+					$container.html(response);
+					$container.show("slow");
+				});
+			}
+		});
+		return false;
+	});
+
+	$("body").on("click", "a#product_search_button", function(event) {
+		event.preventDefault();
+		var $link = $(this);
+		var href = $link.attr("href");
+		var itemId = $("#hidden_search").val();
+		if (itemId == "" || !($.trim(itemId).length > 0)) {
+			return false;
+		}
+		href = href + "?itemId=" + itemId;
+		$.ajax({
+			method : "get",
+			headers : {
+				Accept : "text/html"
+			},
+			url : href,
+			error : function(response) {
+				alert(response.responseText);
+			},
+			success : function(response) {
+				var $container = $("#content_container");
+				$container.hide("slow", function() {
+					$container.empty();
+					$container.html(response);
+					$container.show("slow");
+				});
+			}
+		});
+
+		return false;
+	});
+
 	$(".forward_review_link").bind("click", function(event) {
 		event.preventDefault();
 		var $link = $(this);

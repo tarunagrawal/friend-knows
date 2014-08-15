@@ -2,6 +2,7 @@ package com.system.you.review.web.beans.view;
 
 
 
+
 public class ReviewViewBean {
 
 	public String getId() {
@@ -43,16 +44,21 @@ public class ReviewViewBean {
 	public void setRating(int rating) {
 		this.rating = rating;
 	}
+	
+	public UserViewBean getReviewUser() {
+		return reviewUser;
+	}
+
+	public void setReviewUser(UserViewBean reviewUser) {
+		this.reviewUser = reviewUser;
+	}
+
+
 
 	private String id;
 	private String description;
 	private String dateTime;
 	private TagViewBean tag;
 	private int rating ;
-	
-	
-	class MetaData{
-		public String showReplyButton ;
-		
-	}
+	private UserViewBean reviewUser;
 }

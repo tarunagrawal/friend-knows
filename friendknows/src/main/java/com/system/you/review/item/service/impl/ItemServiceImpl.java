@@ -8,12 +8,24 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.system.you.review.category.service.CategoryService;
+import com.system.you.review.core.service.exception.ServiceException;
 import com.system.you.review.item.bean.Item;
 import com.system.you.review.item.dao.ItemDAO;
 import com.system.you.review.item.service.ItemService;
 
 @Service
 public class ItemServiceImpl implements ItemService {
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Item getItem(String id) throws ServiceException {
+		try {
+			return itemDAO.getItem(id);
+		} catch (Exception ex) {
+			throw new ServiceException(
+					"error occured while loading item from DB", ex);
+		}
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -95,9 +107,10 @@ public class ItemServiceImpl implements ItemService {
 
 	@Autowired
 	private ItemDAO itemDAO;
-	
+
 	@Autowired
 	private CategoryService categoryService;
 
 	public static Item defaultItem;
+
 }

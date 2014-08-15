@@ -9,9 +9,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.system.you.review.item.bean.helper.impl.RequestBeanHelper;
 import com.system.you.review.request.bean.Request;
+import com.system.you.review.request.service.ReviewService;
 import com.system.you.review.web.beans.view.RequestViewBean;
 import com.system.you.review.web.domain.impl.SessionUtils;
 
@@ -29,7 +31,14 @@ public class ProfileController extends ControllerSupport {
 		model.addAttribute("initiated", initiated(helper.reviewInitiated()));
 		return "profile";
 	}
-
+	
+	
+	@RequestMapping("/reviews")
+	@Secured(value = "USER_ROLE")
+	public ModelAndView myReviews(Model model) {
+		return new ModelAndView("myReviews");
+	}
+	
 	private Collection<RequestViewBean> initiated(Iterable<Request> dbRequests) {
 		List<RequestViewBean> viewBean = new ArrayList<RequestViewBean>();
 		if (dbRequests != null) {
@@ -50,6 +59,9 @@ public class ProfileController extends ControllerSupport {
 	@Autowired
 	private ProfileHelper helper;
 
+	@Autowired
+	private ReviewService reviewService;
+	
 	@Autowired
 	private RequestBeanHelper requestBeanHelper;
 }

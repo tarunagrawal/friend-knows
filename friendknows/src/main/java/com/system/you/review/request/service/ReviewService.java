@@ -24,4 +24,6 @@ public interface ReviewService {
 
 	public Review get(String id) throws ServiceException;
 
+	public Review copyToReviewer(String reviewId, String reviewerId) throws ServiceException;
+
 }

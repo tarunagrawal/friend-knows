@@ -51,4 +51,11 @@
 			value="/WEB-INF/views/profile/interestedFriends.jsp" />
 	</definition>
 
+
+	<definition name="itemSearchResult" extends="blank">
+		<put-attribute name="content"
+			value="/WEB-INF/views/profile/itemSearchResult.jsp" />
+	</definition>
+
+
 </tiles-definitions>

@@ -87,45 +87,80 @@ body {
 	padding: 0px !important;
 	background-color: rgba(162, 162, 162, 0.49);
 	height: 45px;
+	-webkit-transform: translateZ(0);
 }
 
 .fk-request-summary-container {
+	
+}
+
+.has-tip {
+	border-bottom: none;
+}
+/* .ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active, 
+.ui-autocomplete, .ui-autocomplete:hover, 
+.ui-menu-item, .ui-menu-item:hover,
+.ui-menu-item a, .ui-menu-item a:hover,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-focus,
+.ui-menu .ui-menu-item a.ui-state-active,
+.ui-menu .ui-menu-item a
+{ background: #ffffff none no-repeat; 
+padding:0;
+margin:0;
+display:block;
+border:0;border-collapse:collapse;
+}
+ */
+.tooltip {
+	font-size: 0.7rem;
+	
 }
 </style>
 </head>
 <body class="fk-background">
-	<div class="fixed">
-		<nav class="top-bar" data-topbar="is_hover=false" class="sticky">
-			<ul class="title-area ">
-				<li class="name"><h1>
-						<a href="<c:url value="/"/>"> <span
-							class="fk-logo-color fk-bold">FriendKnows.com</span></a>
-					</h1></li>
-			</ul>
-			<section class="top-bar-section">
-				<ul class="right">
-					<li class="has-form">
-						<div class="row collapse">
-							<div class="large-9 small-9 columns">
-								<input type="text" id="product_search_box"
-									placeholder="search exiting items...">
-							</div>
-							<div class="large-3 small-3 columns">
-								<a href="#" class="alert button expand">Search</a>
-							</div>
-						</div>
-					</li>
-
-					<li><a href="#" class="fi-torso">&nbsp;${user.name}</a></li>
-					<li><a href="<c:url value="/signout" />">Signout</a></li>
+	<div>
+		<div class="fixed">
+			<nav class="top-bar" data-topbar="is_hover=false"
+				style="-webkit-transform: translateZ(0);">
+				<ul class="title-area ">
+					<li class="name"><h1>
+							<a href="<c:url value="/"/>"> <span
+								class="fk-logo-color fk-bold">FriendKnows.com</span></a>
+						</h1></li>
 				</ul>
-			</section>
-		</nav>
+				<section class="top-bar-section">
+					<ul class="right">
+						<li class="has-form">
+							<div class="row collapse">
+								<div class="large-9 small-9 columns">
+									<input type="text" id="product_search_box"
+										placeholder="search exiting items..."> <input
+										type="hidden" id="hidden_search" name="itemId" value="">
+								</div>
+								<div class="large-3 small-3 columns">
+									<a href="<c:url value="/item/SearchItem/"/>"
+										class="alert button expand fi-magnifying-glass"
+										id="product_search_button"></a>
+								</div>
+							</div>
+						</li>
+						<li><a href="#" class="fi-torso">&nbsp;${user.name}</a></li>
+						<li><a href="<c:url value="/signout" />">Signout</a></li>
+					</ul>
+				</section>
+			</nav>
+		</div>
 	</div>
 	<section>
-		<div class="row" style="">
+		<div class="row" style="margin-bottom: 50px;">
 			<div class="small-12 columns " style="padding: 0px;">
-				<div class="small-11 columns end">
+				<div class="small-11 columns end" id="content_container">
 					<tiles:insertAttribute name="content" />
 				</div>
 			</div>
@@ -149,21 +184,27 @@ body {
 			$(document)
 					.ready(
 							function() {
-								$("#item_search_box").tokenInput(
-										"/friendknows/category/search/", {
-											tokenLimit : 1,
-										});
-
-								var availableTags = [ "ActionScript",
-										"AppleScript", "Asp", "BASIC", "C",
-										"C++", "Clojure", "COBOL",
-										"ColdFusion", "Erlang", "Fortran",
-										"Groovy", "Haskell", "Java",
-										"JavaScript", "Lisp", "Perl", "PHP",
-										"Python", "Ruby", "Scala", "Scheme" ];
-								$("#product_search_box").autocomplete({
-									source : availableTags
-								});
+								$("#product_search_box")
+										.autocomplete(
+												{
+													source : "/friendknows/item/search/",
+													response : function(event,
+															ui) {
+														$
+																.each(
+																		ui.content,
+																		function(
+																				index,
+																				row) {
+																			row.label = row.name;
+																			row.value = row.name;
+																		});
+													},
+													select : function(event, ui) {
+														$("#hidden_search")
+																.val(ui.item.id);
+													}
+												});
 
 								$(
 										".fk-requests-bar .fk-request-summary:first-child")
@@ -172,6 +213,30 @@ body {
 								$(".fk-full-height").height(
 										$("body").height()
 												- $(".fk-top-bar").height());
+
+								(function(i, s, o, g, r, a, m) {
+									i['GoogleAnalyticsObject'] = r;
+									i[r] = i[r] || function() {
+										(i[r].q = i[r].q || []).push(arguments)
+									}, i[r].l = 1 * new Date();
+									a = s.createElement(o), m = s
+											.getElementsByTagName(o)[0];
+									a.async = 1;
+									a.src = g;
+									m.parentNode.insertBefore(a, m)
+								})
+										(
+												window,
+												document,
+												'script',
+												'//www.google-analytics.com/analytics.js',
+												'ga');
+
+								ga('create', 'UA-53827779-1', {
+									'cookieDomain' : 'none'
+								});
+								ga('send', 'pageview');
+
 							});
 		</script>
 	</section>

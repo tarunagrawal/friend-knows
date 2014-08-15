@@ -112,6 +112,10 @@ public class WebRequestorImpl implements Requestor {
 		this.connectedFriends = getConnectedFacebookFriends();
 	}
 
+	public boolean isFriend(String providerId){
+		return this.connectedFriendIds.contains(providerId);
+	}
+	
 	private String getHomeURL() {
 		return HttpHelper.getHomeURL(SessionUtils.getCurrentRequest());
 	}

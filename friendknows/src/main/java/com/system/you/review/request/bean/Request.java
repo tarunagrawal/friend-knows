@@ -106,7 +106,7 @@ public class Request implements ApplicationEntity, Comparable<Request> {
 		this.reviewers = reviewers;
 	}
 
-	@OneToMany(mappedBy = "parentRequest", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+	@OneToMany(mappedBy = "parentRequest", fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public Set<Request> getChildren() {

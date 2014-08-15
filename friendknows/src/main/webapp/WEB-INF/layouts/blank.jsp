@@ -4,5 +4,4 @@
 <%@ page session="false"%>
 <link rel="stylesheet" href="<c:url value="/resources/page.css" />"
 	type="text/css" media="screen" />
-	
 <tiles:insertAttribute name="content" />

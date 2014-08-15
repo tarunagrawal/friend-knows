@@ -2,8 +2,6 @@ package com.system.you.review.web.beans.view;
 
 import java.util.List;
 
-import com.system.you.review.core.PopularTags;
-
 public class ItemViewBean {
 
 	public String getId() {
@@ -37,9 +35,20 @@ public class ItemViewBean {
 	public void setConnectedRating(List<TagViewBean> connectedRating) {
 		this.connectedRating = connectedRating;
 	}
+	
+	public CategoryViewBean getCategory() {
+		return category;
+	}
+
+	public void setCategory(CategoryViewBean category) {
+		this.category = category;
+	}
+
+
 
 	private String id;
 	private String description;
 	private List<TagViewBean> rating;
 	private List<TagViewBean> connectedRating;
+	private CategoryViewBean category ;
 }

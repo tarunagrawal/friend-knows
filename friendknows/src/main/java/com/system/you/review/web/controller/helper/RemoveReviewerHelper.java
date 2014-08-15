@@ -60,6 +60,7 @@ public class RemoveReviewerHelper extends ControllerHelper {
 						responseBean.setViewBean(reviewerBeanHelper
 								.dataToView(reviewer));
 					} catch (Exception ex) {
+						ex.printStackTrace();
 						addSystemErrorMessage(responseBean);
 					}
 				}

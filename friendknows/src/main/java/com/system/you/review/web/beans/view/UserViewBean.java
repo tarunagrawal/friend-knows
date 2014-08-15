@@ -42,9 +42,20 @@ public class UserViewBean {
 		this.imageUrl = imageUrl;
 	}
 
+	
+	
+	public String getProviderId() {
+		return providerId;
+	}
+
+	public void setProviderId(String providerId) {
+		this.providerId = providerId;
+	}
+
 	private String id;
 	private String name;
 	private String nickName;
 	private String mailId;
 	private String imageUrl ;
+	private String providerId;
 }

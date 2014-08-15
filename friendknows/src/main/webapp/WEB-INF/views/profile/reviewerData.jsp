@@ -41,16 +41,15 @@
 									</div>
 
 									<div class="small-11 columns fk-no-margin ">
-										<div class="row">
+										<div class="row fk-no-margin">
 											<div class="small-12 columns fk-review-text-data">
 												<p>${review.description}</p>
 											</div>
 										</div>
 
-										<div class="row">
+										<div class="row fk-no-margin">
 											<div class="small-8 columns fk-padding-top text-left">
 												<div style="display: inline">
-
 													<span class=""> <span
 														class="fk-label fk-radius-left fk-header-fill fk-color-white">T</span><span
 														class="fk-label fk-radius-right fk-tag-viewName">
@@ -68,7 +67,7 @@
 													data-append="reviewer_data_container_${view.id}"
 													data-options="close_on_background_click:false" data-reveal></div>
 
-												<a class="fk-remove-review-link fi-trash"
+												<a class="fk-remove-review-link fi-comment-minus"
 													style="margin-left: 15px;"
 													href="<c:url value="/Request/${view.requestId}/Reviewer/{${view.id}}/Review/${review.id}/Remove"/>"></a>
 
@@ -141,8 +140,13 @@
 														</div>
 													</div>
 													<div class="row">
-														<div class="small-6 columns medium-text-left end ">
+														<div class="small-12 columns medium-text-left end ">
 															<ul class="inline-list fk-padding">
+																<li><a
+																	class="fk-operation-link fk-propagated-back-link"
+																	data-append="reviewer_data_container_${view.id}"
+																	href="<c:url value="/Reviewer/${view.id}/Review/${review.id}"/>">Let
+																		${view.initiatedUser.name} know </a></li>
 																<li><a class="fk-operation-link"
 																	href="javascript:verify('${review.id}">Agree</a></li>
 																<li><a class="fk-date">${review.dateTime}</a></li>

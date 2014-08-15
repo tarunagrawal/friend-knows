@@ -12,6 +12,7 @@ import com.system.you.review.web.UIExceptionFactory;
 import com.system.you.review.web.beans.response.RequestContext;
 import com.system.you.review.web.beans.view.ReviewerViewBean;
 import com.system.you.review.web.controller.helper.RemoveReviewerHelper;
+import com.system.you.review.web.controller.helper.VerifyReviewHelper;
 import com.system.you.review.web.reviewer.exception.RemoveReviewerException;
 
 @Controller
@@ -35,7 +36,25 @@ public class ReviewerController extends ControllerSupport {
 		});
 	}
 
+	@RequestMapping(value = "{reviewerId}/Review/{reviewId}")
+	public ModelAndView verify(@PathVariable String reviewerId,
+			@PathVariable String reviewId, Model model) throws UIException {
+		RequestContext<String[], ReviewerViewBean> requestContext = verifyReviewerHelper
+				.copyReview(reviewerId, reviewId);
+		requestContext.setSuccessView("reviewerData");
+		requestContext.setErrorView("error");
+		requestContext.setModel(model);
+		return handleResponse(requestContext, new UIExceptionFactory() {
+			@Override
+			public UIException create(final Model model, final String viewName) {
+				return new RemoveReviewerException(model, viewName);
+			}
+		});
+	}
+
 	@Autowired
 	private RemoveReviewerHelper removeReviewerHelper;
 
+	@Autowired
+	private VerifyReviewHelper verifyReviewerHelper;
 }
