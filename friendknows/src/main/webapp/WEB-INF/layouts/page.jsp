@@ -119,7 +119,6 @@ border:0;border-collapse:collapse;
  */
 .tooltip {
 	font-size: 0.7rem;
-	
 }
 </style>
 </head>
@@ -236,9 +235,23 @@ border:0;border-collapse:collapse;
 									'cookieDomain' : 'none'
 								});
 								ga('send', 'pageview');
-
+								//$(document).foundation('joyride', 'start');
 							});
 		</script>
+	</section>
+	<section>
+		<ol class="joyride-list" data-joyride>
+			<li data-id="content_container" data-text="Next"
+				data-options="tip_location: top; prev_button: false">
+				<p>Hello and welcome to the Joyride documentation page.</p>
+			</li>
+			<li data-id="footer" data-class="custom so-awesome" data-text="Next"
+				data-prev-text="Prev">
+				<h4>Stop #1</h4>
+				<p>You can control all the details for you tour stop. Any valid
+					HTML will work inside of Joyride.</p>
+			</li>
+		</ol>
 	</section>
 </body>
 </html>

@@ -17,7 +17,7 @@ public interface ReviewService {
 	public Review edit(String id, ReviewFormBean formBean)
 			throws ServiceException;
 
-	public Review verify(String id) throws ServiceException;
+	public Review verify(String requestId, String reviewerId, String reviewId) throws ServiceException;
 
 	public List<Review> getReviewsForItem(String itemId)
 			throws ServiceException;

@@ -58,7 +58,7 @@
 
 												</div>
 												<a class="fi-page-edit" style="margin-left: 15px;"
-													href="<c:url value="/Request/${view.requestId}/Reviewer/{${view.id}}/Review/${review.id}/Edit"/>"
+													href="<c:url value="/Request/${view.requestId}/Reviewer/${view.id}/Review/${review.id}/Edit"/>"
 													data-reveal-id="edit_review_${review.id}"
 													data-reveal-ajax="true"></a>
 
@@ -69,7 +69,7 @@
 
 												<a class="fk-remove-review-link fi-comment-minus"
 													style="margin-left: 15px;"
-													href="<c:url value="/Request/${view.requestId}/Reviewer/{${view.id}}/Review/${review.id}/Remove"/>"></a>
+													href="<c:url value="/Request/${view.requestId}/Reviewer/${view.id}/Review/${review.id}/Remove"/>"></a>
 
 												<div class="small-text-left fk-date "
 													style="display: inline; margin-left: 15px;">

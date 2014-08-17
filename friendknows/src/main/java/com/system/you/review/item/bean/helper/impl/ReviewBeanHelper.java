@@ -34,7 +34,7 @@ public class ReviewBeanHelper extends BeanHelper {
 		checkNulls(dbBean);
 		ReviewViewBean viewBean = new ReviewViewBean();
 		viewBean.setId(dbBean.getReviewID());
-		viewBean.setDescription(dbBean.getReviewDescription());
+		viewBean.setDescription(applyXSSFilter(dbBean.getReviewDescription()));
 		viewBean.setDateTime(date(dbBean.getCreateDateTime()));
 		viewBean.setRating(dbBean.getRating());
 		viewBean.setReviewUser(userBeanHelper.dataToView(dbBean.getReviewer()));
@@ -47,6 +47,10 @@ public class ReviewBeanHelper extends BeanHelper {
 			tagViewBean.setCount(weightedTag.getCount());
 			viewBean.setTag(tagViewBean);
 		}
+		
+		char verified = dbBean.getVerified() ;
+		boolean agreed =  (Review.VERIFED == verified);
+		viewBean.setAgreed(agreed);
 		return viewBean;
 	}
 

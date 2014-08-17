@@ -105,14 +105,29 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Review verify(String id) throws ServiceException {
+	public Review verify(String requestId, String reviewerId, String reviewId)
+			throws ServiceException {
 		try {
-			Review review = reviewDAO.getReview(id);
-			if (review != null) {
-				hasRight(review);
-				review.setVerified('Y');
-				reviewDAO.update(review);
-				return review;
+			Reviewer reviewer = reviewerDAO.getReviewer(reviewerId);
+			if (reviewer != null) {
+				Request request =  reviewer.getRequest();
+				// make sure that input reviewer id belongs request
+				if (request.getId().equalsIgnoreCase(requestId)) {
+					// check that current user has made the request
+					hasRight(request);
+					Review review = reviewDAO.getReview(reviewId);
+					if (review != null) {
+						String reviewerRequestId = review
+								.getReviewerRequestId();
+						//make sure that reviewer request owns the review
+						if (reviewerRequestId.equalsIgnoreCase(reviewer
+								.getId())) {
+							review.setVerified('Y');
+							reviewDAO.update(review);
+							return review;
+						}
+					}
+				}
 			}
 		} catch (Exception ex) {
 			logErrorAndThrowException(

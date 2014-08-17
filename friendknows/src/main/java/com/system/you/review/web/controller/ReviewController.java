@@ -29,20 +29,21 @@ import com.system.you.review.web.review.ReviewEditException;
 import com.system.you.review.web.review.ReviewVerifyException;
 
 @Controller
-@RequestMapping(value = "/Request/{requestId}/Reviewer/{reviewerId}/Review/")
+@RequestMapping(value = "/Request/{requestId}/Reviewer/{reviewerId}/Review")
 public class ReviewController extends ControllerSupport {
 
 	@RequestMapping(value = "/New")
 	@ResponseStatus(value = HttpStatus.OK)
-	public String addForm(@PathVariable String requestId, @PathVariable String reviewerId,
-			Model model) {
+	public String addForm(@PathVariable String requestId,
+			@PathVariable String reviewerId, Model model) {
 		setRequestAndReviewerIds(requestId, reviewerId, model);
 		return "addReview";
 	}
 
 	@RequestMapping(value = "/New/Submit")
 	@ResponseStatus(value = HttpStatus.OK)
-	public ModelAndView addSubmit(ReviewFormBean formBean, Model model) throws UIException {
+	public ModelAndView addSubmit(ReviewFormBean formBean, Model model)
+			throws UIException {
 		RequestContext<ReviewFormBean, ReviewerViewBean> requestContext = addReviewHelper
 				.submit(formBean);
 		requestContext.setSuccessView("reviewerData");
@@ -59,10 +60,12 @@ public class ReviewController extends ControllerSupport {
 
 	@RequestMapping(value = "/{reviewId}/Edit")
 	@ResponseStatus(value = HttpStatus.OK)
-	public ModelAndView editForm(@PathVariable String requestId, @PathVariable String reviewerId,
-			@PathVariable String reviewId, Model model) throws UIException {
+	public ModelAndView editForm(@PathVariable String requestId,
+			@PathVariable String reviewerId, @PathVariable String reviewId,
+			Model model) throws UIException {
 		String viewName = "editReview";
-		RequestContext<String, ReviewViewBean> requestContext = editReviewHelper.editForm(reviewId);
+		RequestContext<String, ReviewViewBean> requestContext = editReviewHelper
+				.editForm(reviewId);
 		requestContext.setErrorView(viewName);
 		requestContext.setSuccessView(viewName);
 		requestContext.setModel(model);
@@ -76,7 +79,8 @@ public class ReviewController extends ControllerSupport {
 
 	@RequestMapping(value = "/{reviewId}/Edit/Submit")
 	@ResponseStatus(value = HttpStatus.OK)
-	public ModelAndView edit(ReviewFormBean formBean, Model model) throws UIException {
+	public ModelAndView edit(ReviewFormBean formBean, Model model)
+			throws UIException {
 		// Using reviewer Request Id as review id for edit purpose. Saves us a
 		// formBean
 		RequestContext<ReviewFormBean, ReviewerViewBean> requestContext = editReviewHelper
@@ -95,8 +99,10 @@ public class ReviewController extends ControllerSupport {
 
 	@RequestMapping(value = "/{reviewId}/Remove")
 	@ResponseStatus(value = HttpStatus.OK)
-	public ModelAndView delete(@PathVariable String reviewId, Model model) throws UIException {
-		RequestContext<String, ReviewerViewBean> requestContext = deleteReviewHelper.delete(reviewId);
+	public ModelAndView delete(@PathVariable String reviewId, Model model)
+			throws UIException {
+		RequestContext<String, ReviewerViewBean> requestContext = deleteReviewHelper
+				.delete(reviewId);
 		requestContext.setErrorView("error");
 		requestContext.setSuccessView("reviewerData");
 		requestContext.setModel(model);
@@ -108,12 +114,15 @@ public class ReviewController extends ControllerSupport {
 		});
 	}
 
-	@RequestMapping(value = "/{reviewID}/Verify")
+	@RequestMapping(value = "{reviewId}/Agree")
 	@ResponseStatus(value = HttpStatus.OK)
-	public ModelAndView verify(@PathVariable String reviewId, Model model) throws UIException {
-		RequestContext<String, String> requestContext = verifyReviewHelper.verify(reviewId);
-		requestContext.setErrorView(JSON);
-		requestContext.setSuccessView(JSON);
+	public ModelAndView agree(@PathVariable String requestId,
+			@PathVariable String reviewerId, @PathVariable String reviewId,
+			Model model) throws UIException {
+		RequestContext<String, String> requestContext = verifyReviewHelper
+				.verify(requestId, reviewerId, reviewId);
+		requestContext.setErrorView("error");
+		requestContext.setSuccessView("agree");
 		requestContext.setModel(model);
 		return handleResponse(requestContext, new UIExceptionFactory() {
 			@Override
@@ -122,18 +131,21 @@ public class ReviewController extends ControllerSupport {
 			}
 		});
 	}
-	
-	@ExceptionHandler(value = { ReviewCreateException.class, ReviewEditException.class,
-			ReviewDeleteException.class, ReviewVerifyException.class, UIException.class })
+
+	@ExceptionHandler(value = { ReviewCreateException.class,
+			ReviewEditException.class, ReviewDeleteException.class,
+			ReviewVerifyException.class, UIException.class })
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public ModelAndView handleUIException(UIException uiException) {
 		String message = uiException.getMessage();
 		Throwable cause = uiException.getCause();
 		logger.error((StringUtils.isBlank(message)) ? "" : message, cause);
-		return new ModelAndView(uiException.getViewName(), uiException.getModel().asMap());
+		return new ModelAndView(uiException.getViewName(), uiException
+				.getModel().asMap());
 	}
 
-	private void setRequestAndReviewerIds(String requestId, String reviewerId, Model model) {
+	private void setRequestAndReviewerIds(String requestId, String reviewerId,
+			Model model) {
 		model.addAttribute("requestId", requestId);
 		model.addAttribute("reviewerId", reviewerId);
 	}
@@ -150,5 +162,6 @@ public class ReviewController extends ControllerSupport {
 	@Autowired
 	private VerifyReviewHelper verifyReviewHelper;
 
-	private static Logger logger = LoggerFactory.getLogger(ReviewController.class);
+	private static Logger logger = LoggerFactory
+			.getLogger(ReviewController.class);
 }

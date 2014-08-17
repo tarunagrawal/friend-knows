@@ -28,7 +28,7 @@ public class RequestBeanHelper extends BeanHelper {
 		dbBean.setParentRequest(null);
 		dbBean.setCreateDateTime(current);
 		dbBean.setUpdateDateTime(current);
-		dbBean.setDescription(applyXSSFilter(formBean.getDescription()));
+		dbBean.setDescription(formBean.getDescription());
 		dbBean.setReviewee(currentUser());
 		dbBean.setStatus(Request.Status.INITIATED);
 		dbBean.setItem(item(formBean));

@@ -13,25 +13,25 @@ import com.system.you.review.request.service.ReviewService;
 import com.system.you.review.request.service.ReviewerService;
 import com.system.you.review.web.beans.response.RequestContext;
 import com.system.you.review.web.beans.view.ReviewerViewBean;
-import com.system.you.review.web.beans.view.ViewBean;
 import com.system.you.review.web.review.ReviewVerifyException;
 
 @Service
 public class VerifyReviewHelper extends ControllerHelper {
 
-	public RequestContext<String, String> verify(String reviewId)
-			throws ReviewVerifyException {
+	public RequestContext<String, String> verify(String requestId,
+			String reviewerId, String reviewId) throws ReviewVerifyException {
 		RequestContext<String, String> requestContext = new RequestContext<String, String>(
 				reviewId);
 		try {
 			validateInput(requestContext);
 			if (!requestContext.containsMessage()) {
-				if (reviewService.verify(reviewId) == null) {
+				if (reviewService.verify(requestId, reviewerId, reviewId) == null) {
 					requestContext.addMessage("page",
 							getMessage("review.verify.error", null));
 				}
 			}
 		} catch (Exception ex) {
+			LOGGER.error("error occured while verifying the review", ex);
 			addSystemErrorMessage(requestContext);
 		}
 		return requestContext;
@@ -88,6 +88,6 @@ public class VerifyReviewHelper extends ControllerHelper {
 	@Autowired
 	private ReviewerBeanHelper reviewerBeanHelper;
 
-	private static Logger logger = LoggerFactory
+	private static Logger LOGGER = LoggerFactory
 			.getLogger(DeleteReviewHelper.class);
 }

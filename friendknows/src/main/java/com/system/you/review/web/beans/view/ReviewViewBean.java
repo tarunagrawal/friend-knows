@@ -53,7 +53,13 @@ public class ReviewViewBean {
 		this.reviewUser = reviewUser;
 	}
 
+	public boolean isAgreed() {
+		return agreed;
+	}
 
+	public void setAgreed(boolean agreed) {
+		this.agreed = agreed;
+	}
 
 	private String id;
 	private String description;
@@ -61,4 +67,6 @@ public class ReviewViewBean {
 	private TagViewBean tag;
 	private int rating ;
 	private UserViewBean reviewUser;
+	private boolean agreed ;
+
 }

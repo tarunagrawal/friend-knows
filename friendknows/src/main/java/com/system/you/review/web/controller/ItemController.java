@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.system.you.review.core.PopularTags;
 import com.system.you.review.core.UserInterest;
 import com.system.you.review.core.exception.UIException;
 import com.system.you.review.core.service.TagService;
-import com.system.you.review.core.service.exception.ServiceException;
 import com.system.you.review.item.bean.Item;
 import com.system.you.review.item.bean.helper.impl.ItemBeanHelper;
 import com.system.you.review.item.bean.helper.impl.ReviewBeanHelper;
@@ -30,7 +28,6 @@ import com.system.you.review.item.service.ItemSearchService;
 import com.system.you.review.item.service.ItemService;
 import com.system.you.review.request.bean.Review;
 import com.system.you.review.request.service.ReviewService;
-import com.system.you.review.request.service.ReviewerService;
 import com.system.you.review.web.beans.view.ItemViewBean;
 import com.system.you.review.web.beans.view.NameValuePair;
 import com.system.you.review.web.beans.view.ReviewViewBean;
@@ -76,7 +73,7 @@ public class ItemController extends ControllerSupport {
 			model.addAttribute("item", itemViewBean);
 			model.addAttribute("connected", connected);
 			model.addAttribute("publicReviews", publicReviews);
-		} catch (ServiceException ex) {
+		} catch (Exception ex) {
 			viewName = "error";
 			throw new UIException(model, viewName);
 		}
@@ -84,7 +81,7 @@ public class ItemController extends ControllerSupport {
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(value = { UIException.class })
+	@ExceptionHandler(value = {UIException.class })
 	public ModelAndView exceptionHandler(UIException uiException) {
 		return new ModelAndView(uiException.getViewName(), uiException
 				.getModel().asMap());

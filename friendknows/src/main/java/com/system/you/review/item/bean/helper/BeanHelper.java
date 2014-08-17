@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.Encoder;
 import org.springframework.social.facebook.api.FacebookProfile;
 import org.springframework.util.Assert;
 
@@ -135,8 +137,8 @@ public class BeanHelper {
 	}
 
 	protected String applyXSSFilter(String value) {
-		//return ESAPI.encoder().encodeForHTML(value);
-		return value;
+		return encoder.encodeForHTML(value);
 	}
 
+	private static Encoder encoder = ESAPI.encoder(); 
 }

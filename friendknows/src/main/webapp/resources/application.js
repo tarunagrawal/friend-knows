@@ -322,6 +322,35 @@ $(function() {
 		return false;
 	});
 
+	// fk-agree-link
+
+	$("body").on("click", "a.fk-agree-link", function(event) {
+		event.preventDefault();
+		var $link = $(this);
+		$.ajax({
+			headers : {
+				Accept : "application/json"
+			},
+			url : $link.attr("href"),
+			error : function(response) {
+				alert(response.responseText);
+			},
+			success : function(response) {
+
+				var $li = $link.closest("li");
+				var $span = $("<span></span>").text("Agreed");
+				$span.addClass("fk-agreed");
+
+				$li.hide("slow", function() {
+					$li.empty();
+					$li.html($span);
+					$li.show("slow");
+				});
+			}
+		});
+		return false;
+	});
+
 	$("body").on("click", "a.fk-propagated-back-link", function(event) {
 		event.preventDefault();
 		var $link = $(this);

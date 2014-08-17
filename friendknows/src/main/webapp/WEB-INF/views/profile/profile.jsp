@@ -81,8 +81,9 @@
 						<div class="small-11 columns medium-text-left">
 							<c:forEach items="${bean.item.rating}" var="tagView">
 								<c:if test="${tagView ne null}">
-									<span class="fk-label fk-header-fill fk-color-white">P</span><span class="fk-label ">
-										${tagView.tagName}</span><span class="fk-label fk-header-fill fk-color-white">${tagView.count}</span>
+									<span class="fk-label fk-header-fill fk-color-white">P</span>
+									<span class="fk-label "> ${tagView.tagName}</span>
+									<span class="fk-label fk-header-fill fk-color-white">${tagView.count}</span>
 									<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 								</c:if>
 							</c:forEach>
@@ -92,9 +93,9 @@
 						<div class="small-11 columns medium-text-left">
 							<c:forEach items="${bean.item.connectedRating}" var="tagView">
 								<c:if test="${tagView ne null}">
-									<span class="fk-label fk-header-fill-trusted fk-color-white">T</span><span class="fk-label-trusted">
-										${tagView.tagName}</span><span 
-										class="fk-label fk-header-fill-trusted fk-color-white">${tagView.count}</span>
+									<span class="fk-label fk-header-fill-trusted fk-color-white">T</span>
+									<span class="fk-label-trusted"> ${tagView.tagName}</span>
+									<span class="fk-label fk-header-fill-trusted fk-color-white">${tagView.count}</span>
 									<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 								</c:if>
 							</c:forEach>
@@ -130,7 +131,7 @@
 											</div>
 											<div class="small-1 columns medium-text-right ">
 												<a
-													href="<c:url value="Request/${bean.id}/Reviewer/${reviewer.id}/Remove"/>"
+													href="<c:url value="/Request/${bean.id}/Reviewer/${reviewer.id}/Remove"/>"
 													class="fk-remove-reviewer-link fk-operation-link fi-trash"></a>
 											</div>
 										</div>
@@ -151,8 +152,12 @@
 															</div>
 															<div class="small-6 columns medium-text-left end ">
 																<ul class="inline-list fk-padding">
-																	<li><a class="fk-operation-link"
-																		href="javascript:verify('${review.id}">Agree</a></li>
+																	<li><c:if test="${review.agreed}">
+																			<span class="fk-agreed">Agreed</span>
+																		</c:if> <c:if test="${not review.agreed}">
+																			<a class="fk-operation-link fk-agree-link"
+																				href="<c:url value="/Request/${bean.id}/Reviewer/${reviewer.id}/Review/${review.id}/Agree/"/>">Agree</a>
+																		</c:if></li>
 																	<li><a class="fk-date">${review.dateTime}</a></li>
 																</ul>
 															</div>
