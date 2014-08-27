@@ -21,7 +21,7 @@ public class HomeController extends ControllerSupport {
 
 	private String viewName() {
 		return (getRequestor() == null) ? "home" : ((getRequestor()
-				.isAuthenticated()) ? "redirect:/profile" : "home");
+				.isAuthenticated()) ? "redirect:/dashboard/" : "home");
 	}
 
 }

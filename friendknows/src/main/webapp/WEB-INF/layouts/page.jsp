@@ -97,6 +97,14 @@ body {
 .has-tip {
 	border-bottom: none;
 }
+
+.has-tip:hover,.has-tip:focus {
+	border: none !important;
+}
+
+.joyride-tip-guide {
+	width: 600px !important;
+}
 /* .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active, 
@@ -137,18 +145,23 @@ border:0;border-collapse:collapse;
 					<ul class="right">
 						<li class="has-form">
 							<div class="row collapse">
-								<div class="large-9 small-9 columns">
+								<div class="large-10 small-10 columns">
 									<input type="text" id="product_search_box"
-										placeholder="search exiting items..."> <input
+										placeholder="search exiting items..." size="50"> <input
 										type="hidden" id="hidden_search" name="itemId" value="">
 								</div>
-								<div class="large-3 small-3 columns">
+								<div class="large-2 small-2 columns">
 									<a href="<c:url value="/item/SearchItem/"/>"
 										class="alert button expand fi-magnifying-glass"
 										id="product_search_button"></a>
 								</div>
 							</div>
 						</li>
+						<li><a href="<c:url value='/feedback/form/'></c:url>"
+							class="fi-record" data-reveal-id="feedback_pop_up" data-reveal-ajax="true" >&nbsp;Feedback</a>
+							<div id="feedback_pop_up" class="reveal-modal small"
+								data-options="close_on_background_click:false" data-reveal>
+							</div></li>
 						<li><a href="#" class="fi-torso">&nbsp;${user.name}</a></li>
 						<li><a href="<c:url value="/signout" />">Signout</a></li>
 					</ul>
@@ -158,9 +171,17 @@ border:0;border-collapse:collapse;
 	</div>
 	<section>
 		<div class="row" style="margin-bottom: 50px;">
-			<div class="small-12 columns " style="padding: 0px;">
-				<div class="small-11 columns end" id="content_container">
-					<tiles:insertAttribute name="content" />
+			<div class="small-12 columns fk-no-margin" style="padding: 0px;">
+				<div class="row fk-no-margin">
+					<div class="small-1 columns fk-full-height hide-for-small "
+						style="padding-left: 0px; padding-right: 0px;">
+						<jsp:include page="../views/profile/iconbar.jsp"></jsp:include>
+					</div>
+					<div class="small-9 columns " id="content_container">
+						<tiles:insertAttribute name="content" />
+					</div>
+					<div class="small-2 columns end" id="notification_container">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -175,8 +196,41 @@ border:0;border-collapse:collapse;
 			</div>
 		</div>
 	</section>
+	<c:if test="${newUser}">
+		<section>
+			<ol class="joyride-list" data-joyride>
+				<li data-text="Next"
+					data-options="tip_location: top; prev_button: false">
+					<p>
+						Hello, <b>${user.name}</b> and welcome to the FriendKnows.com
+					</p>
+					<p>Lets take a tour.</p>
+				</li>
+				<li data-button="Next" data-prev-text="Prev"
+					data-options="tip_location:top;tip_animation:fade">
+					<h4 class="fi-plus">&nbsp;&nbsp;Create Request</h4>
+					<p>Ask your friends about the products</p>
+				</li>
+				<li data-button="Next" data-prev-text="Prev"
+					data-options="tip_location:top;tip_animation:fade">
+					<h4 class="fi-anchor">&nbsp;&nbsp;Help friends</h4>
+					<p>Your friends are looking for your help, let them know you
+						views about products.</p>
+				</li>
+				<li data-button="Next" data-prev-text="Prev"
+					data-options="tip_location:top;tip_animation:fade">
+					<h4 class="">Create a knowledge chain</h4>
+					<p>Include your friends you anwer your trusted friends query</p>
+				</li>
+				<li data-button="End" data-prev-text="Prev">
+					<p>Lets create a better world!</p>
+				</li>
+			</ol>
+		</section>
+	</c:if>
 	<section>
 		<script src="<c:url value="/resources/js/foundation.min.js"/> "></script>
+		<script src="<c:url value="/resources/js/notify.js"/> "></script>
 		<script src="<c:url value="/resources/js/vendor/modernizr.js"/> "></script>
 		<script>
 			$(document).foundation();
@@ -235,23 +289,15 @@ border:0;border-collapse:collapse;
 									'cookieDomain' : 'none'
 								});
 								ga('send', 'pageview');
-								//$(document).foundation('joyride', 'start');
+
+								$(document).foundation('joyride', 'start');
+
+								poll();
+
+								$(".fk-reviewers div:last-child").removeClass(
+										"fk-bottom-border");
 							});
 		</script>
-	</section>
-	<section>
-		<ol class="joyride-list" data-joyride>
-			<li data-id="content_container" data-text="Next"
-				data-options="tip_location: top; prev_button: false">
-				<p>Hello and welcome to the Joyride documentation page.</p>
-			</li>
-			<li data-id="footer" data-class="custom so-awesome" data-text="Next"
-				data-prev-text="Prev">
-				<h4>Stop #1</h4>
-				<p>You can control all the details for you tour stop. Any valid
-					HTML will work inside of Joyride.</p>
-			</li>
-		</ol>
 	</section>
 </body>
 </html>

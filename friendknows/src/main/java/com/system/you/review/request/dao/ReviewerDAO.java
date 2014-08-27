@@ -1,5 +1,6 @@
 package com.system.you.review.request.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +20,10 @@ public interface ReviewerDAO {
 	public Reviewer getReviewer(String id);
 
 	public List<Reviewer> getReviewers(ReviewUser reviewer);
+	
+	public List<Reviewer> getReviewers(ReviewUser reviewer, Date start, Date end);
+	
+	public List<Reviewer> getAnswered(ReviewUser user, Date start, Date end);
 
 	public List<Reviewer> getReviewers(Request reviewRequest);
 
@@ -31,4 +36,6 @@ public interface ReviewerDAO {
 	public int getReviewerCount(String requestId);
 
 	public boolean alreadyExist(String requestId, String providerId);
+	
+	public int getPendingAnswerCount(ReviewUser user);
 }

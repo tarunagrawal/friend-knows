@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.system.you.review.category.service.CategoryService;
 import com.system.you.review.core.exception.UIException;
 import com.system.you.review.request.exception.CreateRequestException;
 import com.system.you.review.request.exception.EditDescriptionException;
@@ -54,6 +55,7 @@ public class RequestController extends ControllerSupport {
 		RequestContext<RequestFormBean, String> responseBean = createHelper
 				.form();
 		String formActionURL = URLGenerator.getURL("/Request", "/New/Submit");
+		model.addAttribute("categories", categoryService.all());
 		model.addAttribute(FORM_BEAN, responseBean.getFormBean());
 		model.addAttribute("formActionURL", formActionURL);
 		return defaultView();
@@ -220,6 +222,9 @@ public class RequestController extends ControllerSupport {
 	@Autowired
 	private EditRequestDescriptionHelper editDescriptionHelper;
 
+	@Autowired
+	private CategoryService categoryService;
+	
 	private static Logger LOGGER = LoggerFactory
 			.getLogger(RequestController.class);
 }

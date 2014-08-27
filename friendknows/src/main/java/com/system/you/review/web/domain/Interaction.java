@@ -5,7 +5,7 @@ import com.system.you.review.core.service.ServiceLocator;
 public interface Interaction {
 
 	public Requestor getRequestor();
-
+	
 	public Object getAttribute(String key);
 
 	public void putAttribute(String key, Object value);

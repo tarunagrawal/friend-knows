@@ -287,6 +287,19 @@ public class RequestServiceImpl extends ServiceSupport implements
 		return null;
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public int totalRequest(ReviewUser user) throws ServiceException {
+		try {
+			return requestDAO.totalRequest(user);
+		} catch (Exception ex) {
+			logErrorAndThrowException(
+					"Error occurred while retirving request count for user "
+							+ user.getName(), ex);
+		}
+		return -1;
+	}
+
 	private void validateLastReviewer(String requestId)
 			throws AttemptToRemoveOnlyReviewerException, ServiceException {
 		int totalReviewer = 0;
@@ -324,11 +337,14 @@ public class RequestServiceImpl extends ServiceSupport implements
 		return bean;
 	}
 
-	private Request create(Request dbBean) {
+	private Request create(Request dbBean) throws Exception{
 		Item item = dbBean.getItem();
 		if (!alreadyExist(item)) {
 			itemService.createItem(item);
 		}
+		//setting right item :
+		//This is kind of hack
+		dbBean.setItem(itemService.getItem(item.getId()));
 		requestDAO.save(dbBean);
 		Collection<Reviewer> reviewers = dbBean.getReviewers();
 		for (Reviewer reviewer : reviewers) {
@@ -385,7 +401,7 @@ public class RequestServiceImpl extends ServiceSupport implements
 	}
 
 	private Request createForwardRequest(ReviewForwardFormBean formBean,
-			Request parentRequest, Reviewer reviewer) {
+			Request parentRequest, Reviewer reviewer) throws Exception{
 		// create a new forwarded request
 		RequestFormBean reqFromBean = createRequestFormBean(formBean,
 				parentRequest);

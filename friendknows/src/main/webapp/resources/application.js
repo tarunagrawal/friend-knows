@@ -2,6 +2,68 @@
  * 
  */
 
+function poll() {
+	setTimeout(
+			function() {
+				$
+						.ajax({
+							url : "/friendknows/Notifications/",
+							dataType : "json",
+							headers : {
+								Accept : "application/json",
+							},
+							success : function(data) {
+								$
+										.each(
+												data.view.assignedRequest,
+												function(index, assingedRequest) {
+													var $p = $("<p></p>")
+															.text(
+																	assingedRequest.initiatedUser.name +  " has assigned request to you");
+													var $div = $("<div></div>")
+															.addClass(
+																	"small-10 columns small-centered fk-padding fk-notify-container")
+															.html($p);
+													var $rowDiv = $(
+															"<div></div>")
+															.addClass(
+																	"row fk-margin-top hide")
+															.html($div);
+													$("#notification_container")
+															.prepend($rowDiv);
+													$rowDiv.show("slow");
+												});
+								$
+										.each(
+												data.view.answeredRequest,
+												function(index, answeredRequest) {
+
+													var $p = $("<p></p>")
+															.text(
+																	answeredRequest.user.name +  " has answered your request");
+													var $div = $("<div></div>")
+															.addClass(
+																	"small-10 columns small-centered fk-padding fk-notify-container")
+															.html($p);
+													var $rowDiv = $(
+															"<div></div>")
+															.addClass(
+																	"row fk-margin-top")
+															.html($div);
+													$("#notification_container")
+															.prepend($rowDiv);
+												});
+
+								poll();
+							},
+							error : function(data) {
+								poll();
+							},
+
+						});
+			}, 60000);
+}
+
 function displayDetails(requestid) {
 	var detailId = "#details-" + requestid;
 	$(".fk-selected").removeClass("fk-selected");
@@ -32,187 +94,6 @@ $(function() {
 		preventDuplicates : true,
 		tokenLimit : 1,
 	});
-
-	$("body")
-			.on(
-					"click",
-					"a.add_review_link",
-					function(event) {
-						event.preventDefault();
-						var $link = $(this);
-						var $dialog = $("<div></div");
-						$dialog
-								.load(
-										$link.attr("href"),
-										function() {
-											$dialog
-													.dialog({
-														autoOpen : false,
-														modal : true,
-														draggable : false,
-														width : 700,
-														buttons : [
-																{
-																	text : "Add",
-																	click : function() {
-																		$
-																				.ajax(
-																						{
-																							method : "post",
-																							url : $dialog
-																									.find(
-																											"form")
-																									.attr(
-																											"action"),
-																							data : $dialog
-																									.find(
-																											"form")
-																									.serialize(),
-																							success : function(
-																									response) {
-																								$dialog
-																										.dialog("close");
-																							},
-																							error : function(
-																									response) {
-																								var jsonResponse = JSON
-																										.parse(response.responseText);
-																								$(
-																										jsonResponse.messages)
-																										.each(
-																												function(
-																														key,
-																														value) {
-																													alert(key
-																															+ ":"
-																															+ value);
-																												});
-																							}
-
-																						})
-																				.done(
-																						function(
-																								data) {
-																							$dialog
-																									.dialog("close");
-																						});
-																	}
-																},
-																{
-																	text : "Cancel",
-																	click : function() {
-																		$dialog
-																				.find(
-																						"form")
-																				.trigger(
-																						"reset");
-																		$dialog
-																				.dialog("close");
-																	}
-																} ],
-														close : function() {
-															$dialog
-																	.trigger("reset");
-															$dialog
-																	.trigger("destroy");
-														}
-													});
-
-											$dialog.dialog("open");
-										});
-					});
-
-	$("body")
-			.on(
-					"click",
-					"a.edit_review_link",
-					function(event) {
-						event.preventDefault();
-						var $link = $(this);
-						var $dialog = $("<div></div");
-						$dialog
-								.load(
-										$link.attr("href"),
-										function() {
-											$dialog
-													.dialog({
-														autoOpen : false,
-														modal : true,
-														draggable : false,
-														width : 700,
-														buttons : [
-																{
-																	text : "Update",
-																	click : function() {
-																		$
-																				.ajax(
-																						{
-																							method : "post",
-																							url : $dialog
-																									.find(
-																											"form")
-																									.attr(
-																											"action"),
-																							data : $dialog
-																									.find(
-																											"form")
-																									.serialize(),
-																							success : function(
-																									response) {
-																								$dialog
-																										.dialog("close");
-																								$dialog
-																										.trigger("destroy");
-
-																							},
-																							error : function(
-																									response) {
-																								var jsonResponse = JSON
-																										.parse(response.responseText);
-																								$(
-																										jsonResponse.messages)
-																										.each(
-																												function(
-																														key,
-																														value) {
-																													alert(key
-																															+ ":"
-																															+ value);
-																												});
-																							}
-
-																						})
-																				.done(
-																						function(
-																								data) {
-																							$dialog
-																									.dialog("close");
-																						});
-																	}
-																},
-																{
-																	text : "Cancel",
-																	click : function() {
-																		$dialog
-																				.find(
-																						"form")
-																				.trigger(
-																						"reset");
-																		$dialog
-																				.dialog("close");
-																	}
-																} ],
-														close : function() {
-															$dialog
-																	.trigger("reset");
-															$dialog
-																	.trigger("destroy");
-														}
-													});
-
-											$dialog.dialog("open");
-										});
-					});
 
 	$("body").on("click", ".fk-remove-reviewer-link", function(event) {
 		event.preventDefault();

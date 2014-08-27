@@ -1,5 +1,6 @@
 package com.system.you.review.web.domain;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,8 +36,15 @@ public interface Requestor {
 	public List<String> getFriendsIds();
 
 	public boolean isFriend(String providerId);
+
+	public Date lastClientSync();
+
+	public void setLastClientSync(Date date);
 	
+	public void newUserSession(boolean session);
 	
+	public boolean isNewUserSession();
+
 	public static String REQUESTOR_ID = "requestorID";
 
 	public static String NEW_REQUESTOR = "";

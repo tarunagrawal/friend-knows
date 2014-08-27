@@ -1,8 +1,5 @@
 package com.system.you.review.web.beans.view;
 
-
-
-
 public class ReviewViewBean {
 
 	public String getId() {
@@ -68,5 +65,4 @@ public class ReviewViewBean {
 	private int rating ;
 	private UserViewBean reviewUser;
 	private boolean agreed ;
-
 }

@@ -7,6 +7,11 @@
 		<put-attribute name="content" value="/WEB-INF/views/profile/profile.jsp" />
 	</definition>
 
+	<definition name="dashboard" extends="page">
+		<put-attribute name="content"
+			value="/WEB-INF/views/profile/dashboard.jsp" />
+	</definition>
+
 	<definition name="pendingRequests" extends="page">
 		<put-attribute name="content"
 			value="/WEB-INF/views/profile/pendingRequests.jsp" />
@@ -57,5 +62,15 @@
 			value="/WEB-INF/views/profile/itemSearchResult.jsp" />
 	</definition>
 
+
+	<definition name="feedback" extends="blank">
+		<put-attribute name="content"
+			value="/WEB-INF/views/profile/feedback.jsp" />
+	</definition>
+
+	<definition name="feedbackSuccess" extends="blank">
+		<put-attribute name="content"
+			value="/WEB-INF/views/profile/feedbackSuccess.jsp" />
+	</definition>
 
 </tiles-definitions>

@@ -70,6 +70,9 @@ public class ItemController extends ControllerSupport {
 					publicReviews.add(viewBean);
 				}
 			}
+			model.addAttribute("totalReviews", reviews.size());
+			model.addAttribute("totalPublicReviews", publicReviews.size());
+			model.addAttribute("totalConnectedReviews", connected.size());
 			model.addAttribute("item", itemViewBean);
 			model.addAttribute("connected", connected);
 			model.addAttribute("publicReviews", publicReviews);

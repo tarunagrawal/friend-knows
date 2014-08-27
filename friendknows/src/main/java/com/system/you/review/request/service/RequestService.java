@@ -39,4 +39,6 @@ public interface RequestService {
 	
 	public Reviewer removeFwdReviewer(String reviewerId, String requestId, String fwdReviewerId)
 			throws ServiceException;
+	
+	public int totalRequest(ReviewUser user)  throws ServiceException;
 }

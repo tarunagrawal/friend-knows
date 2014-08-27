@@ -28,20 +28,34 @@ textarea {
 .editable-click {
 	border-bottom: none;
 }
+
+.fk-reviewer-data-container {
+	border-width: 1px;
+	border-style: solid;
+	border-color: rgb(192, 191, 191);
+	box-shadow: 3px 3px 3px rgb(192, 191, 191);
+}
+
+.fk-reviewer-data-container:HOVER {
+	background-color: rgb(239, 237, 237);
+}
 </style>
+
+
 
 
 <div class="row">
 	<div class="small-12 large-8 columns ">
 		<div class="row">
-			<div class="small-2 columns fk-full-height hide-for-small"
-				style="padding-left: 0px; ">
-				<jsp:include page="iconbar.jsp"></jsp:include>
-			</div>
 			<div class="small-10 columns fk-padding-top  end">
+
+				<c:if test="${empty pending}">
+                        You do not have any request pending requests !
+				</c:if>
+
 				<c:forEach items="${pending}" var="bean" varStatus="index">
 					<c:set var="view" value="${bean}" scope="request"></c:set>
-					<div class="fk-reviewer-data-container"
+					<div class="fk-reviewer-data-container fk-margin-top"
 						id="reviewer_data_container_${view.id}">
 						<jsp:include page="reviewerData.jsp"></jsp:include>
 					</div>

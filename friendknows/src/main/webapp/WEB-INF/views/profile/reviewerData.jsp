@@ -4,7 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
 <%@ page session="false"%>
 
-<div class="row fk-bottom-border fk-padding">
+<div class="row fk-padding">
 	<div class="small-12 columns end">
 		<div class="row ">
 			<div class="small-8 columns ">

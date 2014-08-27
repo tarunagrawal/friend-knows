@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Cache;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.system.you.review.database.DAOSupport;
@@ -67,7 +68,7 @@ public class RequestDAOImpl extends DAOSupport<Request> implements RequestDAO {
 		if (request != null) {
 			getSession().delete(request);
 			return true;
-		} 
+		}
 		return false;
 	}
 
@@ -81,4 +82,11 @@ public class RequestDAOImpl extends DAOSupport<Request> implements RequestDAO {
 		return Request.class;
 	}
 
+	@Override
+	public int totalRequest(ReviewUser user) {
+		return ((Number) getCriteria().createAlias("reviewee", "user")
+				.add(Restrictions.eq("user.id", user.getId()))
+				.setProjection(Projections.rowCount()).uniqueResult())
+				.intValue();
+	}
 }

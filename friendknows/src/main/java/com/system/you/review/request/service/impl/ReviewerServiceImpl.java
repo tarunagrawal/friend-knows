@@ -60,7 +60,7 @@ public class ReviewerServiceImpl extends ServiceSupport implements
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = { Throwable.class })
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Throwable.class })
 	public Reviewer updateReviewer(Reviewer reviewer) throws ServiceException {
 		try {
 			reviewer.setUpdateDateTime(new Date());
@@ -72,6 +72,46 @@ public class ReviewerServiceImpl extends ServiceSupport implements
 		}
 
 		return null;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Throwable.class })
+	public List<Reviewer> getReviewers(ReviewUser user, Date start, Date end)
+			throws ServiceException {
+		try {
+			return reviewerDAO.getReviewers(user, start, end);
+		} catch (Exception ex) {
+			logErrorAndThrowException(
+					"Error occurred while retrieving reviewers list for user "
+							+ user.getUsername(), ex);
+		}
+		return null;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Throwable.class })
+	public List<Reviewer> getAnswered(ReviewUser user, Date start, Date end)
+			throws ServiceException {
+		try {
+			return reviewerDAO.getAnswered(user, start, end);
+		} catch (Exception ex) {
+			logErrorAndThrowException(
+					"Error occurred while retrieving answered list for user "
+							+ user.getUsername(), ex);
+		}
+		return null;
+	}
+
+	@Override
+	public int getPendingAnswerCount(ReviewUser user) throws ServiceException {
+		try {
+			return reviewerDAO.getPendingAnswerCount(user);
+		} catch (Exception ex) {
+			logErrorAndThrowException(
+					"Error occurred while retrieving pending answered count for user "
+							+ user.getUsername(), ex);
+		}
+		return -1;
 	}
 
 	private void logErrorAndThrowException(String message, Exception ex)

@@ -1,9 +1,11 @@
 package com.system.you.review.request.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -37,6 +39,33 @@ public class ReviewerDAOImpl extends DAOSupport<Reviewer> implements
 				.add(Restrictions.ne("status", Request.Status.CLOSED)).list();
 	}
 
+	
+	@Override
+	public List<Reviewer> getReviewers(ReviewUser reviewer, Date start, Date end) {
+		return getCriteria()
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+				.add(Restrictions.eq("reviewerID", reviewer.getProviderUserId()))
+				.add(Restrictions.ge("updateDateTime", start))
+				.add(Restrictions.lt("updateDateTime", end))
+				.add(Restrictions.ne("status", Request.Status.CLOSED))
+				.addOrder(Order.desc("updateDateTime"))
+				.list();
+	}
+	
+	
+	@Override
+	public List<Reviewer> getAnswered(ReviewUser user, Date start, Date end) {
+		return getCriteria()
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+				.createAlias("request", "request")
+				.add(Restrictions.eq("request.reviewee.id", user.getId()))
+				.add(Restrictions.ge("updateDateTime", start))
+				.add(Restrictions.lt("updateDateTime", end))
+				.add(Restrictions.eq("status", Request.Status.ANSWERED))
+				.addOrder(Order.desc("updateDateTime"))
+				.list();
+	}
+	
 	@Override
 	public List<Reviewer> getReviewers(Request reviewRequest) {
 		return getCriteria()
@@ -85,6 +114,16 @@ public class ReviewerDAOImpl extends DAOSupport<Reviewer> implements
 		return Reviewer.class;
 	}
 
+	@Override
+	public int getPendingAnswerCount(ReviewUser user){
+		 return ((Number) getCriteria()
+					.add(Restrictions.eq("reviewerID", user.getProviderUserId()))
+					.add(Restrictions.eq("status", Request.Status.INITIATED))
+					.setProjection(Projections.rowCount()).uniqueResult())
+					.intValue();
+	}
+	
+	
 	@Override
 	public int getReviewerCount(String requestId) {
 		return ((Number) getCriteria().createAlias("request", "request")

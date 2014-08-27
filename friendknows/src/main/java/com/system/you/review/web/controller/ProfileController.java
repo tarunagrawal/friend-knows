@@ -31,14 +31,13 @@ public class ProfileController extends ControllerSupport {
 		model.addAttribute("initiated", initiated(helper.reviewInitiated()));
 		return "profile";
 	}
-	
-	
+
 	@RequestMapping("/reviews")
 	@Secured(value = "USER_ROLE")
 	public ModelAndView myReviews(Model model) {
 		return new ModelAndView("myReviews");
 	}
-	
+
 	private Collection<RequestViewBean> initiated(Iterable<Request> dbRequests) {
 		List<RequestViewBean> viewBean = new ArrayList<RequestViewBean>();
 		if (dbRequests != null) {
@@ -49,9 +48,6 @@ public class ProfileController extends ControllerSupport {
 					viewBean.add(requestBeanHelper.dataToView(dbRequest));
 				}
 			}
-			
-			/*Collections
-					.sort(viewBean, new DateUtils.AscSortByViewBeanCreateDate<RequestViewBean>());*/
 		}
 		return viewBean;
 	}
@@ -61,7 +57,7 @@ public class ProfileController extends ControllerSupport {
 
 	@Autowired
 	private ReviewService reviewService;
-	
+
 	@Autowired
 	private RequestBeanHelper requestBeanHelper;
 }

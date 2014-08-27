@@ -21,4 +21,6 @@ public interface RequestDAO {
 	public Request get(ReviewUser reviewee, Request parentRequest);
 
 	public List<Request> all();
+	
+	public int totalRequest(ReviewUser user) ;
 }

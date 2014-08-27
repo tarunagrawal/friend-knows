@@ -10,5 +10,6 @@
 		<mapping class="com.system.you.review.request.bean.Request"/>
 		<mapping class="com.system.you.review.request.bean.Reviewer"/>
 		<mapping class="com.system.you.review.request.bean.Review"/>
+		<mapping class="com.system.you.review.feedback.bean.Feedback"/>
 	</session-factory>
 </hibernate-configuration>

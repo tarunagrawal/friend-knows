@@ -1,5 +1,7 @@
 package com.system.you.review.category.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.Restrictions;
 import org.springframework.dao.DataAccessException;
 
@@ -27,8 +29,16 @@ public class CategoryDAOImpl extends DAOSupport<Category> implements
 				Restrictions.eq("description", description)).uniqueResult();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Category> all() {
+		return getCriteria().list();
+	}
+
+	
 	@Override
 	public Class<Category> getEntity(){
 		return Category.class;
 	}
+
 }

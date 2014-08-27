@@ -119,8 +119,13 @@
 						<span class="prefix fk-inline-prefix">Category</span>
 					</div>
 					<div class="small-9 large-10 columns">
-						<form:input id="category-search" type="text" path="category"
-							placeholder="Select Category..." />
+
+						<select name="category">
+							<c:forEach items="${categories}" var="category">
+								<option value="${category.id}">${category.description}</option>
+							</c:forEach>
+						</select> <!-- <input id="category-search" type="text" name="category"
+							placeholder="Select Category..." /> -->
 					</div>
 				</div>
 				<div class="row collapse">

@@ -1,14 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <div class="row">
-	<div class="small-12 large-5 columns ">
+	<div class="small-12 large-4 columns ">
 		<div class="row">
-			<div class="small-2 columns fk-full-height hide-for-small "
-				style="padding-left: 0px; padding-right: 0px;">
-				<jsp:include page="iconbar.jsp"></jsp:include>
-			</div>
 			<div
-				class="small-10 columns fk-padding-top fk-summary-border fk-requests-bar"
+				class="small-12 columns fk-padding-top fk-summary-border fk-requests-bar end"
 				style="margin-left: 0 !important; padding-left: 0px">
 				<div class="fk-request-summary-container">
 					<c:forEach items="${initiated}" var="bean" varStatus="index">
@@ -45,9 +41,9 @@
 			</div>
 		</div>
 	</div>
-	<div class="small-7 columns fk-padding-top end hide-for-small">
+	<div class="small-12 large-8 columns fk-padding-top end  hide-for-small">
 		<c:forEach items="${initiated}" var="bean" varStatus="index">
-			<div class="row hide fk-details fk-padding" id="details-${bean.id}">
+			<div class="row hide fk-details fk-padding" id="details-${bean.id}" style="display: block; box-shadow: rgb(205, 197, 197) 5px 5px 5px; background-color: rgb(244, 244, 244); margin-left: 3px;border: rgb(229, 225, 225) 1px solid;">
 				<div class="small-12 columns">
 					<div class="row">
 						<div class="small-7 columns ">
@@ -93,7 +89,7 @@
 						<div class="small-11 columns medium-text-left">
 							<c:forEach items="${bean.item.connectedRating}" var="tagView">
 								<c:if test="${tagView ne null}">
-									<span class="fk-label fk-header-fill-trusted fk-color-white">T</span>
+									<span class="fk-label fk-header-fill-trusted fk-color-white fi-link"></span>
 									<span class="fk-label-trusted"> ${tagView.tagName}</span>
 									<span class="fk-label fk-header-fill-trusted fk-color-white">${tagView.count}</span>
 									<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -106,7 +102,7 @@
 							<c:forEach items="${bean.reviewers}" var="reviewer"
 								varStatus="count">
 								<div
-									class="row fk-reviewer fk-no-margin fk-padding-top fk-bottom-border">
+									class="row fk-reviewer fk-no-margin fk-padding-top fk-bottom-border ">
 									<div class="small-1 columns fk-no-margin fk-no-padding">
 										<img src="${reviewer.user.imageUrl}" class="" />
 									</div>
@@ -115,7 +111,7 @@
 										<div class="row fk-no-margin">
 											<div class="small-3 columns medium-text-left fk-bold">${reviewer.user.name}
 											</div>
-											<div class="small-5 columns medium-text-left ">
+											<div class="small-8 columns medium-text-left ">
 
 												<c:if test="${reviewer.status eq 'Answered'}">
 													<span class="fk-label fk-radius fk-answered">${reviewer.status}</span>

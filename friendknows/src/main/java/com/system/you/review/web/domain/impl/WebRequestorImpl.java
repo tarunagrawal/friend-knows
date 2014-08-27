@@ -1,6 +1,6 @@
 package com.system.you.review.web.domain.impl;
 
-import java.security.SecureRandom;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -110,6 +110,7 @@ public class WebRequestorImpl implements Requestor {
 		this.locale = SessionUtils.getCurrentRequest().getLocale();
 		this.connectedFriendIds = getConnectedFriendsIds();
 		this.connectedFriends = getConnectedFacebookFriends();
+		setLastClientSync(new Date());
 	}
 
 	public boolean isFriend(String providerId){
@@ -137,6 +138,28 @@ public class WebRequestorImpl implements Requestor {
 		return connectedFriends;
 	}
 
+	@Override
+	public Date lastClientSync() {
+		return lastClientSync;
+	}
+
+	@Override
+	public void setLastClientSync(Date date) {
+		this.lastClientSync = date ;
+	}
+	
+	
+	@Override
+	public void newUserSession(boolean session) {
+		newUserSession = session;
+		
+	}
+
+	@Override
+	public boolean isNewUserSession() {
+		return newUserSession;
+	}
+	
 	private String id;
 	private Locale locale;
 	private ReviewUser reviewUser;
@@ -145,6 +168,8 @@ public class WebRequestorImpl implements Requestor {
 	private List<String> connectedFriendIds;
 	private String contextPath;
 	private Facebook facebook;
-	private SecureRandom secureRandom;
 	private boolean destroy;
+	private Date lastClientSync ;
+	private boolean newUserSession;
+	
 }
