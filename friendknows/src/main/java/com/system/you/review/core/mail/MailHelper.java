@@ -1,10 +1,14 @@
 package com.system.you.review.core.mail;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.system.you.review.item.bean.Item;
 import com.system.you.review.request.bean.Request;
+import com.system.you.review.request.bean.Review;
 import com.system.you.review.request.bean.Reviewer;
 import com.system.you.review.user.bean.ReviewUser;
 import com.system.you.review.user.service.ReviewUserService;
@@ -20,23 +24,42 @@ public class MailHelper {
 		}
 		return defaultMail;
 	}
-	
-	
-	public MailContent getAssignedMailContent(Request request) {
+
+	public MailContent getAssignedMailContent(Request request,
+			Set<Reviewer> reviewers) {
 		String from = MailMessage.FROM;
-		String senderName = request.getReviewee().getName();
-		String[] recipients = getRecipient(getReviewersProviderIds(request));
+		String description = request.getDescription();
 		String category = request.getItem().getCategory().getDescription();
 		String item = request.getItem().getDescription();
+		String senderName = request.getReviewee().getName();
+		String[] recipients = getRecipient(getReviewersProviderIds(reviewers));
 		MailContent mailContent = new RequestAssignmentMailContent(from,
-				recipients, senderName, category, item);
+				recipients, senderName, category, item,description);
 		return mailContent;
 	}
-	
-	private String[] getReviewersProviderIds(Request request) {
-		String[] recipient = new String[request.getReviewers().size()];
+
+	public MailContent getAssignedMailContent(Request request) {
+		return getAssignedMailContent(request, request.getReviewers());
+	}
+
+	public MailContent getAnswerredMailContent(Review review, Reviewer reviewer) {
+		String from = MailMessage.FROM;
+		String description = review.getDescription();
+		Item itemDB = reviewer.getRequest().getItem();
+		String category = itemDB.getCategory().getDescription();
+		String item = itemDB.getDescription();
+		String senderName =  review.getReviewer().getName();
+		String[] recipients = getRecipient(new String[] { reviewer.getRequest()
+				.getReviewee().getProviderUserId() });
+		MailContent mailContent = new RequestAnswerredMailContent(from,
+				recipients, senderName, category, item,description);
+		return mailContent;
+	}
+
+	private String[] getReviewersProviderIds(Set<Reviewer> reviewers) {
+		String[] recipient = new String[reviewers.size()];
 		int count = 0;
-		for (Reviewer reviewer : request.getReviewers()) {
+		for (Reviewer reviewer : reviewers) {
 			recipient[count++] = reviewer.getReviewerID();
 		}
 		return recipient;
@@ -54,14 +77,14 @@ public class MailHelper {
 
 	private String getDefaultMail(String providerId) {
 		return SessionUtils.getRequestor().getFacebookFriend(providerId)
-				.getName()
+				.getUsername()
 				+ "@facebook.com";
 	}
-	
-	
+
 	@Autowired
 	private ReviewUserService userService;
-	
+
 	@Autowired
 	private JavaMailSender mailSender;
+
 }

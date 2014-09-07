@@ -82,6 +82,16 @@ public class ReviewUser implements SocialUserDetails {
 		return createAuthority();
 	}
 
+	
+	@Basic
+	public String getProviderUserName() {
+		return providerUserName;
+	}
+
+	public void setProviderUserName(String providerUserName) {
+		this.providerUserName = providerUserName;
+	}
+
 	@Transient
 	public String getPassword() {
 		return "";
@@ -143,6 +153,7 @@ public class ReviewUser implements SocialUserDetails {
 	private String providerId;
 	private String providerUserId;
 	private String name;
+	private String providerUserName;
 	private boolean external ;
 
 }

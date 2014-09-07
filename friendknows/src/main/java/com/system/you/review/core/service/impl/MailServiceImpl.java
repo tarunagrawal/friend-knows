@@ -1,6 +1,8 @@
 package com.system.you.review.core.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -19,6 +21,8 @@ import com.system.you.review.core.mail.MailMessage;
 import com.system.you.review.core.mail.impl.MailMessageImpl;
 import com.system.you.review.core.service.MailService;
 import com.system.you.review.request.bean.Request;
+import com.system.you.review.request.bean.Review;
+import com.system.you.review.request.bean.Reviewer;
 
 @Service
 public class MailServiceImpl implements MailService {
@@ -44,11 +48,21 @@ public class MailServiceImpl implements MailService {
 	//This method should always be called in current requestor's context
 	@Override
 	public void sendMessage(Request request) {
-		MailContent mailContent = mailHelper.getAssignedMailContent(request);
-		mailQueue.offer(new MailMessageImpl(mailContent));
-
+		sendMessage(request, request.getReviewers());
 	}
 
+	@Override
+	public void sendMessage(Request request, Collection<Reviewer> reviewers) {
+		MailContent mailContent = mailHelper.getAssignedMailContent(request, new HashSet<Reviewer>(reviewers));
+		mailQueue.offer(new MailMessageImpl(mailContent));
+	}
+	
+	@Override
+	public void sendMessage(Review review, Reviewer reviewer) {
+		MailContent mailContent = mailHelper.getAnswerredMailContent(review, reviewer);
+		mailQueue.offer(new MailMessageImpl(mailContent));
+	}
+	
 	private List<MimeMessagePreparator> sendingMails() {
 		List<MimeMessagePreparator> mails = new ArrayList<MimeMessagePreparator>();
 		int count = 0;
@@ -72,4 +86,5 @@ public class MailServiceImpl implements MailService {
 	private Queue<MailMessage> mailQueue;
 
 	private static int PROCESSING_LIMIT = 20;
+
 }

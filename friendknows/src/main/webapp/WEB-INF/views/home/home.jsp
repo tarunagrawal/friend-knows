@@ -12,6 +12,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>friendknows.com</title>
+<link rel="stylesheet" type="text/css"
+	href="http://fonts.googleapis.com/css">
 <link rel="stylesheet"
 	href="<c:url value="/resources/css/foundation.css" />" />
 <link rel="stylesheet"
@@ -20,6 +22,8 @@
 	href="<c:url value="/resources/css/normalize.css" />" />
 <style>
 body {
+	/*font-family: 'Open', serif;*/
+	font-family: 'Indie Flower', cursive;
 	background-color: rgb(249, 245, 245);
 }
 
@@ -53,17 +57,30 @@ body {
 	background-repeat: no-repeat;
 	background-position: center top;
 	background-size: cover;
-	height: 22rem;
+	height: 21rem;
 	background-color: black;
 }
 
 .problem-border {
 	border-width: 1px;
 	border-style: solid;
+	
+}
+
+.text-stmt {
+	font-size: 1.4rem !important;
+	color: rgba(72, 69, 69, 1)
+	font-family: 'Crafty Girls', cursive;
+}
+
+.problem-text {
+	border-bottom-color: rgba(197, 193, 193, 1);
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
 }
 </style>
 </head>
-<body>
+<body style="background-color: whitesmoke; height: 100%;">
 	<section>
 		<div class="container">
 			<div class="row banner fk-no-margin">
@@ -76,19 +93,60 @@ body {
 										class="com logo">.com</span>
 								</div>
 								<div style="margin-top: 2rem;">
-									<a href="<c:url value="/auth/facebook"/>" class="button small">Signin
-										with Facebook </a>
+									<b> <a href="<c:url value="/auth/facebook"/>"
+										class="button small bold">Signin with Facebook </a></b>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="small-6 columns small-centered logopanel">
-					<div class="left fk-label text-center"
-						style="color: white; height: 10rem; border-color: white;">Looking
-						for review, opinion online ?</div>
+		</div>
+	</section>
+	<section>
+		<div class="row"
+			style="box-shadow: inset 0px 0 200px -30px rgba(0, 0, 0, 1);">
+			<div class="small-12 columns">
+				<div class="row" style="margin-top: 1rem;">
+					<div class="small-6 columns small-centered problem-text">
+						<p class="text-center text-stmt">
+							Have you searched through websites before buying a car? <br />
+							Or <br /> hunted for ratings before booking a restaurant? <br />
+							Are you <b style="color: rgba(0, 129, 255, 1);">UNSATISFIED</b>
+							at times even after enough <b
+								style="color: rgba(0, 129, 255, 1);">HOMEWORK</b>?
+						</p>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 1rem;">
+					<div class="small-6 columns small-centered problem-text">
+						<p class="text-center text-stmt">
+							Do you feel the same stress.. <br /> When the recommendations
+							come through a <b style="color: red;">FRIEND</b>.<br /> Somebody
+							with common interests. Somebody with a common background.
+							Somebody you can <b style="color: red;">TRUST</b> ?
+						</p>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 1rem;">
+					<div class="small-6 columns small-centered">
+						<p class="text-center text-stmt">
+							<b style="color: maroon;">FriendKnows</b> helps you to reach out
+							to trusted friends <br /> because <b style="color: red;">FRIEND</b>
+							<b style="color: maroon;">Knows</b> everything.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="row"
+			style="background-color: black; color: rgba(96, 92, 92, 1); height: 40px;">
+			<div class="small-12 columns hide-for-small">
+				<div class="row">
+					<div class="small-6 columns small-centered text-center"
+						style="padding-top: 10px;">&#169; friendknows.com</div>
 				</div>
 			</div>
 		</div>

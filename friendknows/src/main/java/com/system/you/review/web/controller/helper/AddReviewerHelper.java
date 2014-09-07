@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.system.you.review.core.service.MailService;
 import com.system.you.review.core.service.exception.ReviewerAlreadyExist;
 import com.system.you.review.item.bean.helper.impl.ReviewerBeanHelper;
 import com.system.you.review.request.bean.Reviewer;
@@ -35,6 +36,8 @@ public class AddReviewerHelper extends ControllerHelper {
 					for (Reviewer reviewer : newReviewers) {
 						reviewers.add(getViewBean(reviewer));
 					}
+					//send mail 
+					mailService.sendMessage(requestService.get(requestId), newReviewers);
 				} else {
 					// some problem as reviewers are null- add error message
 					addSystemErrorMessage(responseBean);
@@ -81,6 +84,9 @@ public class AddReviewerHelper extends ControllerHelper {
 		}
 	}
 
+	@Autowired
+	private MailService mailService ;
+	
 	@Autowired
 	private RequestService requestService;
 

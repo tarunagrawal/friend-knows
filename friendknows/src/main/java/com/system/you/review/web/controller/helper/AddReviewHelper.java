@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.system.you.review.core.service.MailService;
 import com.system.you.review.item.bean.helper.impl.ReviewBeanHelper;
 import com.system.you.review.item.bean.helper.impl.ReviewerBeanHelper;
 import com.system.you.review.request.bean.Review;
@@ -36,10 +37,11 @@ public class AddReviewHelper extends ControllerHelper {
 					if (review != null) {
 						Reviewer reviewer = reviewerService.getReviewer(review
 								.getReviewerRequestId());
-						//make a cleanup for current http request.
+						// make a cleanup for current http request.
 						makeCleanup(review, reviewer);
 						respBean.setViewBean(reviewerBeanHelper
 								.dataToView(reviewer));
+						mailService.sendMessage(review, reviewer);
 					} else {
 						addSystemErrorMessage(respBean);
 					}
@@ -56,15 +58,18 @@ public class AddReviewHelper extends ControllerHelper {
 	}
 
 	private void makeCleanup(Review review, Reviewer reviewer) {
-		Set<Review> reviews = reviewer.getReviews() ;
-		if(reviews != null){
+		Set<Review> reviews = reviewer.getReviews();
+		if (reviews != null) {
 			reviews.add(review);
-		}else{
-			reviews = new HashSet<Review>(); 
+		} else {
+			reviews = new HashSet<Review>();
 			reviews.add(review);
 			reviewer.setReviews(reviews);
 		}
 	}
+
+	@Autowired
+	private MailService mailService;
 
 	@Autowired
 	private ReviewService reviewService;

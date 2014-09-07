@@ -1,5 +1,7 @@
 package com.system.you.review.item.bean.helper.impl;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import com.system.you.review.item.bean.helper.BeanHelper;
@@ -20,6 +22,17 @@ public class UserBeanHelper extends BeanHelper {
 		viewBean.setNickName(nickName(dbBean));
 		viewBean.setImageUrl(profileImage(dbBean.getProviderUserId()));
 		return viewBean;
+	}
+
+	//form bean
+	public ReviewUser formBean(Map<String, String> attributes) {
+		ReviewUser reviewUser = new ReviewUser();
+		reviewUser.setMailID(attributes.get("mail"));
+		reviewUser.setName(attributes.get("userName"));
+		reviewUser.setProviderId(attributes.get("providerId"));
+		reviewUser.setProviderUserId(attributes.get("providerUserId"));
+		reviewUser.setProviderUserName(attributes.get("providerUserName"));
+		return reviewUser;
 	}
 
 	private String nickName(ReviewUser dbBean) {

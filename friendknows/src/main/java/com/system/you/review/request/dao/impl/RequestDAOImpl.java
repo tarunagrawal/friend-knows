@@ -89,4 +89,5 @@ public class RequestDAOImpl extends DAOSupport<Request> implements RequestDAO {
 				.setProjection(Projections.rowCount()).uniqueResult())
 				.intValue();
 	}
+	
 }

@@ -1,21 +1,16 @@
 package com.system.you.review.core.mail;
 
-public class RequestAssignmentMailContent extends MailContent {
+public class RequestAnswerredMailContent extends RequestAssignmentMailContent {
 
-	public RequestAssignmentMailContent(String from, String[] recipient,
+	public RequestAnswerredMailContent(String from, String[] recipient,
 			String senderName, String category, String item) {
-		super(from, recipient);
-		this.category = category;
-		this.item = item;
+		super(from, recipient, "", category, item);
 		this.senderName = senderName;
 	}
 
-	public RequestAssignmentMailContent(String from, String[] recipient,
+	public RequestAnswerredMailContent(String from, String[] recipient,
 			String senderName, String category, String item, String description) {
-		super(from, recipient);
-		this.category = category;
-		this.item = item;
-		this.senderName = senderName;
+		this(from, recipient, senderName, category, item);
 		this.description = description;
 	}
 
@@ -30,7 +25,8 @@ public class RequestAssignmentMailContent extends MailContent {
 		builder.append("Hi Friend, ");
 		builder.append("\n");
 		builder.append("\n");
-		builder.append("I am seeking your opinion for " + getItem()
+		builder.append("\n");
+		builder.append("I have submitted my opinion on " + getItem()
 				+ " through friendknows.com");
 		builder.append("\n");
 		builder.append("\n");
@@ -39,7 +35,7 @@ public class RequestAssignmentMailContent extends MailContent {
 		builder.append(" \"");
 		builder.append("\n");
 		builder.append("\n");
-		builder.append("Please let me know your views !");
+		builder.append("Please let me know if it helps !");
 		builder.append("\n");
 		builder.append("\n");
 		builder.append("login to friendknows.com");
@@ -53,23 +49,11 @@ public class RequestAssignmentMailContent extends MailContent {
 		return builder.toString();
 	}
 
-	protected String getCategory() {
-		return this.category;
-	}
-
-	protected String getItem() {
-		return this.item;
-	}
-
 	private String subjectText() {
-		return " is looking for your help for " + item ;
+		return " has answerred your request for " + getItem() + " ";
 	}
 
 	private String senderName;
-
-	private String category;
-
-	private String item;
 
 	private String description;
 }

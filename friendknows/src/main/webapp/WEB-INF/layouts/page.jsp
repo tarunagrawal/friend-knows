@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>friendknows.com</title>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine">
 <link rel="stylesheet" href="<c:url value="/resources/page.css" />"
 	type="text/css" media="screen" />
 <link rel="stylesheet" href="<c:url value="/resources/form.css" />"
