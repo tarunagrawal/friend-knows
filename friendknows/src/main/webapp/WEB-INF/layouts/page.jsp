@@ -77,6 +77,7 @@
 body {
 	line-height: 1.5rem;
 	font-size: 0.8rem;
+	background-color: rgba(239, 239, 240, 1);
 }
 
 #footer {

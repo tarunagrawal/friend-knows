@@ -33,19 +33,20 @@ textarea {
 	border-width: 1px;
 	border-style: solid;
 	border-color: rgb(192, 191, 191);
-	box-shadow: 3px 3px 3px rgb(192, 191, 191);
+	background-color:  whitesmoke;
+	/* box-shadow: 3px 3px 3px rgb(192, 191, 191); */
 }
 
-.fk-reviewer-data-container:HOVER {
+/* .fk-reviewer-data-container:HOVER {
 	background-color: rgb(239, 237, 237);
-}
+} */
 </style>
 
 
 
 
 <div class="row">
-	<div class="small-12 large-8 columns ">
+	<div class="small-12 large-10 columns ">
 		<div class="row">
 			<div class="small-10 columns fk-padding-top  end">
 

@@ -7,14 +7,14 @@
 <div class="row fk-padding">
 	<div class="small-12 columns end">
 		<div class="row ">
-			<div class="small-8 columns ">
+			<div class="small-10 columns ">
 				<span class="fk-label fk-radius">${view.category.description}</span>
 				<span class="fk-label fk-radius">${view.item.description}</span>
 				<jsp:include page="reviewerStatus.jsp">
 					<jsp:param value="${view}" name="view" />
 				</jsp:include>
 			</div>
-			<div class="small-4 columns text-right">
+			<div class="small-2 columns text-right">
 				<span class="fk-date">${view.createDateTime}</span>
 			</div>
 		</div>
@@ -23,32 +23,35 @@
 				<img src="${view.initiatedUser.imageUrl}" />
 			</div>
 			<div class="small-11 columns text-left">
-				<span class="detail fk-bold">${view.initiatedUser.name}</span> <span
-					class="detail">is looking for your help</span>
-
+				<div class="row">
+					<div class="small-12 columns">
+						<span class="detail fk-bold">${view.initiatedUser.name}</span> <span
+							class="detail">is looking for your help</span>
+					</div>
+				</div>
 				<div class="row fk-padding-top">
 					<div class="small-12 columns end">
-						<p>${view.requestDescription}</p>
+						<p style="margin-bottom: 0px !important;">&quot;&nbsp;&nbsp;${view.requestDescription}&nbsp;&nbsp;&quot;</p>
 					</div>
 				</div>
 				<c:if test="${not empty view.reviews}">
-					<div class="row fk-reviews fk-padding-top">
+					<div class="row fk-reviews" style="margin-top: 10px;">
 						<c:forEach items="${view.reviews}" var="review">
-							<div class="small-12 columns" id="review_details_${review.id}">
-								<div class="row fk-review fk-no-margin ">
+							<div class="small-12 columns" id="review_details_${review.id}" style="margin-bottom: 10px !important;">
+								<div class="row fk-review fk-no-margin fk-padding" style="border-bottom: 1px solid  #D8D5D5;background-color: rgba(239, 239, 240, 1);">
 									<div class="small-1 columns fk-no-margin fk-no-padding">
 										<img src="${view.user.imageUrl}" />
 									</div>
 
-									<div class="small-11 columns fk-no-margin ">
+									<div class="small-9 columns fk-no-margin end">
 										<div class="row fk-no-margin">
 											<div class="small-12 columns fk-review-text-data">
-												<p>${review.description}</p>
+												<p style="margin-bottom: 0px !important;">${review.description}</p>
 											</div>
 										</div>
 
 										<div class="row fk-no-margin">
-											<div class="small-8 columns fk-padding-top text-left">
+											<div class="small-12 columns fk-padding-top text-left">
 												<div style="display: inline">
 													<span class=""> <span
 														class="fk-label fk-radius-left fk-header-fill fk-color-white">T</span><span
@@ -67,7 +70,7 @@
 													data-append="reviewer_data_container_${view.id}"
 													data-options="close_on_background_click:false" data-reveal></div>
 
-												<a class="fk-remove-review-link fi-comment-minus"
+												<a class="fk-remove-review-link fi-trash"
 													style="margin-left: 15px;"
 													href="<c:url value="/Request/${view.requestId}/Reviewer/${view.id}/Review/${review.id}/Remove"/>"></a>
 
