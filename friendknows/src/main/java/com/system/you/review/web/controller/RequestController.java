@@ -1,5 +1,6 @@
 package com.system.you.review.web.controller;
 
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ import com.system.you.review.web.beans.form.RequestFormBean;
 import com.system.you.review.web.beans.form.ReviewForwardFormBean;
 import com.system.you.review.web.beans.response.RequestContext;
 import com.system.you.review.web.beans.view.ReviewerViewBean;
+import com.system.you.review.web.beans.view.UserInterestViewBean;
 import com.system.you.review.web.controller.helper.AddReviewerHelper;
 import com.system.you.review.web.controller.helper.CloseRequestHelper;
 import com.system.you.review.web.controller.helper.EditRequestDescriptionHelper;
@@ -161,6 +163,11 @@ public class RequestController extends ControllerSupport {
 			@PathVariable String reviewerId, Model model) {
 		model.addAttribute("requestId", applyXXFilter(requestId));
 		model.addAttribute("reviewerId", applyXXFilter(reviewerId));
+		RequestContext<String[], List<UserInterestViewBean>> requestContext = forwardHelper
+				.form(requestId, reviewerId);
+		if(!requestContext.containsMessage()){
+			model.addAttribute("interestedFriends", requestContext.getViewBean());
+		}
 		return "forward";
 	}
 
@@ -224,7 +231,7 @@ public class RequestController extends ControllerSupport {
 
 	@Autowired
 	private CategoryService categoryService;
-	
+
 	private static Logger LOGGER = LoggerFactory
 			.getLogger(RequestController.class);
 }

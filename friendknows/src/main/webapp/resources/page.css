@@ -272,13 +272,18 @@ body {
 	font-size: 0.8rem;
 	padding: 0.15rem;
 	font-weight: bold;
+	border-radius: 5px;
 }
 
 .fk-dashboad-box {
-	background-color: rgb(232, 204, 204);
+	background-color: rgba(255, 255, 255, 1);
+	border: 1px solid rgba(204, 215, 232, 1);
+	box-shadow: 3px 3px 3px 3px rgba(174, 174, 174, 0.7);
+	width: 100%;
+	/* background-color: rgb(232, 204, 204);
 	border: 1px solid rgb(232, 204, 204);
 	box-shadow: 3px 3px 3px 3px rgba(153, 115, 115, 0.7);
-	width: 100%;
+	width: 100%; */
 }
 
 .fk-dashboad-box a {
@@ -298,6 +303,6 @@ body {
 	-webkit-transform: translateZ(0);
 }
 
-img{
-	border-radius:10px;
+img {
+	border-radius: 10px;
 }

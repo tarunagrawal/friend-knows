@@ -11,9 +11,13 @@
 		<input type="hidden" name="reviewerRequestId" value="${reviewerId}" />
 		<div
 			class="small-2 columns text-center fk-padding-top fk-label-heading">Friends</div>
-		<div class="small-6 columns end">
+		<div class="small-6 columns ">
 			<input id="search-box" type="text" name="friends" />
 		</div>
+		<div class="small-3 columns end">
+			<jsp:include page="interestedFriends.jsp"></jsp:include>
+		</div>
+
 	</div>
 	<div class="row fk-padding-top">
 		<div class="small-2 columns small-centered">

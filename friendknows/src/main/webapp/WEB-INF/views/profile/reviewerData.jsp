@@ -54,8 +54,8 @@
 											<div class="small-12 columns fk-padding-top text-left">
 												<div style="display: inline">
 													<span class=""> <span
-														class="fk-label fk-radius-left fk-header-fill fk-color-white">T</span><span
-														class="fk-label fk-radius-right fk-tag-viewName">
+														class="fk-label fk-radius-left fk-header-fill-trusted fk-color-white fi-link"></span><span
+														class="fk-label-trusted fk-radius-right fk-tag-viewName">
 															${review.tag.tagName}</span>
 													</span>
 

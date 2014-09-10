@@ -23,9 +23,9 @@
 							<h5>Pending Answer</h5>
 							<ul>
 								<li><c:if test="${pendingAnswer eq 0}">
-								    You do not have any request for answer !
+								    You do not have any request to answer !
 								</c:if> <c:if test="${pendingAnswer gt 0}">
-								You have ${pendingAnswer} request pending for answer
+								You have ${pendingAnswer} request pending to answer
 								</c:if></li>
 								<li><a href="<c:url value="/request/assigned"/>">Answer
 										friend request</a></li>
