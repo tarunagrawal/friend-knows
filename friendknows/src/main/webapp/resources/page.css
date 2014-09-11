@@ -142,7 +142,16 @@ body {
 
 .fk-selected {
 	background-color: #E5E5E5;
-	box-shadow: 3px 3px 3px rgb(179, 168, 168)
+	/* background-color: #BDC81D; */
+	/* background-color:#E8ECC7; */
+	box-shadow: 3px 3px 3px rgb(179, 168, 168);
+	color: black;
+}
+
+.fk-request-summary:HOVER {
+	background-color: #E8ECC7;
+	box-shadow: 3px 3px 3px rgb(179, 168, 168);
+	color: black;
 }
 
 .fk-background {
