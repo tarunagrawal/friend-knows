@@ -116,7 +116,7 @@
 			<div class="row">
 				<div class="row collapse">
 					<div class="small-3 large-2 columns">
-						<span class="prefix fk-inline-prefix">Category</span>
+						<span class="prefix ">Category</span>
 					</div>
 					<div class="small-9 large-10 columns">
 
@@ -124,11 +124,10 @@
 							<c:forEach items="${categories}" var="category">
 								<option value="${category.id}">${category.description}</option>
 							</c:forEach>
-						</select> <!-- <input id="category-search" type="text" name="category"
-							placeholder="Select Category..." /> -->
+						</select> 
 					</div>
 				</div>
-				<div class="row collapse">
+				<div class="row collapse fk-padding-top">
 					<div class="small-3 large-2 columns">
 						<span class="prefix fk-inline-prefix">Item</span>
 					</div>

@@ -8,8 +8,8 @@
 <div class="icon-bar vertical six-up fk-sidebar fixed "
 	style="width: auto; margin-top: 2.8rem;">
 
-	<a class="item has-tip tip-right radius" data-tooltip
-		title="Dashboard" href="<c:url value="/dashboard/"/>"> <label
+	<a class="item has-tip tip-right radius" data-tooltip title="Dashboard"
+		href="<c:url value="/dashboard/"/>"> <label
 		class="fi-page-multiple fk-navigation-icon-size"></label>
 	</a> <a class="item has-tip tip-right radius" data-tooltip
 		title="Your requests" href="<c:url value="/profile"/>"> <label
@@ -23,8 +23,12 @@
 		id="icon_pending_annswer_requests"
 		class="fi-anchor fk-navigation-icon-size"></label>
 	</a> <a class="item has-tip tip-right radius " data-tooltip
-		title="Your reviews"> <label
+		title="Add a new review"  href="<c:url value="/Review/Independent/New"/>" data-reveal-id="independent_review"
+		data-reveal-ajax="true"> <label
 		class="fi-lightbulb fk-navigation-icon-size"></label>
 	</a> <a class="item has-tip tip-right radius" data-tooltip title="!"><label
 		class="fi-results-demographics fk-navigation-icon-size"></label> </a>
+
+	<div id="independent_review" class="reveal-modal small"
+		data-options="close_on_background_click:false" data-reveal></div>
 </div>

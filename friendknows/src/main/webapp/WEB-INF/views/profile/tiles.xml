@@ -73,4 +73,9 @@
 			value="/WEB-INF/views/profile/feedbackSuccess.jsp" />
 	</definition>
 
+	<definition name="independentReview" extends="blank">
+		<put-attribute name="content"
+			value="/WEB-INF/views/profile/independentReview.jsp" />
+	</definition>
+
 </tiles-definitions>

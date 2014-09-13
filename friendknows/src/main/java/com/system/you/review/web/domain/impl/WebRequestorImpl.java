@@ -109,7 +109,9 @@ public class WebRequestorImpl implements Requestor {
 		this.contextPath = getHomeURL();
 		this.locale = SessionUtils.getCurrentRequest().getLocale();
 		this.connectedFriendIds = getConnectedFriendsIds();
+		this.connectedFriendIds.add(reviewUser.getProviderUserId());
 		this.connectedFriends = getConnectedFacebookFriends();
+		this.connectedFriends.add(this.reviewUser);
 		setLastClientSync(new Date());
 	}
 

@@ -11,6 +11,8 @@ public interface ReviewService {
 
 	public Review addReview(ReviewFormBean review, Reviewer reviewerRequest)
 			throws ServiceException;
+	
+	public Review addIndependentReview(ReviewFormBean review, String category, String itemId) throws ServiceException;
 
 	public Review delete(String id) throws ServiceException;
 

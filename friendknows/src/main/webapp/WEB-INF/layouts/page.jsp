@@ -7,7 +7,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>friendknows.com</title>
-<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css">
+<link rel="stylesheet" type="text/css"
+	href="http://fonts.googleapis.com/css">
 <link rel="stylesheet" href="<c:url value="/resources/page.css" />"
 	type="text/css" media="screen" />
 <link rel="stylesheet" href="<c:url value="/resources/form.css" />"
@@ -80,7 +81,7 @@ body {
 	background-color: rgba(239, 239, 240, 1);
 	/* font-family: 'Open Sans', sans-serif; */
 	/* font-family: 'Indie Flower', cursive; */
-    font-family: 'Josefin Sans', sans-serif;
+	font-family: 'Josefin Sans', sans-serif;
 	font-weight: 400;
 }
 
@@ -164,7 +165,8 @@ border:0;border-collapse:collapse;
 							</div>
 						</li>
 						<li><a href="<c:url value='/feedback/form/'></c:url>"
-							class="fi-record" data-reveal-id="feedback_pop_up" data-reveal-ajax="true" >&nbsp;Feedback</a>
+							class="fi-record" data-reveal-id="feedback_pop_up"
+							data-reveal-ajax="true">&nbsp;Feedback</a>
 							<div id="feedback_pop_up" class="reveal-modal small"
 								data-options="close_on_background_click:false" data-reveal>
 							</div></li>

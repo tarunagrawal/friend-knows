@@ -38,6 +38,7 @@ body {
 	font-size: 3rem;
 	display: inline;
 	color: white;
+	text-shadow: 3px 3px rgba(23, 23, 27, 1);
 }
 
 .com {
@@ -64,13 +65,11 @@ body {
 .problem-border {
 	border-width: 1px;
 	border-style: solid;
-	
 }
 
 .text-stmt {
 	font-size: 1.4rem !important;
-	color: rgba(72, 69, 69, 1)
-	font-family: 'Crafty Girls', cursive;
+	color: rgba(72, 69, 69, 1) font-family: 'Crafty Girls', cursive;
 }
 
 .problem-text {
@@ -93,8 +92,8 @@ body {
 										class="com logo">.com</span>
 								</div>
 								<div style="margin-top: 2rem;">
-									<b> <a href="<c:url value="/auth/facebook"/>"
-										class="button small bold">Signin with Facebook </a></b>
+									<span> <b> <a href="<c:url value="/auth/facebook"/>"
+										class="button small bold">Signin with Facebook </a></b></span>
 								</div>
 							</div>
 						</div>
@@ -132,7 +131,8 @@ body {
 					<div class="small-6 columns small-centered">
 						<p class="text-center text-stmt">
 							<b style="color: maroon;">FriendKnows</b> helps you to reach out
-							to trusted friends <br /> because <b style="color: red;">FRIEND</b>
+							to trusted friends <br /> to get their recommendations 	<br />
+							because <b style="color: red;">FRIEND</b>
 							<b style="color: maroon;">Knows</b> everything.
 						</p>
 					</div>

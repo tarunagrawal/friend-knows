@@ -315,3 +315,16 @@ body {
 img {
 	border-radius: 10px;
 }
+
+.ui-autocomplete-loading {
+	background: white url('images/ui-anim_basic_16x16.gif') right center
+		no-repeat;
+}
+
+.fk-no-height {
+	height: 2.18rem;
+}
+
+.fk-inline-prefix {
+	height: 2.7125rem;
+}

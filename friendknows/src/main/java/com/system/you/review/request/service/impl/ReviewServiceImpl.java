@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.system.you.review.core.service.exception.ServiceException;
+import com.system.you.review.item.bean.Item;
+import com.system.you.review.item.bean.helper.impl.ItemBeanHelper;
 import com.system.you.review.item.bean.helper.impl.ReviewBeanHelper;
 import com.system.you.review.request.bean.Request;
 import com.system.you.review.request.bean.Request.Status;
@@ -31,7 +33,7 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 			throws ServiceException {
 		try {
 			hasRight(reviewerRequest);
-			Review bean = reviewBean(review, reviewerRequest);
+			Review bean = reviewBean(review, reviewerRequest.getId(), reviewerRequest.getRequest().getItem());
 			reviewDAO.addReview(bean);
 
 			Status status = reviewerRequest.getStatus();
@@ -41,6 +43,23 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 			}
 			reviewerRequest.setStatus(newStatus);
 			updateReviewer(reviewerRequest);
+			triggerAddChange(bean);
+			return bean;
+		} catch (Exception e) {
+			logErrorAndThrowException("exception occured while adding review ",
+					e);
+		}
+		return null;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Review addIndependentReview(ReviewFormBean review, String category, String itemId)
+			throws ServiceException {
+		try {
+			Item item = itemBeanHelper.formToData(category, itemId);
+			Review bean = reviewBean(review, null, item);
+			reviewDAO.addReview(bean);
 			triggerAddChange(bean);
 			return bean;
 		} catch (Exception e) {
@@ -218,19 +237,23 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 		return onwerParentRequest == parentRequest;
 	}
 
-	private Review reviewBean(ReviewFormBean formBean, Reviewer reviewerRequest) {
+	private Review reviewBean(ReviewFormBean formBean, String reviewerId, Item item) {
 		Review review = reviewBeanHelper.formToDB(formBean);
-		review.setReviewerRequestId(reviewerRequest.getRequestID());
-		review.setItem(reviewerRequest.getRequest().getItem());
+		review.setReviewerRequestId(reviewerId);
+		review.setItem(item);
 		return review;
 	}
-
+	
 	private void logErrorAndThrowException(String message, Exception ex)
 			throws ServiceException {
 		logger.error(message, ex);
 		throw new ServiceException(message, ex);
 	}
 
+	
+	@Autowired
+	private ItemBeanHelper itemBeanHelper;
+	
 	@Autowired
 	private ReviewDAO reviewDAO;
 
