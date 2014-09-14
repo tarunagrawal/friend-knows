@@ -93,7 +93,10 @@ body {
 								</div>
 								<div style="margin-top: 2rem;">
 									<span> <b> <a href="<c:url value="/auth/facebook"/>"
-										class="button small bold">Signin with Facebook </a></b></span>
+											class="button small bold"><span class="fi-social-facebook" style="font-size:24;"></span> Signin with Facebook </a></b></span>
+								</div>
+								<div style="margin-top: 0px; font-size: 0.7rem;">
+									<span style="color:white">(It will redirect you to Facebook login screen)</span>
 								</div>
 							</div>
 						</div>
@@ -131,9 +134,9 @@ body {
 					<div class="small-6 columns small-centered">
 						<p class="text-center text-stmt">
 							<b style="color: maroon;">FriendKnows</b> helps you to reach out
-							to trusted friends <br /> to get their recommendations 	<br />
-							because <b style="color: red;">FRIEND</b>
-							<b style="color: maroon;">Knows</b> everything.
+							to trusted friends <br /> to get their recommendations <br />
+							because <b style="color: red;">FRIEND</b> <b
+								style="color: maroon;">Knows</b> everything.
 						</p>
 					</div>
 				</div>

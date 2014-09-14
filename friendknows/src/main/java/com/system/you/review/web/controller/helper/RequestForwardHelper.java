@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.system.you.review.core.UserInterest;
+import com.system.you.review.core.service.MailService;
 import com.system.you.review.core.service.TagService;
 import com.system.you.review.core.service.exception.ReviewerAlreadyExist;
 import com.system.you.review.item.bean.helper.impl.RequestBeanHelper;
@@ -60,6 +61,7 @@ public class RequestForwardHelper extends ControllerHelper {
 							.getReviewerRequestId());
 					ReviewerViewBean viewBean = getViewBean(reviewer);
 					requestContext.setViewBean(viewBean);
+					mailService.sendMessage(fwdRequest);
 				} else {
 					addSystemErrorMessage(requestContext);
 				}
@@ -106,6 +108,9 @@ public class RequestForwardHelper extends ControllerHelper {
 				.getFacebookFriend(ex.getProviderId()).getName();
 	}
 
+	@Autowired
+	private MailService mailService;
+	
 	@Autowired
 	private UserBeanHelper userBeanHelper;
 	

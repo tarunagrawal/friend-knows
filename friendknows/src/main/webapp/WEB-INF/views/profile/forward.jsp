@@ -4,14 +4,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <div class="row fk-error hide"></div>
-
-
 <div class="row">
 	<div class="small-12 columns end">
-		<jsp:include page="interestedFriends_horizontal.jsp"></jsp:include>
+	<jsp:include page="interestedFriends_horizontal.jsp"></jsp:include> 
 	</div>
 </div>
-
 <form
 	action="<c:url value="/Request/${requestId}/Reviewer/${reviewerId}/Forward/New/Submit"/>"
 	method="post" class="form">
@@ -19,7 +16,7 @@
 		<input type="hidden" name="reviewerRequestId" value="${reviewerId}" />
 		<div
 			class="small-2 columns text-center fk-padding-top fk-label-heading">Friends</div>
-		<div class="small-6 columns ">
+		<div class="small-6 columns end">
 			<input id="search-box" type="text" name="friends" />
 		</div>
 	</div>
