@@ -26,7 +26,7 @@
 <SCRIPT type="text/javascript">
 	$(document).ready(
 			function() {
-				$("#search-box").tokenInput("/friendknows/facebook/search/", {
+				$("#search-box").tokenInput("<c:url value='/facebook/search/'/>", {
 					theme : "facebook",
 					preventDuplicates : true,
 				});

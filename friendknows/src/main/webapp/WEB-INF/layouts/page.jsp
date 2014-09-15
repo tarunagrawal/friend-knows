@@ -248,7 +248,7 @@ border:0;border-collapse:collapse;
 								$("#product_search_box")
 										.autocomplete(
 												{
-													source : "/friendknows/item/search/",
+													source : "<c:url value="/item/search/"/>",
 													response : function(event,
 															ui) {
 														$

@@ -23,14 +23,14 @@
 					function() {
 
 						$("#friend-search").tokenInput(
-								"/friendknows/facebook/search/", {
+								"<c:url value='/facebook/search/' />", {
 									theme : "facebook",
 									preventDuplicates : true,
 								});
 
 						$("#item-search")
 								.tokenInput(
-										"/friendknows/item/search/",
+										"<c:url value='/item/search/' />",
 										{
 											theme : "facebook",
 											tokenLimit : 1,
@@ -47,7 +47,7 @@
 											},
 
 											onAdd : function() {
-												var url = "/friendknows/item/"
+												var url = "<c:url value='/item/'/>"
 														+ $("#item-search")
 																.val()
 														+ "/friends/interested";
@@ -87,7 +87,7 @@
 										});
 
 						$("#category-search").tokenInput(
-								"/friendknows/category/search/", {
+								"<c:url value='/category/search/'/>", {
 									theme : "facebook",
 									tokenLimit : 1,
 								});

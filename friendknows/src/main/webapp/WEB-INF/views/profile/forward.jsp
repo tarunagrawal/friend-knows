@@ -29,7 +29,7 @@
 </form>
 <a class="close-reveal-modal">&#215;</a>
 <SCRIPT type="text/javascript">
-	$("#search-box").tokenInput("/friendknows/facebook/search/", {
+	$("#search-box").tokenInput("<c:url value='/facebook/search/'/>", {
 		theme : "facebook",
 		preventDuplicates : true,
 	});

@@ -54,7 +54,7 @@ body {
 }
 
 .banner {
-	background-image: url("/friendknows/resources/images/newbanner.png");
+	background-image: url("resources/images/newbanner.png");
 	background-repeat: no-repeat;
 	background-position: center top;
 	background-size: cover;

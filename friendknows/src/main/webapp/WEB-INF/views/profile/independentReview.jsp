@@ -4,6 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<h3>Your Recommendation</h3>
 <div class="row fk-error hide"></div>
 <form action="<c:url value="/Review/Independent/New/Submit"/>"
 	method="post">
@@ -91,7 +92,7 @@
 		});
 	});
 
-	$("#item-search").tokenInput("/friendknows/item/search/", {
+	$("#item-search").tokenInput("<c:url value='/item/search/'/>", {
 		theme : "facebook",
 		tokenLimit : 1,
 		onResult : function(results) {
