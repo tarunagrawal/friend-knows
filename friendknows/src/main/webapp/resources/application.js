@@ -7,7 +7,7 @@ function poll() {
 			function() {
 				$
 						.ajax({
-							url : "<c:url value='/Notifications/' />",
+							url : notificationURL,
 							dataType : "json",
 							headers : {
 								Accept : "application/json",

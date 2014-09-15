@@ -78,4 +78,9 @@
 			value="/WEB-INF/views/profile/independentReview.jsp" />
 	</definition>
 
+	<definition name="myReviews" extends="page">
+		<put-attribute name="content"
+			value="/WEB-INF/views/profile/myReviews.jsp" />
+	</definition>
+
 </tiles-definitions>

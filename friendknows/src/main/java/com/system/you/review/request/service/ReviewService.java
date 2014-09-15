@@ -5,6 +5,7 @@ import java.util.List;
 import com.system.you.review.core.service.exception.ServiceException;
 import com.system.you.review.request.bean.Review;
 import com.system.you.review.request.bean.Reviewer;
+import com.system.you.review.user.bean.ReviewUser;
 import com.system.you.review.web.beans.form.ReviewFormBean;
 
 public interface ReviewService {
@@ -28,4 +29,5 @@ public interface ReviewService {
 
 	public Review copyToReviewer(String reviewId, String reviewerId) throws ServiceException;
 
+	public List<Review> getReviews(ReviewUser user) throws ServiceException;
 }

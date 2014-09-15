@@ -22,7 +22,9 @@ import com.system.you.review.request.dao.ReviewDAO;
 import com.system.you.review.request.dao.ReviewerDAO;
 import com.system.you.review.request.service.ReviewService;
 import com.system.you.review.request.service.ServiceSupport;
+import com.system.you.review.user.bean.ReviewUser;
 import com.system.you.review.web.beans.form.ReviewFormBean;
+import com.system.you.review.web.domain.impl.SessionUtils;
 
 @Service
 public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
@@ -33,7 +35,8 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 			throws ServiceException {
 		try {
 			hasRight(reviewerRequest);
-			Review bean = reviewBean(review, reviewerRequest.getId(), reviewerRequest.getRequest().getItem());
+			Review bean = reviewBean(review, reviewerRequest.getId(),
+					reviewerRequest.getRequest().getItem());
 			reviewDAO.addReview(bean);
 
 			Status status = reviewerRequest.getStatus();
@@ -54,8 +57,8 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Review addIndependentReview(ReviewFormBean review, String category, String itemId)
-			throws ServiceException {
+	public Review addIndependentReview(ReviewFormBean review, String category,
+			String itemId) throws ServiceException {
 		try {
 			Item item = itemBeanHelper.formToData(category, itemId);
 			Review bean = reviewBean(review, null, item);
@@ -129,7 +132,7 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 		try {
 			Reviewer reviewer = reviewerDAO.getReviewer(reviewerId);
 			if (reviewer != null) {
-				Request request =  reviewer.getRequest();
+				Request request = reviewer.getRequest();
 				// make sure that input reviewer id belongs request
 				if (request.getId().equalsIgnoreCase(requestId)) {
 					// check that current user has made the request
@@ -138,9 +141,9 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 					if (review != null) {
 						String reviewerRequestId = review
 								.getReviewerRequestId();
-						//make sure that reviewer request owns the review
-						if (reviewerRequestId.equalsIgnoreCase(reviewer
-								.getId())) {
+						// make sure that reviewer request owns the review
+						if (reviewerRequestId
+								.equalsIgnoreCase(reviewer.getId())) {
 							review.setVerified('Y');
 							reviewDAO.update(review);
 							return review;
@@ -209,6 +212,19 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 		return null;
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public List<Review> getReviews(ReviewUser user) throws ServiceException {
+		try {
+			return reviewDAO.getReviewsByReviewer(user);
+		} catch (Exception ex) {
+			logErrorAndThrowException(
+					"error occured while getting reviews for user"
+							+ user.getName(), ex);
+		}
+		return null;
+	}
+
 	private Review copy(Review review, Reviewer newReviewer) {
 		Review copied = new Review();
 		Date now = new Date();
@@ -237,23 +253,23 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 		return onwerParentRequest == parentRequest;
 	}
 
-	private Review reviewBean(ReviewFormBean formBean, String reviewerId, Item item) {
+	private Review reviewBean(ReviewFormBean formBean, String reviewerId,
+			Item item) {
 		Review review = reviewBeanHelper.formToDB(formBean);
 		review.setReviewerRequestId(reviewerId);
 		review.setItem(item);
 		return review;
 	}
-	
+
 	private void logErrorAndThrowException(String message, Exception ex)
 			throws ServiceException {
 		logger.error(message, ex);
 		throw new ServiceException(message, ex);
 	}
 
-	
 	@Autowired
 	private ItemBeanHelper itemBeanHelper;
-	
+
 	@Autowired
 	private ReviewDAO reviewDAO;
 
@@ -265,4 +281,5 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 
 	private static Logger logger = LoggerFactory
 			.getLogger(ReviewServiceImpl.class);
+
 }

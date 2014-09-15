@@ -4,6 +4,9 @@
 <%@ page session="false"%>
 <html class="no-js" lang="en">
 <head>
+<script type="text/javascript">
+ var notificationURL = "<c:url value='/Notifications/'/>" ;
+</script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>friendknows.com</title>

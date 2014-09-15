@@ -81,6 +81,7 @@
 							<b>Public Views:</b>
 						</div>
 						<div class="small-10 columns medium-text-left">
+						    <c:if test="${empty bean.item.rating}">No Review Available</c:if>
 							<c:forEach items="${bean.item.rating}" var="tagView">
 								<c:if test="${tagView ne null}">
 									<span class="fk-label fk-header-fill fk-color-white fi-megaphone"></span><span class="fk-label "> 
@@ -95,6 +96,7 @@
 							<b>Friend Views:</b>
 						</div>
 						<div class="small-10 columns medium-text-left">
+						    <c:if test="${empty bean.item.rating}">No Review Available</c:if>
 							<c:forEach items="${bean.item.connectedRating}" var="tagView">
 								<c:if test="${tagView ne null}">
 									<span
