@@ -18,7 +18,7 @@ import com.system.you.review.web.beans.view.ReviewViewBean;
 import com.system.you.review.web.controller.helper.UserReviewHelper;
 
 @Controller
-@RequestMapping(value = "/My/Reviews/")
+@RequestMapping(value = "/my/reviews/")
 public class UserReviewController extends ControllerSupport {
 
 	@RequestMapping(value = "")

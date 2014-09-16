@@ -11,6 +11,7 @@ import com.system.you.review.core.service.TagService;
 import com.system.you.review.item.bean.helper.BeanHelper;
 import com.system.you.review.request.bean.Review;
 import com.system.you.review.web.beans.form.ReviewFormBean;
+import com.system.you.review.web.beans.view.ItemViewBean;
 import com.system.you.review.web.beans.view.ReviewViewBean;
 import com.system.you.review.web.beans.view.TagViewBean;
 
@@ -30,6 +31,16 @@ public class ReviewBeanHelper extends BeanHelper {
 		return dbBean;
 	}
 
+	public ReviewViewBean dbToView(Review dbBean, boolean full) {
+		ReviewViewBean viewBean = dbToView(dbBean);
+		if (full) {
+			ItemViewBean itemViewBean = itemBeanHelper.dataToView(dbBean
+					.getItem());
+			viewBean.setItem(itemViewBean);
+		}
+		return viewBean;
+	}
+
 	public ReviewViewBean dbToView(Review dbBean) {
 		checkNulls(dbBean);
 		ReviewViewBean viewBean = new ReviewViewBean();
@@ -47,9 +58,9 @@ public class ReviewBeanHelper extends BeanHelper {
 			tagViewBean.setCount(weightedTag.getCount());
 			viewBean.setTag(tagViewBean);
 		}
-		
-		char verified = dbBean.getVerified() ;
-		boolean agreed =  (Review.VERIFED == verified);
+
+		char verified = dbBean.getVerified();
+		boolean agreed = (Review.VERIFED == verified);
 		viewBean.setAgreed(agreed);
 		return viewBean;
 	}
@@ -59,4 +70,7 @@ public class ReviewBeanHelper extends BeanHelper {
 
 	@Autowired
 	private UserBeanHelper userBeanHelper;
+
+	@Autowired
+	private ItemBeanHelper itemBeanHelper;
 }

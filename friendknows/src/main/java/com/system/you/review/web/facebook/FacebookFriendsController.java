@@ -23,6 +23,8 @@ public class FacebookFriendsController extends ControllerSupport {
 			@RequestParam(required = true, value = "term") String search) {
 		Collection<FacebookProfile> results = new ArrayList<FacebookProfile>();
 		for (FacebookProfile facebookProfile : getRequestor().getFriends()) {
+			System.out.println("HomeTown" + ((facebookProfile.getHometown() != null) ?facebookProfile.getHometown().getName(): "UNKOWNN"));
+			System.out.println("Location" +  ((facebookProfile.getLocation() != null) ?facebookProfile.getLocation().getName(): "UNKOWNN"));
 			if (facebookProfile.getName().toLowerCase()
 					.contains(search.trim().toLowerCase())) {
 				results.add(facebookProfile);

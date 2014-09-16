@@ -32,7 +32,7 @@
 					<constructor-arg value="${facebook.clientId}" />
 					<constructor-arg value="${facebook.clientSecret}" />
 					<constructor-arg value="${facebook.appNamespace}" />
-					<property name="defaultScope" value="email,user_friends" />
+					<property name="defaultScope" value="email,user_friends,friends_hometown,user_hometown, user_location, friends_location" />
 				</bean>
 			</list>
 		</property>

@@ -44,8 +44,6 @@ public class ItemViewBean {
 		this.category = category;
 	}
 
-
-
 	private String id;
 	private String description;
 	private List<TagViewBean> rating;

@@ -25,7 +25,7 @@ public class UserReviewHelper extends ControllerHelper {
 			if (reviews != null && !reviews.isEmpty()) {
 				List<ReviewViewBean> viewBean = new ArrayList<ReviewViewBean>();
 				for (Review review : reviews) {
-					viewBean.add(reviewBeanHelper.dbToView(review));
+					viewBean.add(reviewBeanHelper.dbToView(review, true));
 				}
 				requestContext.setViewBean(viewBean);
 			}

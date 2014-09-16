@@ -19,7 +19,15 @@
 									</div>
 									<div class="small-10 columns end "
 										style="padding-bottom: .8rem;">
+
 										<div class="row">
+											<div class="small-12 columns">
+												<span class="fk-label fk-radius">${review.item.category.description}</span>
+												<span class="fk-label fk-radius">${review.item.description}</span>
+											</div>
+										</div>
+
+										<div class="row fk-padding-top">
 											<div class="small-12 columns">
 												<p>${review.description}</p>
 											</div>

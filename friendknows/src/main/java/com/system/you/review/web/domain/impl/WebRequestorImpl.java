@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.catalina.startup.HomesUserDatabase;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
 import org.springframework.social.facebook.api.PagedList;
+import org.springframework.social.facebook.api.Reference;
 import org.springframework.social.security.SocialAuthenticationToken;
 
 import com.system.you.review.user.bean.ReviewUser;
@@ -47,7 +49,8 @@ public class WebRequestorImpl implements Requestor {
 
 	@Override
 	public boolean isAuthenticated() {
-		return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+		return SecurityContextHolder.getContext().getAuthentication()
+				.isAuthenticated();
 	}
 
 	@Override
@@ -104,6 +107,15 @@ public class WebRequestorImpl implements Requestor {
 
 	public void authenticateRequestor(Authentication authentication) {
 		this.facebook = getFacebookApi(authentication);
+		Reference location = this.facebook.userOperations().getUserProfile()
+				.getLocation();
+		System.out.println("Location:" + ((location != null) ? location.getName() : "UNKNOWN"));
+		
+		location = this.facebook.userOperations().getUserProfile()
+				.getHometown();
+		System.out.println("Homes Town:" + ((location != null) ? location.getName() : "UNKNOWN"));
+
+		
 		this.friends = FacebookAPIHelper.getFacebookFriends(facebook);
 		this.reviewUser = (ReviewUser) authentication.getPrincipal();
 		this.contextPath = getHomeURL();
@@ -115,10 +127,10 @@ public class WebRequestorImpl implements Requestor {
 		setLastClientSync(new Date());
 	}
 
-	public boolean isFriend(String providerId){
+	public boolean isFriend(String providerId) {
 		return this.connectedFriendIds.contains(providerId);
 	}
-	
+
 	private String getHomeURL() {
 		return HttpHelper.getHomeURL(SessionUtils.getCurrentRequest());
 	}
@@ -132,7 +144,8 @@ public class WebRequestorImpl implements Requestor {
 	}
 
 	private Facebook getFacebookApi(Authentication authentication) {
-		return ((Facebook) ((SocialAuthenticationToken) authentication).getConnection().getApi());
+		return ((Facebook) ((SocialAuthenticationToken) authentication)
+				.getConnection().getApi());
 	}
 
 	@Override
@@ -147,21 +160,20 @@ public class WebRequestorImpl implements Requestor {
 
 	@Override
 	public void setLastClientSync(Date date) {
-		this.lastClientSync = date ;
+		this.lastClientSync = date;
 	}
-	
-	
+
 	@Override
 	public void newUserSession(boolean session) {
 		newUserSession = session;
-		
+
 	}
 
 	@Override
 	public boolean isNewUserSession() {
 		return newUserSession;
 	}
-	
+
 	private String id;
 	private Locale locale;
 	private ReviewUser reviewUser;
@@ -171,7 +183,7 @@ public class WebRequestorImpl implements Requestor {
 	private String contextPath;
 	private Facebook facebook;
 	private boolean destroy;
-	private Date lastClientSync ;
+	private Date lastClientSync;
 	private boolean newUserSession;
-	
+
 }

@@ -28,7 +28,7 @@
 		data-reveal-id="independent_review" data-reveal-ajax="true"> <label
 		class="fi-lightbulb fk-navigation-icon-size"></label>
 	</a> <a class="item has-tip tip-right radius"
-		href="<c:url value='/My/Reviews/'/>" data-tooltip title="Your Reviews"><label
+		href="<c:url value='/my/reviews/'/>" data-tooltip title="Your Reviews"><label
 		class="fi-results-demographics fk-navigation-icon-size"></label> </a>
 
 	<div id="independent_review" class="reveal-modal small"
