@@ -8,14 +8,25 @@
 		<div class="row">
 			<div class="small-10 columns fk-padding-top fk-requests-bar"
 				style="margin-left: 0 !important; padding-left: 0px">
-				<div class="row">
-					<div class="small-11 columns ">
-						<span class="fk-label fk-radius"
-							style="font-size: 1rem; font-weight: bold; color: blue; border-color: blue !important;">${item.category.description}</span>
-						<span class="fk-label fk-radius"
-							style="font-size: 1rem; font-weight: bold; color: blue; border-color: blue !important;">${item.description}</span>
+				<c:if test="${item ne null}">
+					<div class="row">
+						<div class="small-11 columns ">
+							<span class="fk-label fk-radius"
+								style="font-size: 1rem; font-weight: bold; color: blue; border-color: blue !important;">${item.category.description}</span>
+							<span class="fk-label fk-radius"
+								style="font-size: 1rem; font-weight: bold; color: blue; border-color: blue !important;">${item.description}</span>
+						</div>
 					</div>
-				</div>
+				</c:if>
+				<c:if test="${item eq null}">
+				<div class="row">
+                        <div class="small-11 columns ">
+                            <p class="" style="margin-top: 2rem;">
+                                No item exist in the system with selected name.
+                            </p>
+                        </div>
+                    </div>
+				</c:if>
 				<c:if test="${totalReviews eq 0}">
 					<div class="row">
 						<div class="small-11 columns">

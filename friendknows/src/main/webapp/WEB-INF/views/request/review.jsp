@@ -61,8 +61,7 @@
 																	success : function(
 																			data) {
 																		var $interested_friend = $("#interested_friend");
-																		$interested_friend
-																				.html(data);
+																		$interested_friend.html(data);
 																		$interested_friend
 																				.show("slow");
 																	},

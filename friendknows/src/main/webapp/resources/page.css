@@ -312,8 +312,10 @@ body {
 	-webkit-transform: translateZ(0);
 }
 
-img {
-	border-radius: 10px;
+.profileImage {
+	border-radius: 40px;
+	border: 2px solid rgba(207, 207, 207, 1) !important;
+	box-shadow: 2px 2px 2px rgba(156, 143, 143, 1) !important;
 }
 
 .ui-autocomplete-loading {

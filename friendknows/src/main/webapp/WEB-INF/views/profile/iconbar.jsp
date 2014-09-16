@@ -23,7 +23,7 @@
 		id="icon_pending_annswer_requests"
 		class="fi-anchor fk-navigation-icon-size"></label>
 	</a> <a class="item has-tip tip-right radius " data-tooltip
-		title="Add a new review"
+		title="Submit your recommendation"
 		href="<c:url value="/Review/Independent/New"/>"
 		data-reveal-id="independent_review" data-reveal-ajax="true"> <label
 		class="fi-lightbulb fk-navigation-icon-size"></label>

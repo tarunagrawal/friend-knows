@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.system.you.review.category.service.CategoryService;
 import com.system.you.review.core.UserInterest;
 import com.system.you.review.core.exception.UIException;
 import com.system.you.review.core.service.TagService;
@@ -42,9 +43,10 @@ public class ItemController extends ControllerSupport {
 	@RequestMapping(value = "search/", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody
 	Collection<NameValuePair> search(
-			@RequestParam(required = true, value = "term") String item) {
+			@RequestParam(required = true, value = "term") String item,
+			@RequestParam(required = false, value = "s", defaultValue = "true") boolean suggestItem) {
 		Collection<Item> results = search.searchDescription(item);
-		return toNameValuePairs(item, results);
+		return toNameValuePairs(item, results,suggestItem);
 	}
 
 	@ResponseStatus(value = HttpStatus.OK)
@@ -53,24 +55,29 @@ public class ItemController extends ControllerSupport {
 			@RequestParam(required = true, value = "itemId") String itemId,
 			Model model) throws UIException {
 		String viewName = "itemSearchResult";
+		List<ReviewViewBean> connected = new ArrayList<ReviewViewBean>();
+		List<ReviewViewBean> publicReviews = new ArrayList<ReviewViewBean>();
+		List<Review> reviews = null;
+		ItemViewBean itemViewBean = null;
 		try {
 			Item item = itemService.getItem(itemId);
-			ItemViewBean itemViewBean = itemBeanHelper.dataToView(item);
-			List<Review> reviews = reviewService.getReviewsForItem(itemId);
-			List<ReviewViewBean> connected = new ArrayList<ReviewViewBean>();
-			List<ReviewViewBean> publicReviews = new ArrayList<ReviewViewBean>();
-			Requestor requestor = getRequestor();
-			for (Review review : reviews) {
-				ReviewViewBean viewBean = reviewBeanHelper.dbToView(review);
-				String reviewerProviderId = viewBean.getReviewUser()
-						.getProviderId();
-				if (requestor.isFriend(reviewerProviderId)) {
-					connected.add(viewBean);
-				} else {
-					publicReviews.add(viewBean);
+			if (item != null) {
+				itemViewBean = itemBeanHelper.dataToView(item);
+				reviews = reviewService.getReviewsForItem(itemId);
+				Requestor requestor = getRequestor();
+				for (Review review : reviews) {
+					ReviewViewBean viewBean = reviewBeanHelper.dbToView(review);
+					String reviewerProviderId = viewBean.getReviewUser()
+							.getProviderId();
+					if (requestor.isFriend(reviewerProviderId)) {
+						connected.add(viewBean);
+					} else {
+						publicReviews.add(viewBean);
+					}
 				}
 			}
-			model.addAttribute("totalReviews", reviews.size());
+			model.addAttribute("totalReviews",
+					(reviews != null) ? reviews.size() : 0);
 			model.addAttribute("totalPublicReviews", publicReviews.size());
 			model.addAttribute("totalConnectedReviews", connected.size());
 			model.addAttribute("item", itemViewBean);
@@ -84,7 +91,7 @@ public class ItemController extends ControllerSupport {
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(value = {UIException.class })
+	@ExceptionHandler(value = { UIException.class })
 	public ModelAndView exceptionHandler(UIException uiException) {
 		return new ModelAndView(uiException.getViewName(), uiException
 				.getModel().asMap());
@@ -116,11 +123,18 @@ public class ItemController extends ControllerSupport {
 	}
 
 	private Collection<NameValuePair> toNameValuePairs(String term,
-			Collection<Item> results) {
+			Collection<Item> results, boolean suggestItem) {
 		Collection<NameValuePair> list = new ArrayList<NameValuePair>();
-		list.add(nameValue(defaultItem(term)));
+		if(suggestItem){
+			list.add(nameValue(defaultItem(term)));
+		}
 		for (Item item : results) {
 			NameValuePair nameValue = nameValue(item);
+			list.add(nameValue);
+		}
+		
+		if(list.isEmpty()){
+			NameValuePair nameValue = new NameValuePair("Item does not exist", "");
 			list.add(nameValue);
 		}
 		return list;
@@ -138,6 +152,9 @@ public class ItemController extends ControllerSupport {
 		item.setDescription(term);
 		return item;
 	}
+
+	@Autowired
+	private CategoryService categoryService;
 
 	@Autowired
 	private ItemSearchService search;

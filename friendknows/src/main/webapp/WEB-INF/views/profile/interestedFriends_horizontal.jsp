@@ -23,7 +23,7 @@
 						<div class=""
 							style="margin: 0px !important; padding: 0px !important;">
 							<div class="left">
-								<img src="${friend.user.imageUrl}" />
+								<img src="${friend.user.imageUrl}" class="profileImage" />
 							</div>
 							<div class="right fk-header-fill fk-center-align end"
 								style="width: 50px;">

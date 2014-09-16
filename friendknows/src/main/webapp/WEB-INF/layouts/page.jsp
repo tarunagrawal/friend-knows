@@ -250,7 +250,7 @@ border:0;border-collapse:collapse;
 								$("#product_search_box")
 										.autocomplete(
 												{
-													source : "<c:url value="/item/search/"/>",
+													source : "<c:url value="/item/search/"/>" +"?s=false",
 													response : function(event,
 															ui) {
 														$
@@ -264,6 +264,9 @@ border:0;border-collapse:collapse;
 																		});
 													},
 													select : function(event, ui) {
+													     if(ui.item.id=="" || ($.trim(ui.item.id).length <= 0)){
+													    	 return false;
+													     }
 														$("#hidden_search")
 																.val(ui.item.id);
 													}

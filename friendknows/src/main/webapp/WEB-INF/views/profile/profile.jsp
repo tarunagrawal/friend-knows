@@ -21,8 +21,10 @@
 								onclick="javascript:displayDetails('${bean.id}');">
 								<div class="row ">
 									<div class="small-8 columns ">
-										<span class="fk-label fk-radius">${bean.category.description}</span>
-										<span class="fk-label fk-radius">${bean.item.description}</span>
+										<span class="fk-label fk-radius"
+											style="font-size: 0.9rem; color: rgba(84, 53, 53, 1); font-weight: bold; background-color: #F5E469; box-shadow: 2px 2px 4px #A5A3A3 !important; border-color: #F5E469;">${bean.category.description}</span>
+										<span class="fk-label fk-radius"
+											style="font-size: 0.9rem; color: rgba(84, 53, 53, 1); font-weight: bold; background-color: #F5E469; box-shadow: 2px 2px 4px #A5A3A3 !important; border-color: #F5E469;">${bean.item.description}</span>
 									</div>
 									<div class="small-4 columns medium-text-right end">
 										<span class="fk-date">${bean.createDateTime}</span>
@@ -30,7 +32,8 @@
 								</div>
 								<div class="row fk-padding-top">
 									<div class="small-12 columns medium-text-left">
-										<p class="fk-short-description">&quot;&nbsp; ${bean.shortDescription} &nbsp;&quot;</p>
+										<p class="fk-short-description">&quot;&nbsp;
+											${bean.shortDescription} &nbsp;&quot;</p>
 									</div>
 								</div>
 							</div>
@@ -49,8 +52,10 @@
 				<div class="small-12 columns">
 					<div class="row">
 						<div class="small-7 columns ">
-							<span class="fk-label fk-radius">${bean.category.description}</span>
-							<span class="fk-label fk-radius">${bean.item.description}</span>
+							<span class="fk-label fk-radius"
+								style="font-size: 0.9rem; color: rgba(84, 53, 53, 1); font-weight: bold; background-color: #F5E469; box-shadow: 2px 2px 4px #A5A3A3 !important; border-color: #F5E469;">${bean.category.description}</span>
+							<span class="fk-label fk-radius"
+								style="font-size: 0.9rem; color: rgba(84, 53, 53, 1); font-weight: bold; background-color: #F5E469; box-shadow: 2px 2px 4px #A5A3A3 !important; border-color: #F5E469;">${bean.item.description}</span>
 						</div>
 						<div class="small-4 columns medium-text-right end">
 							<a href="<c:url value="/Request/${bean.id}/Reviewer/Add"/>"
@@ -67,11 +72,11 @@
 					<div class="row">
 						<div class="small-11 columns end">
 							<div class="medium-text-left fk-request-description">
-								<p>&quot;&nbsp;
-									<a href="#" class="editable-in-place" data-type="textarea"
-										data-append="summary_${bean.id}"
+								<p>
+									&quot;&nbsp; <a href="#" class="editable-in-place"
+										data-type="textarea" data-append="summary_${bean.id}"
 										data-url="<c:url value="/Request/${bean.id}/Description/Edit"/>">${bean.description}</a>
-								&nbsp;&quot;		
+									&nbsp;&quot;
 								</p>
 							</div>
 						</div>
@@ -81,11 +86,12 @@
 							<b>Public Views:</b>
 						</div>
 						<div class="small-10 columns medium-text-left">
-						    <c:if test="${empty bean.item.rating}">No Review Available</c:if>
+							<c:if test="${empty bean.item.rating}">No Review Available</c:if>
 							<c:forEach items="${bean.item.rating}" var="tagView">
 								<c:if test="${tagView ne null}">
-									<span class="fk-label fk-header-fill fk-color-white fi-megaphone"></span><span class="fk-label "> 
-									${tagView.tagName}</span><span class="fk-label fk-header-fill fk-color-white">${tagView.count}</span>
+									<span
+										class="fk-label fk-header-fill fk-color-white fi-megaphone"></span><span class="fk-label "> 
+										${tagView.tagName}</span><span class="fk-label fk-header-fill fk-color-white">${tagView.count}</span>
 									<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 								</c:if>
 							</c:forEach>
@@ -96,12 +102,12 @@
 							<b>Friend Views:</b>
 						</div>
 						<div class="small-10 columns medium-text-left">
-						    <c:if test="${empty bean.item.rating}">No Review Available</c:if>
+							<c:if test="${empty bean.item.rating}">No Review Available</c:if>
 							<c:forEach items="${bean.item.connectedRating}" var="tagView">
 								<c:if test="${tagView ne null}">
 									<span
-										class="fk-label fk-header-fill-trusted fk-color-white fi-link"></span><span class="fk-label-trusted">
-										 ${tagView.tagName}</span><span class="fk-label fk-header-fill-trusted fk-color-white">${tagView.count}</span>
+										class="fk-label fk-header-fill-trusted fk-color-white fi-link"></span><span class="fk-label-trusted"> 
+										${tagView.tagName}</span><span class="fk-label fk-header-fill-trusted fk-color-white">${tagView.count}</span>
 									<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 								</c:if>
 							</c:forEach>
@@ -114,7 +120,7 @@
 								<div class="row fk-reviewer fk-no-margin fk-bottom-border "
 									style="padding-bottom: 10px; margin-top: 10px !important; background-color: rgba(239, 239, 240, 1);">
 									<div class="small-1 columns fk-no-margin fk-no-padding">
-										<img src="${reviewer.user.imageUrl}" class="" />
+										<img src="${reviewer.user.imageUrl}" class="profileImage" />
 									</div>
 									<div
 										class="small-11 columns medium-text-left fk-no-left-padding end ">
@@ -145,7 +151,7 @@
 										<c:if test="${not empty reviewer.reviews}">
 											<c:forEach items="${reviewer.reviews}" var="review">
 												<div class="row fk-no-margin fk-padding-top"
-													style="margin-top: 0.4rem !important; margin-bottom: 0.4rem !important; background-color: whitesmoke; border-radius:10px;">
+													style="margin-top: 0.4rem !important; margin-bottom: 0.4rem !important; background-color: whitesmoke; border-radius: 10px;">
 													<div class="small-10 columns end fk-review-display">
 														<div class="row">
 															<div class="small-12 columns">
@@ -154,7 +160,8 @@
 														</div>
 														<div class="row">
 															<div class="small-4 columns">
-																<span class="fk-label fk-header-fill-trusted fk-color-white fi-link"></span><span
+																<span
+																	class="fk-label fk-header-fill-trusted fk-color-white fi-link"></span><span
 																	class="fk-label-trusted"> ${review.tag.tagName}</span>
 															</div>
 															<div class="small-6 columns medium-text-left end ">

@@ -20,7 +20,7 @@
 		</div>
 		<div class="row fk-no-margin fk-padding-top">
 			<div class="small-1 columns fk-no-margin fk-no-padding">
-				<img src="${view.initiatedUser.imageUrl}" />
+				<img src="${view.initiatedUser.imageUrl}" class="profileImage"/>
 			</div>
 			<div class="small-11 columns text-left">
 				<div class="row">
@@ -40,7 +40,7 @@
 							<div class="small-12 columns" id="review_details_${review.id}" style="margin-bottom: 10px !important;">
 								<div class="row fk-review fk-no-margin fk-padding" style="border-bottom: 1px solid  #D8D5D5;background-color: rgba(239, 239, 240, 1);">
 									<div class="small-1 columns fk-no-margin fk-no-padding">
-										<img src="${view.user.imageUrl}" />
+										<img src="${view.user.imageUrl}" class="profileImage"/>
 									</div>
 
 									<div class="small-9 columns fk-no-margin end">
@@ -100,7 +100,7 @@
 							<div
 								class="row fk-reviewer fk-no-margin fk-padding-top fk-bottom-border">
 								<div class="small-1 columns fk-no-margin fk-no-padding">
-									<img src="${reviewer.user.imageUrl}" class="" />
+									<img src="${reviewer.user.imageUrl}" class="profileImage" />
 								</div>
 								<div
 									class="small-11 columns medium-text-left fk-no-left-padding end ">
@@ -182,9 +182,9 @@
 				</c:if>
 			</div>
 			<div class="small-2 columns  small-text-left end">
-				<a class="fk-forward-review-link fk-operation-link"
+				<a class="fk-forward-review-link fk-operation-link fk-bold"
 					href="<c:url value="/Request/${view.requestId}/Reviewer/${view.id}/Forward/New"/>/"
-					data-reveal-id="forward_review_${view.id}" data-reveal-ajax="true">forward</a>
+					data-reveal-id="forward_review_${view.id}" data-reveal-ajax="true">Forward</a>
 				<div id="forward_review_${view.id}" class="reveal-modal small"
 					data-append="reviewer_data_container_${view.id}"
 					data-options="close_on_background_click:false" data-reveal></div>

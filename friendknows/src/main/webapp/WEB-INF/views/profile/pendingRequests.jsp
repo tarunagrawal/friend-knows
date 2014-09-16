@@ -34,12 +34,15 @@ textarea {
 	border-style: solid;
 	border-color: rgb(192, 191, 191);
 	background-color:  whitesmoke;
-	/* box-shadow: 3px 3px 3px rgb(192, 191, 191); */
+	border-radius:10px;
+	border-left: 2px solid rgb(192, 191, 191);
+	border-bottom: 2px solid rgb(192, 191, 191);
+	/*  */
 }
 
-/* .fk-reviewer-data-container:HOVER {
-	background-color: rgb(239, 237, 237);
-} */
+ .fk-reviewer-data-container:HOVER {
+	box-shadow: inset 0px 70px 30px rgb(192, 191, 191);
+ } 
 </style>
 
 

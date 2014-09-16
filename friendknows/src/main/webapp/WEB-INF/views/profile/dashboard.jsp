@@ -29,7 +29,7 @@
 								</c:if></li>
 								<li><a href="<c:url value="/request/assigned"/>">Answer
 										friend request</a></li>
-								<li>Your Reviews</li>
+								<li><a href="<c:url value="/my/reviews/"/>">Your Reviews</a></li>
 							</ul>
 						</div>
 					</div>
