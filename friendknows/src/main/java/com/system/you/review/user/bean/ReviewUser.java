@@ -1,6 +1,7 @@
 package com.system.you.review.user.bean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -24,7 +25,7 @@ import com.system.you.review.database.IConstants;
 
 @SuppressWarnings("serial")
 @Cacheable
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Table(name = IConstants.ITable.INames.REVIEW_USER_TABLE)
 public class ReviewUser implements SocialUserDetails {
@@ -82,7 +83,6 @@ public class ReviewUser implements SocialUserDetails {
 		return createAuthority();
 	}
 
-	
 	@Basic
 	public String getProviderUserName() {
 		return providerUserName;
@@ -90,6 +90,24 @@ public class ReviewUser implements SocialUserDetails {
 
 	public void setProviderUserName(String providerUserName) {
 		this.providerUserName = providerUserName;
+	}
+
+	@Basic
+	public Date getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public void setCreateDateTime(Date createDateTime) {
+		this.createDateTime = createDateTime;
+	}
+
+	@Basic
+	public Date getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(Date updateDateTime) {
+		this.updateDateTime = updateDateTime;
 	}
 
 	@Transient
@@ -154,6 +172,8 @@ public class ReviewUser implements SocialUserDetails {
 	private String providerUserId;
 	private String name;
 	private String providerUserName;
-	private boolean external ;
+	private boolean external;
+	private Date createDateTime;
+	private Date updateDateTime;
 
 }

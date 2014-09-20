@@ -23,14 +23,40 @@ public class FacebookFriendsController extends ControllerSupport {
 			@RequestParam(required = true, value = "term") String search) {
 		Collection<FacebookProfile> results = new ArrayList<FacebookProfile>();
 		for (FacebookProfile facebookProfile : getRequestor().getFriends()) {
-			System.out.println("HomeTown" + ((facebookProfile.getHometown() != null) ?facebookProfile.getHometown().getName(): "UNKOWNN"));
-			System.out.println("Location" +  ((facebookProfile.getLocation() != null) ?facebookProfile.getLocation().getName(): "UNKOWNN"));
 			if (facebookProfile.getName().toLowerCase()
 					.contains(search.trim().toLowerCase())) {
 				results.add(facebookProfile);
 			}
 		}
 		return toNameValuePairs(results);
+	}
+
+	@RequestMapping(value = "/location/search", method = RequestMethod.GET)
+	public @ResponseBody
+	Collection<NameValuePair> location(
+			@RequestParam(required = true, value = "term") String search) {
+		Collection<String> results = new ArrayList<String>();
+		for (String location : getRequestor().getFriendLocations()) {
+			if (location.toLowerCase().contains(search)) {
+				results.add(location);
+			}
+		}
+		return nameValue(results);
+	}
+
+	private Collection<NameValuePair> nameValue(Collection<String> results) {
+		Collection<NameValuePair> list = new ArrayList<NameValuePair>();
+		for (String location : results) {
+			NameValuePair nameValue = new NameValuePair(location, location);
+			list.add(nameValue);
+		}
+		
+		if(list.isEmpty()){
+			NameValuePair nameValue = new NameValuePair("unknown", "unknown");
+			list.add(nameValue);
+		}
+		
+		return list;
 	}
 
 	private Collection<NameValuePair> toNameValuePairs(

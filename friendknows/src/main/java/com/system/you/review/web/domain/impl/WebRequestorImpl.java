@@ -1,10 +1,13 @@
 package com.system.you.review.web.domain.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
-import org.apache.catalina.startup.HomesUserDatabase;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -107,15 +110,6 @@ public class WebRequestorImpl implements Requestor {
 
 	public void authenticateRequestor(Authentication authentication) {
 		this.facebook = getFacebookApi(authentication);
-		Reference location = this.facebook.userOperations().getUserProfile()
-				.getLocation();
-		System.out.println("Location:" + ((location != null) ? location.getName() : "UNKNOWN"));
-		
-		location = this.facebook.userOperations().getUserProfile()
-				.getHometown();
-		System.out.println("Homes Town:" + ((location != null) ? location.getName() : "UNKNOWN"));
-
-		
 		this.friends = FacebookAPIHelper.getFacebookFriends(facebook);
 		this.reviewUser = (ReviewUser) authentication.getPrincipal();
 		this.contextPath = getHomeURL();
@@ -125,6 +119,35 @@ public class WebRequestorImpl implements Requestor {
 		this.connectedFriends = getConnectedFacebookFriends();
 		this.connectedFriends.add(this.reviewUser);
 		setLastClientSync(new Date());
+	}
+
+	private Map<String, List<FacebookProfile>> friendLocations() {
+		Map<String, List<FacebookProfile>> locations = new HashMap<String, List<FacebookProfile>>();
+		locations.put("", null);
+		locations.put("General", null);
+		for (FacebookProfile friend : this.friends) {
+			Reference location = friend.getHometown();
+			if (location != null) {
+				if (locations.containsKey(location.getName())) {
+					locations.get(location.getName()).add(friend);
+				} else {
+					List<FacebookProfile> list = new ArrayList<FacebookProfile>();
+					list.add(friend);
+					locations.put(location.getName(), list);
+				}
+			}
+			location = friend.getLocation();
+			if (location != null) {
+				if (locations.containsKey(location.getName())) {
+					locations.get(location.getName()).add(friend);
+				} else {
+					List<FacebookProfile> list = new ArrayList<FacebookProfile>();
+					list.add(friend);
+					locations.put(location.getName(), list);
+				}
+			}
+		}
+		return locations;
 	}
 
 	public boolean isFriend(String providerId) {
@@ -174,6 +197,35 @@ public class WebRequestorImpl implements Requestor {
 		return newUserSession;
 	}
 
+	@Override
+	public Set<String> getFriendLocations() {
+		if (friendLocations == null) {
+			friendLocations = friendLocations();
+		}
+		return friendLocations.keySet();
+	}
+
+	@Override
+	public List<ReviewUser> getFriendsWithLocation(String location) {
+		List<ReviewUser> friends = new ArrayList<ReviewUser>();
+		// ideally this should not happen.
+		if (friendLocations == null) {
+			friendLocations = friendLocations();
+		}
+		Set<String> locations = friendLocations.keySet();
+		for (String place : locations) {
+			if (location.equalsIgnoreCase(place)) {
+				List<FacebookProfile> profiles = friendLocations.get(place);
+				for (FacebookProfile facebookProfile : profiles) {
+					friends.add(SessionUtils.getServiceLocator()
+							.getUserBeanHelper()
+							.socialToDB(facebookProfile.getId()));
+				}
+			}
+		}
+		return friends;
+	}
+
 	private String id;
 	private Locale locale;
 	private ReviewUser reviewUser;
@@ -185,5 +237,6 @@ public class WebRequestorImpl implements Requestor {
 	private boolean destroy;
 	private Date lastClientSync;
 	private boolean newUserSession;
+	private Map<String, List<FacebookProfile>> friendLocations;
 
 }

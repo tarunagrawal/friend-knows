@@ -39,6 +39,7 @@ import com.system.you.review.web.controller.helper.EditRequestDescriptionHelper;
 import com.system.you.review.web.controller.helper.RemoveReviewerHelper;
 import com.system.you.review.web.controller.helper.RequestCreateHelper;
 import com.system.you.review.web.controller.helper.RequestForwardHelper;
+import com.system.you.review.web.domain.impl.SessionUtils;
 import com.system.you.review.web.reviewer.exception.AddReviewerException;
 import com.system.you.review.web.reviewer.exception.RemoveReviewerException;
 
@@ -58,6 +59,8 @@ public class RequestController extends ControllerSupport {
 				.form();
 		String formActionURL = URLGenerator.getURL("/Request", "/New/Submit");
 		model.addAttribute("categories", categoryService.all());
+		model.addAttribute("locations", SessionUtils.getRequestor()
+				.getFriendLocations());
 		model.addAttribute(FORM_BEAN, responseBean.getFormBean());
 		model.addAttribute("formActionURL", formActionURL);
 		return defaultView();
@@ -165,8 +168,9 @@ public class RequestController extends ControllerSupport {
 		model.addAttribute("reviewerId", applyXXFilter(reviewerId));
 		RequestContext<String[], List<UserInterestViewBean>> requestContext = forwardHelper
 				.form(requestId, reviewerId);
-		if(!requestContext.containsMessage()){
-			model.addAttribute("interestedFriends", requestContext.getViewBean());
+		if (!requestContext.containsMessage()) {
+			model.addAttribute("interestedFriends",
+					requestContext.getViewBean());
 		}
 		return "forward";
 	}

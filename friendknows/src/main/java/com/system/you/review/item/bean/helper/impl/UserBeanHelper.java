@@ -1,5 +1,6 @@
 package com.system.you.review.item.bean.helper.impl;
 
+import java.util.Date;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -21,10 +22,17 @@ public class UserBeanHelper extends BeanHelper {
 		viewBean.setName(dbBean.getName());
 		viewBean.setNickName(nickName(dbBean));
 		viewBean.setImageUrl(profileImage(dbBean.getProviderUserId()));
+		viewBean.setCurrentCity(currentCity(dbBean.getProviderUserId()));
+		viewBean.setHomeTown(homeTown(dbBean.getProviderUserId()));
 		return viewBean;
 	}
 
-	//form bean
+	
+	public ReviewUser socialToDB(String providerId){
+		return user(providerId);
+	}
+	
+	// form bean
 	public ReviewUser formBean(Map<String, String> attributes) {
 		ReviewUser reviewUser = new ReviewUser();
 		reviewUser.setMailID(attributes.get("mail"));
@@ -32,6 +40,9 @@ public class UserBeanHelper extends BeanHelper {
 		reviewUser.setProviderId(attributes.get("providerId"));
 		reviewUser.setProviderUserId(attributes.get("providerUserId"));
 		reviewUser.setProviderUserName(attributes.get("providerUserName"));
+		Date now = new Date();
+		reviewUser.setCreateDateTime(now);
+		reviewUser.setUpdateDateTime(now);
 		return reviewUser;
 	}
 

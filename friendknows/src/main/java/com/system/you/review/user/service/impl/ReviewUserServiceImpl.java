@@ -3,6 +3,7 @@
  */
 package com.system.you.review.user.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,8 @@ import com.system.you.review.user.dao.ReviewUserDAO;
 import com.system.you.review.user.service.ReviewUserService;
 import com.system.you.review.web.domain.account.UsernameAlreadyInUseException;
 
-public class ReviewUserServiceImpl extends ServiceSupport implements ReviewUserService {
+public class ReviewUserServiceImpl extends ServiceSupport implements
+		ReviewUserService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -101,6 +103,9 @@ public class ReviewUserServiceImpl extends ServiceSupport implements ReviewUserS
 		user.setMailID(mailID);
 		user.setProviderId(providerId);
 		user.setProviderUserId(providerUserId);
+		Date now = new Date();
+		user.setCreateDateTime(now);
+		user.setUpdateDateTime(now);
 		return user;
 	}
 

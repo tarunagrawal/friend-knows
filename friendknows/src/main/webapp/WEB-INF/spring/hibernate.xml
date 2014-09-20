@@ -25,8 +25,8 @@
 				<beans:prop key="hibernate.cache.use_query_cache">true</beans:prop>
 				<beans:prop key="hibernate.cache.region.factory_class">com.hazelcast.hibernate.HazelcastCacheRegionFactory
 				</beans:prop>
-				<beans:prop key="hibernate.search.default.indexBase">D:\Personal\Projects\index</beans:prop>  
-				<!-- <beans:prop key="hibernate.search.default.indexBase">/usr/share/friendKnows/index</beans:prop>  -->
+				<!--<beans:prop key="hibernate.search.default.indexBase">D:\Personal\Projects\index</beans:prop>   -->
+				<beans:prop key="hibernate.search.default.indexBase">/usr/share/friendKnows/index</beans:prop> 
 			</beans:props>
 		</beans:property>
 

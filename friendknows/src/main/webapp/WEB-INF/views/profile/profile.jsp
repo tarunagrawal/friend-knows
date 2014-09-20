@@ -57,7 +57,7 @@
 							<span class="fk-label fk-radius"
 								style="font-size: 0.9rem; color: rgba(84, 53, 53, 1); font-weight: bold; background-color: #F5E469; box-shadow: 2px 2px 4px #A5A3A3 !important; border-color: #F5E469;">${bean.item.description}</span>
 						</div>
-						<div class="small-4 columns medium-text-right end">
+						<div class="small-5 columns medium-text-right end">
 							<a href="<c:url value="/Request/${bean.id}/Reviewer/Add"/>"
 								data-reveal-id="add_reviewer_${bean.id}" data-reveal-ajax="true"
 								class="fk_add_reviewer_link fk-operation-link fi-torsos">&nbsp;
@@ -70,7 +70,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="small-11 columns end">
+						<div class="small-12 columns end">
 							<div class="medium-text-left fk-request-description">
 								<p>
 									&quot;&nbsp; <a href="#" class="editable-in-place"
@@ -114,7 +114,7 @@
 						</div>
 					</div>
 					<div class="row fk-reviewers">
-						<div class="small-11 columns fk-reviewers-rows">
+						<div class="small-12 columns fk-reviewers-rows">
 							<c:forEach items="${bean.reviewers}" var="reviewer"
 								varStatus="count">
 								<div class="row fk-reviewer fk-no-margin fk-bottom-border "

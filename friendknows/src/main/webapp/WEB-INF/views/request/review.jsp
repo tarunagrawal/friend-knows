@@ -28,6 +28,51 @@
 									preventDuplicates : true,
 								});
 
+						$("#locations")
+								.tokenInput(
+										"<c:url value='/facebook/location/search' />",
+										{
+											theme : "facebook",
+											preventDuplicates : true,
+											tokenLimit : 1,
+											onAdd : function() {
+												var url = "<c:url value='/suggestion/location/friend'/>"
+														+ "?location="
+														+ $("#locations").val();
+												$
+														.ajax(
+																{
+																	url : url,
+																	headers : {
+																		Accept : "text/html"
+																	},
+																	success : function(
+																			data) {
+																		var $interested_friend = $("#interested_friend .friend-with-location22");
+																		$interested_friend
+																				.html(data);
+																		$interested_friend
+																				.show("slow");
+																	},
+																	error : function(
+																			data) {
+																		alert(data);
+																	}
+																}).done(
+																function(data) {
+																});
+
+											},
+											onDelete : function() {
+												var $interested_friend = $("#interested_friend .friend-with-location22");
+												$interested_friend.hide("slow",
+														function() {
+															$interested_friend
+																	.empty();
+														});
+											}
+										});
+
 						$("#item-search")
 								.tokenInput(
 										"<c:url value='/item/search/' />",
@@ -60,8 +105,9 @@
 																	},
 																	success : function(
 																			data) {
-																		var $interested_friend = $("#interested_friend");
-																		$interested_friend.html(data);
+																		var $interested_friend = $("#interested_friend .friend-already-reviewed");
+																		$interested_friend
+																				.html(data);
 																		$interested_friend
 																				.show("slow");
 																	},
@@ -75,7 +121,7 @@
 
 											},
 											onDelete : function() {
-												var $interested_friend = $("#interested_friend");
+												var $interested_friend = $("#interested_friend .friend-already-reviewed");
 												$interested_friend.hide("slow",
 														function() {
 															$interested_friend
@@ -103,7 +149,7 @@
 			<jsp:include page="../profile/iconbar.jsp"></jsp:include>
 		</div>
 
-		<div class="small-6 columns fk-padding">
+		<div class="small-5 columns fk-padding">
 			<div class="row">
 				<div class="small-12 large-12 columns fk-error">
 					<c:forEach var="error" items="${messages}">
@@ -118,14 +164,14 @@
 						<span class="prefix ">Category</span>
 					</div>
 					<div class="small-9 large-10 columns">
-
 						<select name="category">
 							<c:forEach items="${categories}" var="category">
 								<option value="${category.id}">${category.description}</option>
 							</c:forEach>
-						</select> 
+						</select>
 					</div>
 				</div>
+
 				<div class="row collapse fk-padding-top">
 					<div class="small-3 large-2 columns">
 						<span class="prefix fk-inline-prefix">Item</span>
@@ -152,7 +198,21 @@
 						</form:select>
 					</div>
 				</div>
-				<div class="row collapse fk-margin-top">
+
+				<div class="row collapse fk-padding-top">
+					<div class="small-3 large-12 columns">
+						<span class="fk-bold" style="color:gray;">(Please try to filter friend who might know location)</span>
+					</div>
+				</div>
+				<div class="row collapse ">
+					<div class="small-3 large-2 columns">
+						<span class="prefix fk-inline-prefix">Location</span>
+					</div>
+					<div class="small-9 large-10 columns">
+						<input name="locations" id="locations" />
+					</div>
+				</div>
+				<div class="row collapse ">
 					<div class="small-3 large-2 columns fk-margin-top">
 						<span class="prefix fk-inline-prefix">Friends</span>
 					</div>
@@ -167,7 +227,14 @@
 				</div>
 			</div>
 		</div>
-		<div class="small-4 columns end fk-padding" id="interested_friend"></div>
+		<div class="small-4 columns fk-padding" id="interested_friend">
+			<div class="row ">
+				<div class="small-11 friend-already-reviewed"></div>
+			</div>
+			<div class="row ">
+				<div class="small-11 friend-with-location22"></div>
+			</div>
+		</div>
 	</div>
 
 </form:form>

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.system.you.review.core.service.ServiceLocator;
+import com.system.you.review.item.bean.helper.impl.UserBeanHelper;
 import com.system.you.review.user.service.ReviewUserService;
 
 @Service
@@ -28,6 +29,15 @@ public class ServiceLocatorImpl implements ServiceLocator {
 		return reviewUserService;
 	}
 	
+	@Override
+	public UserBeanHelper getUserBeanHelper() {
+		return userBeanHelper;
+	}
+	
 	@Autowired
 	private ReviewUserService reviewUserService;
+	
+	@Autowired
+	private UserBeanHelper userBeanHelper;
+	
 }

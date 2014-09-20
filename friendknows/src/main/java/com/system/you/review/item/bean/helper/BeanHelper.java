@@ -46,13 +46,14 @@ public class BeanHelper {
 				int currentHourOfTheDay = nowCalendar.get(Calendar.HOUR_OF_DAY);
 				int dateHourOfTheDay = dateCalendar.get(Calendar.HOUR_OF_DAY);
 				if (isMoreThanAHour(currentHourOfTheDay, dateHourOfTheDay)) {
-					dateFormat = (currentHourOfTheDay - dateHourOfTheDay) + " hour(s) ago";
+					dateFormat = (currentHourOfTheDay - dateHourOfTheDay)
+							+ " hour(s) ago";
 				} else {
 					int currentMinutes = nowCalendar.get(Calendar.MINUTE);
 					int minutesOfthehours = dateCalendar.get(Calendar.MINUTE);
 					int minutes = ((currentMinutes - minutesOfthehours) > 0) ? (currentMinutes - minutesOfthehours)
 							: 1;
-					dateFormat = minutes+ " minute(s) ago";
+					dateFormat = minutes + " minute(s) ago";
 				}
 			}
 		}
@@ -65,11 +66,11 @@ public class BeanHelper {
 	}
 
 	private boolean isMoreThanAYear(int currentYear, int dateYear) {
-		return (currentYear - dateYear) > 0 ;
+		return (currentYear - dateYear) > 0;
 	}
 
 	private boolean moreThanADay(int currentDay, int dateDay) {
-		return (currentDay-dateDay) > 0 ;
+		return (currentDay - dateDay) > 0;
 	}
 
 	private Calendar getCurrentCalendar() {
@@ -92,7 +93,8 @@ public class BeanHelper {
 	}
 
 	protected String name(String providerId) {
-		FacebookProfile profile = SessionUtils.getRequestor().getFacebookFriend(providerId);
+		FacebookProfile profile = SessionUtils.getRequestor()
+				.getFacebookFriend(providerId);
 		if (profile != null) {
 			return profile.getName();
 		}
@@ -100,7 +102,8 @@ public class BeanHelper {
 	}
 
 	protected String mail(String providerId) {
-		FacebookProfile profile = SessionUtils.getRequestor().getFacebookFriend(providerId);
+		FacebookProfile profile = SessionUtils.getRequestor()
+				.getFacebookFriend(providerId);
 		if (profile != null) {
 			return profile.getUsername() + "@facebook.com";
 		}
@@ -112,8 +115,27 @@ public class BeanHelper {
 		return url;
 	}
 
+	protected String homeTown(String providerId) {
+		FacebookProfile profile = SessionUtils.getRequestor()
+				.getFacebookFriend(providerId);
+		if (profile != null && profile.getHometown() != null) {
+			return profile.getHometown().getName();
+		}
+		return "Not Known";
+	}
+
+	protected String currentCity(String providerId) {
+		FacebookProfile profile = SessionUtils.getRequestor()
+				.getFacebookFriend(providerId);
+		if (profile != null && profile.getLocation() != null) {
+			return profile.getLocation().getName();
+		}
+		return "Not Known";
+	}
+
 	protected ReviewUser user(String providerId) {
-		FacebookProfile profile = SessionUtils.getRequestor().getFacebookFriend(providerId);
+		FacebookProfile profile = SessionUtils.getRequestor()
+				.getFacebookFriend(providerId);
 		ReviewUser user = new ReviewUser();
 		user.setExternal(true);
 		user.setProviderUserId(providerId);
@@ -123,7 +145,8 @@ public class BeanHelper {
 			user.setName(profile.getName());
 			user.setProviderId("facebook");
 		} else {
-			System.out.println("error: provider id is not a friend:" + providerId);
+			System.out.println("error: provider id is not a friend:"
+					+ providerId);
 			user.setMailID("not avl");
 			user.setName("not avl");
 			user.setProviderId("facebook");
@@ -140,5 +163,5 @@ public class BeanHelper {
 		return encoder.encodeForHTML(value);
 	}
 
-	private static Encoder encoder = ESAPI.encoder(); 
+	private static Encoder encoder = ESAPI.encoder();
 }

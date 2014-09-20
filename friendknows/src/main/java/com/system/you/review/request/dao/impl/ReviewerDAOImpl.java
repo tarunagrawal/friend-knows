@@ -39,7 +39,6 @@ public class ReviewerDAOImpl extends DAOSupport<Reviewer> implements
 				.add(Restrictions.ne("status", Request.Status.CLOSED)).list();
 	}
 
-	
 	@Override
 	public List<Reviewer> getReviewers(ReviewUser reviewer, Date start, Date end) {
 		return getCriteria()
@@ -47,12 +46,12 @@ public class ReviewerDAOImpl extends DAOSupport<Reviewer> implements
 				.add(Restrictions.eq("reviewerID", reviewer.getProviderUserId()))
 				.add(Restrictions.ge("updateDateTime", start))
 				.add(Restrictions.lt("updateDateTime", end))
-				.add(Restrictions.ne("status", Request.Status.CLOSED))
-				.addOrder(Order.desc("updateDateTime"))
-				.list();
+				.add(Restrictions.or(
+						Restrictions.eq("status", Request.Status.INITIATED),
+						Restrictions.eq("status", Request.Status.INITIATED)))
+				.addOrder(Order.desc("updateDateTime")).list();
 	}
-	
-	
+
 	@Override
 	public List<Reviewer> getAnswered(ReviewUser user, Date start, Date end) {
 		return getCriteria()
@@ -61,11 +60,12 @@ public class ReviewerDAOImpl extends DAOSupport<Reviewer> implements
 				.add(Restrictions.eq("request.reviewee.id", user.getId()))
 				.add(Restrictions.ge("updateDateTime", start))
 				.add(Restrictions.lt("updateDateTime", end))
-				.add(Restrictions.eq("status", Request.Status.ANSWERED))
-				.addOrder(Order.desc("updateDateTime"))
-				.list();
+				.add(Restrictions.or(Restrictions.eq("status",
+						Request.Status.ANSWERED), Restrictions.eq("status",
+						Request.Status.ASWERED_FORWARED)))
+				.addOrder(Order.desc("updateDateTime")).list();
 	}
-	
+
 	@Override
 	public List<Reviewer> getReviewers(Request reviewRequest) {
 		return getCriteria()
@@ -98,8 +98,10 @@ public class ReviewerDAOImpl extends DAOSupport<Reviewer> implements
 		Reviewer reviewer = getReviewer(reviewerId);
 		if (reviewer != null) {
 			getSession().delete(reviewer);
-			/*reviewer.setStatus(Request.Status.CLOSED);
-			getSession().update(reviewer);*/
+			/*
+			 * reviewer.setStatus(Request.Status.CLOSED);
+			 * getSession().update(reviewer);
+			 */
 		}
 		return reviewer;
 	}
@@ -115,15 +117,14 @@ public class ReviewerDAOImpl extends DAOSupport<Reviewer> implements
 	}
 
 	@Override
-	public int getPendingAnswerCount(ReviewUser user){
-		 return ((Number) getCriteria()
-					.add(Restrictions.eq("reviewerID", user.getProviderUserId()))
-					.add(Restrictions.eq("status", Request.Status.INITIATED))
-					.setProjection(Projections.rowCount()).uniqueResult())
-					.intValue();
+	public int getPendingAnswerCount(ReviewUser user) {
+		return ((Number) getCriteria()
+				.add(Restrictions.eq("reviewerID", user.getProviderUserId()))
+				.add(Restrictions.eq("status", Request.Status.INITIATED))
+				.setProjection(Projections.rowCount()).uniqueResult())
+				.intValue();
 	}
-	
-	
+
 	@Override
 	public int getReviewerCount(String requestId) {
 		return ((Number) getCriteria().createAlias("request", "request")

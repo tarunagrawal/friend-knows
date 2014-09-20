@@ -96,7 +96,7 @@ body {
 											class="button small bold"><span class="fi-social-facebook" style="font-size:24;"></span> Signin with Facebook </a></b></span>
 								</div>
 								<div style="margin-top: 0px; font-size: 0.7rem;">
-									<span style="color:white">(It will redirect you to Facebook login screen)</span>
+									<span style="color:white">(You will be redirected to Facebook login screen)</span>
 								</div>
 							</div>
 						</div>

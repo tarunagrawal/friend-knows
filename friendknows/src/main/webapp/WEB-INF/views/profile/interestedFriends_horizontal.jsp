@@ -20,16 +20,15 @@
 					<div id="var_${requestId}_${reviewerId}_${friend.user.id}_id"
 						class="f-dropdown" data-dropdown-content
 						style="padding: 0px !important;">
-						<div class=""
-							style="margin: 0px !important; padding: 0px !important;">
-							<div class="left">
+						<div class="row fk-suggested-friend-background"
+							style="margin-bottom: 3px">
+							<div class="small-2 columns medium-text-center ">
 								<img src="${friend.user.imageUrl}" class="profileImage" />
 							</div>
-							<div class="right fk-header-fill fk-center-align end"
-								style="width: 50px;">
-								<h3>
-									<span class="fk-color-white fk-center-align">${friend.toalReviews}</span>
-								</h3>
+							<div class="small-8 columns medium-text-left end">
+								<span class="fk-bold" style="font-size: 0.8rem;">${friend.user.name}</span>
+								<br /> <span style="font-weight: 100; color: gray;">Reviews
+									: </span><span>${friend.toalReviews}</span>
 							</div>
 						</div>
 					</div>

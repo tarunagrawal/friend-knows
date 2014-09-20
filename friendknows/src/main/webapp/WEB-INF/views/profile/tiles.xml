@@ -83,4 +83,9 @@
 			value="/WEB-INF/views/profile/myReviews.jsp" />
 	</definition>
 
+	<definition name="friendsWithLocation" extends="blank">
+		<put-attribute name="content"
+			value="/WEB-INF/views/profile/friendsWithLocation.jsp" />
+	</definition>
+
 </tiles-definitions>

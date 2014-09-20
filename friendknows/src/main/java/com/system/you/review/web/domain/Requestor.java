@@ -3,6 +3,7 @@ package com.system.you.review.web.domain;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.social.facebook.api.FacebookProfile;
@@ -44,6 +45,10 @@ public interface Requestor {
 	public void newUserSession(boolean session);
 	
 	public boolean isNewUserSession();
+	
+	public Set<String> getFriendLocations();
+	
+	public List<ReviewUser> getFriendsWithLocation(String location);
 
 	public static String REQUESTOR_ID = "requestorID";
 
