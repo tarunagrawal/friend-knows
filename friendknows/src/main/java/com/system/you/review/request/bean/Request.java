@@ -51,7 +51,7 @@ public class Request implements ApplicationEntity, Comparable<Request> {
 		this.requestID = requestID;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = IConstants.ITable.IReviewRequest.ITEM_ID, nullable = false)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public Item getItem() {
@@ -62,7 +62,7 @@ public class Request implements ApplicationEntity, Comparable<Request> {
 		this.item = item;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = IConstants.ITable.IReviewRequest.REVIEWEE_ID, nullable = false)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public ReviewUser getReviewee() {
@@ -73,7 +73,7 @@ public class Request implements ApplicationEntity, Comparable<Request> {
 		this.reviewee = reviewee;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = IConstants.ITable.IReviewRequest.PARENT_REQ_ID, nullable = true)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public Request getParentRequest() {
@@ -93,7 +93,7 @@ public class Request implements ApplicationEntity, Comparable<Request> {
 		this.status = status;
 	}
 
-	@OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+	@OneToMany(mappedBy = "request", fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE })
 	@Fetch(FetchMode.JOIN)
 	@Where(clause = "status != 'CLOSED'")
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -106,7 +106,7 @@ public class Request implements ApplicationEntity, Comparable<Request> {
 		this.reviewers = reviewers;
 	}
 
-	@OneToMany(mappedBy = "parentRequest", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "parentRequest", fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE })
 	@Fetch(FetchMode.JOIN)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public Set<Request> getChildren() {

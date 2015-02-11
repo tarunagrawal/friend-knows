@@ -1,7 +1,5 @@
 package com.system.you.review.web.beans.form;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.core.style.ToStringCreator;
@@ -54,22 +52,19 @@ public class RequestFormBean {
 				.toString();
 	}
 
-	@NotBlank
+	@NotBlank(message="You should select an item")
 	private String item;
 
-	@NotBlank
+	@NotBlank(message="You should select a category")
 	private String category;
 
-	@NotNull
-	@NotBlank
+	@NotBlank(message="You should not leave description blank")
 	@Length(max=500, message="Description should not exceeds 500 chars")
 	private String description;
 
-	@NotNull
-	@NotBlank
+	@NotBlank(message="You should select scope")
 	private String scope;
 
-	@NotNull
-	@NotBlank
+	@NotBlank(message="You should select a friend")
 	private String friends;
 }

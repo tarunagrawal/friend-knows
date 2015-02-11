@@ -118,7 +118,7 @@
 							<c:forEach items="${bean.reviewers}" var="reviewer"
 								varStatus="count">
 								<div class="row fk-reviewer fk-no-margin fk-bottom-border "
-									style="padding-bottom: 10px; margin-top: 10px !important; background-color: rgba(239, 239, 240, 1);">
+									>
 									<div class="small-1 columns fk-no-margin fk-no-padding">
 										<img src="${reviewer.user.imageUrl}" class="profileImage" />
 									</div>
@@ -150,20 +150,22 @@
 										</div>
 										<c:if test="${not empty reviewer.reviews}">
 											<c:forEach items="${reviewer.reviews}" var="review">
-												<div class="row fk-no-margin fk-padding-top"
+												<div class="row fk-no-margin"
 													style="margin-top: 0.4rem !important; margin-bottom: 0.4rem !important; background-color: whitesmoke; border-radius: 10px;">
-													<div class="small-10 columns end fk-review-display">
+													<div class="small-11 columns end fk-review-display">
 														<div class="row">
+                                                            <div class="small-12 columns text-right">
+                                                               <!--  <span
+                                                                    class="fk-label fk-header-fill-trusted fk-color-white fi-link"></span> --><span
+                                                                    class="fk-label-trusted"> ${review.tag.tagName}</span>
+                                                            </div>
+                                                        </div>
+														<div class="row fk-padding-top">
 															<div class="small-12 columns">
 																<p>${review.description}</p>
 															</div>
 														</div>
 														<div class="row">
-															<div class="small-4 columns">
-																<span
-																	class="fk-label fk-header-fill-trusted fk-color-white fi-link"></span><span
-																	class="fk-label-trusted"> ${review.tag.tagName}</span>
-															</div>
 															<div class="small-6 columns medium-text-left end ">
 																<ul class="inline-list fk-padding">
 																	<li><c:if test="${review.agreed}">
@@ -192,5 +194,6 @@
 </div>
 
 <script type="text/javascript">
-	
+    $(".fk-selected-icon").removeClass("fk-selected");
+	$("#profile-icon label").addClass("fk-selected-icon");
 </script>

@@ -47,7 +47,7 @@ public class Item implements ApplicationEntity {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = IConstants.ITable.IItem.CATEGORY, nullable = false)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public Category getCategory() {

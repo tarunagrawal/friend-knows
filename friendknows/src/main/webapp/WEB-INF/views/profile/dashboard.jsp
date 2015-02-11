@@ -38,4 +38,7 @@
 		</div>
 	</div>
 </div>
-
+<script type="text/javascript">
+    $(".fk-selected-icon").removeClass("fk-selected");
+    $("#dashboard-icon label").addClass("fk-selected-icon");
+</script>

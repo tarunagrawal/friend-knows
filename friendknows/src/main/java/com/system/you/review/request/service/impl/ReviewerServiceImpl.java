@@ -103,6 +103,7 @@ public class ReviewerServiceImpl extends ServiceSupport implements
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public int getPendingAnswerCount(ReviewUser user) throws ServiceException {
 		try {
 			return reviewerDAO.getPendingAnswerCount(user);

@@ -53,7 +53,7 @@ public class RemoveReviewerHelper extends ControllerHelper {
 				Request request = requestService.get(requestId);
 				if (request != null) {
 					try {
-						requestService.removeFwdReviewer(reviewerId, requestId,
+						requestService.removeForwardReviewer(reviewerId, requestId,
 								fwdReviewerId);
 						Reviewer reviewer = reviewerService
 								.getReviewer(reviewerId);

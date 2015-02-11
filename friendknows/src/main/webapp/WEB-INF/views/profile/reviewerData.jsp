@@ -20,7 +20,7 @@
 		</div>
 		<div class="row fk-no-margin fk-padding-top">
 			<div class="small-1 columns fk-no-margin fk-no-padding">
-				<img src="${view.initiatedUser.imageUrl}" class="profileImage"/>
+				<img src="${view.initiatedUser.imageUrl}" class="profileImage" />
 			</div>
 			<div class="small-11 columns text-left">
 				<div class="row">
@@ -37,13 +37,15 @@
 				<c:if test="${not empty view.reviews}">
 					<div class="row fk-reviews" style="margin-top: 10px;">
 						<c:forEach items="${view.reviews}" var="review">
-							<div class="small-12 columns" id="review_details_${review.id}" style="margin-bottom: 10px !important;">
-								<div class="row fk-review fk-no-margin fk-padding" style="border-bottom: 1px solid  #D8D5D5;background-color: rgba(239, 239, 240, 1);">
+							<div class="small-12 columns" id="review_details_${review.id}"
+								style="margin-bottom: 10px !important;">
+								<div class="row fk-review fk-no-margin fk-padding"
+									style="border-bottom: 1px solid #D8D5D5; background-color: rgba(239, 239, 240, 1);">
 									<div class="small-1 columns fk-no-margin fk-no-padding">
-										<img src="${view.user.imageUrl}" class="profileImage"/>
+										<img src="${view.user.imageUrl}" class="profileImage" />
 									</div>
 
-									<div class="small-9 columns fk-no-margin end">
+									<div class="small-11 columns fk-no-margin end">
 										<div class="row fk-no-margin">
 											<div class="small-12 columns fk-review-text-data">
 												<p style="margin-bottom: 0px !important;">${review.description}</p>
@@ -84,88 +86,91 @@
 							</div>
 						</c:forEach>
 					</div>
+					<c:if test="${fn:contains(view.status, 'friends')}">
+						<div class="row" style="">
+							<div class="small-12 columns">
+								<div class="row">
+									<div class="small-12 columns fk-padding-top">
+										<p class="fk-bold" style="margin-bottom: 0px !important;">You
+											have forwarded to friends</p>
+									</div>
+								</div>
+								<c:forEach items="${view.forwardRequest.reviewers}"
+									var="reviewer">
+									<div
+										class="row fk-reviewer fk-no-margin fk-padding-top fk-bottom-border">
+										<div class="small-1 columns fk-no-margin fk-no-padding">
+											<img src="${reviewer.user.imageUrl}" class="profileImage" />
+										</div>
+										<div
+											class="small-11 columns medium-text-left fk-no-left-padding end ">
+											<div class="row ">
+												<div class="small-3 columns medium-text-left fk-bold">${reviewer.user.name}
+												</div>
+												<div class="small-5 columns medium-text-left ">
+													<c:if test="${reviewer.status eq 'Answered'}">
+														<span class="fk-label fk-radius fk-answered">${reviewer.status}</span>
+													</c:if>
+
+													<c:if test="${reviewer.status eq 'Pending Answer'}">
+														<span class="fk-label fk-radius fk-pending-answer">${reviewer.status}</span>
+													</c:if>
+
+													<c:if test="${fn:contains(reviewer.status, 'friends')}">
+														<span class="fk-label fk-radius fk-forwarded">${reviewer.status}</span>
+													</c:if>
+												</div>
+												<c:if test="${fn:contains(reviewer.status, 'Answered')}">
+													<div class="small-3 columns">
+														<span class="fk-label fk-header-fill fk-color-white">T</span><span
+															class="fk-label">
+															${reviewer.reviews[0].tag.tagName}</span>
+													</div>
+												</c:if>
+												<div class="small-1 columns medium-text-right ">
+													<a
+														href="<c:url value="/Reviewer/${view.id}/Request/${view.forwardRequest.id}/Reviewer/${reviewer.id}/Remove"/>"
+														class="fk-remove-fwd-reviewer-link fk-operation-link fi-trash"
+														data-append="reviewer_data_container_${view.id}"></a>
+												</div>
+											</div>
+											<c:if test="${not empty reviewer.reviews}">
+												<c:forEach items="${reviewer.reviews}" var="review">
+													<div class="row  fk-padding-top">
+														<div class="small-10 columns end fk-review-display">
+															<div class="row">
+																<div class="small-12 columns">
+																	<p>${review.description}</p>
+																</div>
+															</div>
+															<div class="row">
+																<div class="small-12 columns medium-text-left end ">
+																	<ul class="inline-list fk-padding">
+																		<li><a
+																			class="fk-operation-link fk-propagated-back-link"
+																			data-append="reviewer_data_container_${view.id}"
+																			href="<c:url value="/Reviewer/${view.id}/Review/${review.id}"/>">Let
+																				${view.initiatedUser.name} know </a></li>
+																		<li><a class="fk-operation-link"
+																			href="javascript:verify('${review.id}">Agree</a></li>
+																		<li><a class="fk-date">${review.dateTime}</a></li>
+																	</ul>
+																</div>
+															</div>
+														</div>
+													</div>
+												</c:forEach>
+											</c:if>
+										</div>
+									</div>
+								</c:forEach>
+							</div>
+						</div>
+					</c:if>
 				</c:if>
 			</div>
 
-			<c:if test="${fn:contains(view.status, 'friends')}">
-				<div class="row" style="margin-left: 4rem;">
-					<div class="small-12 columns">
-						<div class="row">
-							<div class="small-12 columns fk-padding-top">
-								<p class="fk-bold" style="margin-bottom: 0px !important;">You
-									have forwarded to friends</p>
-							</div>
-						</div>
-						<c:forEach items="${view.forwardRequest.reviewers}" var="reviewer">
-							<div
-								class="row fk-reviewer fk-no-margin fk-padding-top fk-bottom-border">
-								<div class="small-1 columns fk-no-margin fk-no-padding">
-									<img src="${reviewer.user.imageUrl}" class="profileImage" />
-								</div>
-								<div
-									class="small-11 columns medium-text-left fk-no-left-padding end ">
-									<div class="row ">
-										<div class="small-3 columns medium-text-left fk-bold">${reviewer.user.name}
-										</div>
-										<div class="small-5 columns medium-text-left ">
-											<c:if test="${reviewer.status eq 'Answered'}">
-												<span class="fk-label fk-radius fk-answered">${reviewer.status}</span>
-											</c:if>
 
-											<c:if test="${reviewer.status eq 'Pending Answer'}">
-												<span class="fk-label fk-radius fk-pending-answer">${reviewer.status}</span>
-											</c:if>
-
-											<c:if test="${fn:contains(reviewer.status, 'friends')}">
-												<span class="fk-label fk-radius fk-forwarded">${reviewer.status}</span>
-											</c:if>
-										</div>
-										<c:if test="${fn:contains(reviewer.status, 'Answered')}">
-											<div class="small-3 columns">
-												<span class="fk-label fk-header-fill fk-color-white">T</span><span
-													class="fk-label"> ${reviewer.reviews[0].tag.tagName}</span>
-											</div>
-										</c:if>
-										<div class="small-1 columns medium-text-right ">
-											<a
-												href="<c:url value="/Reviewer/${view.id}/Request/${view.forwardRequest.id}/Reviewer/${reviewer.id}/Remove"/>"
-												class="fk-remove-fwd-reviewer-link fk-operation-link fi-trash"
-												data-append="reviewer_data_container_${view.id}"></a>
-										</div>
-									</div>
-									<c:if test="${not empty reviewer.reviews}">
-										<c:forEach items="${reviewer.reviews}" var="review">
-											<div class="row  fk-padding-top">
-												<div class="small-10 columns end fk-review-display">
-													<div class="row">
-														<div class="small-12 columns">
-															<p>${review.description}</p>
-														</div>
-													</div>
-													<div class="row">
-														<div class="small-12 columns medium-text-left end ">
-															<ul class="inline-list fk-padding">
-																<li><a
-																	class="fk-operation-link fk-propagated-back-link"
-																	data-append="reviewer_data_container_${view.id}"
-																	href="<c:url value="/Reviewer/${view.id}/Review/${review.id}"/>">Let
-																		${view.initiatedUser.name} know </a></li>
-																<li><a class="fk-operation-link"
-																	href="javascript:verify('${review.id}">Agree</a></li>
-																<li><a class="fk-date">${review.dateTime}</a></li>
-															</ul>
-														</div>
-													</div>
-												</div>
-											</div>
-										</c:forEach>
-									</c:if>
-								</div>
-							</div>
-						</c:forEach>
-					</div>
-				</div>
-			</c:if>
 		</div>
 
 		<div class="row fk-padding-top">

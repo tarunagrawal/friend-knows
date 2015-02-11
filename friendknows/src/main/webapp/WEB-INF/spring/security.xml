@@ -23,7 +23,7 @@
 		<remember-me />
 
 		<!-- Spring Social Security authentication filter -->
-		<custom-filter ref="openSessionInViewFilter" before="FIRST" />
+		<!-- <custom-filter ref="openSessionInViewFilter" before="FIRST" /> -->
 		<custom-filter ref="contextInitializationFilter" after="FIRST" />
 		<custom-filter ref="socialAuthenticationFilter" before="PRE_AUTH_FILTER" />
 	</http>

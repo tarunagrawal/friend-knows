@@ -37,7 +37,7 @@ public class ReviewerController extends ControllerSupport {
 	}
 
 	@RequestMapping(value = "{reviewerId}/Review/{reviewId}")
-	public ModelAndView verify(@PathVariable String reviewerId,
+	public ModelAndView forwardBack(@PathVariable String reviewerId,
 			@PathVariable String reviewId, Model model) throws UIException {
 		RequestContext<String[], ReviewerViewBean> requestContext = verifyReviewerHelper
 				.copyReview(reviewerId, reviewId);

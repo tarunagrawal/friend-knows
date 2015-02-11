@@ -8,26 +8,26 @@
 <div class="icon-bar vertical six-up fk-sidebar fixed "
 	style="width: auto; margin-top: 2.8rem;">
 
-	<a class="item has-tip tip-right radius" data-tooltip title="Dashboard"
+	<a id="dashboard-icon" class="item has-tip tip-right radius" data-tooltip title="Dashboard"
 		href="<c:url value="/dashboard/"/>"> <label
 		class="fi-page-multiple fk-navigation-icon-size"></label>
-	</a> <a class="item has-tip tip-right radius" data-tooltip
+	</a> <a id="profile-icon" class="item has-tip tip-right radius" data-tooltip
 		title="Your requests" href="<c:url value="/profile"/>"> <label
 		class="fi-clipboard-notes fk-navigation-icon-size"></label>
-	</a> <a class="item has-tip tip-right radius " data-tooltip
+	</a> <a id="new-icon" class="item has-tip tip-right radius " data-tooltip
 		title="New request" href="<c:url value="/Request/New"/>"> <label
 		class="fi-plus fk-navigation-icon-size"></label>
-	</a> <a class="item has-tip tip-right radius " data-tooltip
+	</a> <a id="assigned-icon" class="item has-tip tip-right radius " data-tooltip
 		title="Friends request waiting for your answer !"
 		href="<c:url value="/request/assigned"/>"> <label
 		id="icon_pending_annswer_requests"
 		class="fi-anchor fk-navigation-icon-size"></label>
-	</a> <a class="item has-tip tip-right radius " data-tooltip
+	</a> <a id="independent-review-icon" class="item has-tip tip-right radius " data-tooltip
 		title="Submit your recommendation"
 		href="<c:url value="/Review/Independent/New"/>"
 		data-reveal-id="independent_review" data-reveal-ajax="true"> <label
 		class="fi-lightbulb fk-navigation-icon-size"></label>
-	</a> <a class="item has-tip tip-right radius"
+	</a> <a id="my-reviews" class="item has-tip tip-right radius"
 		href="<c:url value='/my/reviews/'/>" data-tooltip title="Your Reviews"><label
 		class="fi-results-demographics fk-navigation-icon-size"></label> </a>
 

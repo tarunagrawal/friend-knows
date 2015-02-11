@@ -18,17 +18,39 @@ public class RequestDAOImpl extends DAOSupport<Request> implements RequestDAO {
 
 	@Override
 	public void save(Request reviewRequest) {
+		getSession().saveOrUpdate(reviewRequest);
+		ClearHibernateCaches(reviewRequest);
+	}
+
+	private void ClearHibernateCaches(Request reviewRequest) {
 		if (reviewRequest.getRequestID() != null) {
 			Cache cache = sessionFactory.getCache();
 			if (cache != null) {
-				String role = getEntity().getCanonicalName() + ".reviewers";
 				String requestID = reviewRequest.getRequestID();
+
+				if (cache.containsEntity(Request.class, requestID)) {
+					cache.evictEntity(Request.class, requestID);
+				}
+
+				String role = getEntity().getCanonicalName() + ".reviewers";
 				if (cache.containsCollection(role, requestID)) {
 					cache.evictCollection(role, requestID);
 				}
+
+				role = getEntity().getCanonicalName() + ".children";
+				if (cache.containsCollection(role, requestID)) {
+					cache.evictCollection(role, requestID);
+				}
+
+				Request parentRequest = reviewRequest.getParentRequest();
+				if (parentRequest != null) {
+					String parentRequestId = parentRequest.getRequestID();
+					if (cache.containsEntity(Request.class, parentRequestId)) {
+						cache.evictEntity(Request.class, parentRequestId);
+					}
+				}
 			}
 		}
-		getSession().saveOrUpdate(reviewRequest);
 	}
 
 	@Override
@@ -67,6 +89,7 @@ public class RequestDAOImpl extends DAOSupport<Request> implements RequestDAO {
 		Request request = get(id);
 		if (request != null) {
 			getSession().delete(request);
+			ClearHibernateCaches(request);
 			return true;
 		}
 		return false;
@@ -89,5 +112,5 @@ public class RequestDAOImpl extends DAOSupport<Request> implements RequestDAO {
 				.setProjection(Projections.rowCount()).uniqueResult())
 				.intValue();
 	}
-	
+
 }

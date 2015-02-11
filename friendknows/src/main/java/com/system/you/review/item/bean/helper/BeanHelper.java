@@ -105,7 +105,7 @@ public class BeanHelper {
 		FacebookProfile profile = SessionUtils.getRequestor()
 				.getFacebookFriend(providerId);
 		if (profile != null) {
-			return profile.getUsername() + "@facebook.com";
+			return "unknown" + "@facebook.com";
 		}
 		return "";
 	}

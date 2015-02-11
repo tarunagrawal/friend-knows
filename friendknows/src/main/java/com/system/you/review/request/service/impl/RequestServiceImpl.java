@@ -145,7 +145,7 @@ public class RequestServiceImpl extends ServiceSupport implements
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
-	public Reviewer removeFwdReviewer(String reviewerId, String requestId,
+	public Reviewer removeForwardReviewer(String reviewerId, String requestId,
 			String fwdReviewerId) throws ServiceException {
 		try {
 			Reviewer reviewer = reviewerDAO.getReviewer(fwdReviewerId);
@@ -158,20 +158,7 @@ public class RequestServiceImpl extends ServiceSupport implements
 						if (totalReviewer == 1) {
 							// if only one reviewer is left then close the
 							// request
-							close(requestId);
-							Reviewer parentReviewer = reviewerDAO
-									.getReviewer(reviewerId);
-							Status newStatus = Status.INITIATED;
-							Status existing = parentReviewer.getStatus();
-							if (existing == Status.PROPAGATED) {
-								newStatus = Status.INITIATED;
-							} else if (existing == Status.ASWERED_FORWARED) {
-								newStatus = Status.ANSWERED;
-							}
-							parentReviewer.setStatus(newStatus);
-							parentReviewer.setUpdateDateTime(new Date());
-							reviewerDAO.update(parentReviewer);
-							return null;
+							return closeRequest(reviewerId, requestId);
 						} else {
 							reviewer = reviewerDAO.close(fwdReviewerId);
 							if (reviewer != null) {
@@ -202,6 +189,23 @@ public class RequestServiceImpl extends ServiceSupport implements
 			logErrorAndThrowException("error while removing reviewer "
 					+ reviewerId + " for request " + requestId, ex);
 		}
+		return null;
+	}
+
+	private Reviewer closeRequest(String reviewerId, String requestId) {
+		close(requestId);
+		Reviewer parentReviewer = reviewerDAO
+				.getReviewer(reviewerId);
+		Status newStatus = Status.INITIATED;
+		Status existing = parentReviewer.getStatus();
+		if (existing == Status.PROPAGATED) {
+			newStatus = Status.INITIATED;
+		} else if (existing == Status.ASWERED_FORWARED) {
+			newStatus = Status.ANSWERED;
+		}
+		parentReviewer.setStatus(newStatus);
+		parentReviewer.setUpdateDateTime(new Date());
+		reviewerDAO.update(parentReviewer);
 		return null;
 	}
 

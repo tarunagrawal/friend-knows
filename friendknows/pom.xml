@@ -10,7 +10,8 @@
 	<properties>
 		<java-version>1.6</java-version>
 		<org.springframework.social-version>1.1.0.BUILD-SNAPSHOT</org.springframework.social-version>
-		<org.springframework.social.facebook-version>1.1.0.BUILD-SNAPSHOT</org.springframework.social.facebook-version>
+		<!-- <org.springframework.social.facebook-version>1.1.0.BUILD-SNAPSHOT</org.springframework.social.facebook-version> -->
+		<org.springframework.social.facebook-version>2.0.0.M1</org.springframework.social.facebook-version>
 		<org.springframework.social.twitter-version>1.1.0.BUILD-SNAPSHOT</org.springframework.social.twitter-version>
 		<org.springframework.social.linkedin-version>1.0.0.BUILD-SNAPSHOT</org.springframework.social.linkedin-version>
 		<org.springframework-version>3.2.1.RELEASE</org.springframework-version>
@@ -272,6 +273,10 @@
 					<artifactId>logback-classic</artifactId>
 					<groupId>ch.qos.logback</groupId>
 				</exclusion>
+				<exclusion>
+					<artifactId>jackson-databind</artifactId>
+					<groupId>com.fasterxml.jackson.core</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -325,6 +330,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<version>1.0.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mobile</artifactId>
+			<version>1.0.0.RELEASE</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jackson-databind</artifactId>
+					<groupId>com.fasterxml.jackson.core</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<repositories>

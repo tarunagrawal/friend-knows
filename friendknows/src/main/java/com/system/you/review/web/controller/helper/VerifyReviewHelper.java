@@ -1,5 +1,8 @@
 package com.system.you.review.web.controller.helper;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +51,7 @@ public class VerifyReviewHelper extends ControllerHelper {
 						reviewerId);
 				if (review != null) {
 					Reviewer reviewer = reviewerService.getReviewer(reviewerId);
+					//updateReviewerForAddReview(review, reviewer);
 					requestContext.setViewBean(reviewerBeanHelper
 							.dataToView(reviewer));
 				} else {
@@ -58,6 +62,25 @@ public class VerifyReviewHelper extends ControllerHelper {
 			addSystemErrorMessage(requestContext);
 		}
 		return requestContext;
+	}
+
+	private void updateReviewerForAddReview(Review review, Reviewer reviewer) {
+		if (reviewer.getReviews() != null) {
+			boolean alreadyAdded = false;
+			for (Review existing : reviewer.getReviews()) {
+				if (existing.getId().equalsIgnoreCase(
+						review.getId())) {
+					alreadyAdded = true;
+				}
+			}
+			if (!alreadyAdded) {
+				reviewer.getReviews().add(review);
+			}
+		}else{
+			Set<Review> reviews = new HashSet<Review>();
+			reviews.add(review);
+			reviewer.setReviews(reviews);
+		}
 	}
 
 	private void validateCopyFormData(RequestContext<String[], ?> requestContext) {

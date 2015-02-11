@@ -45,7 +45,13 @@ textarea {
  } 
 </style>
 
+<script type="text/javascript">
+<!--
+$(".fk-selected-icon").removeClass("fk-selected");
+$("#assigned-icon label").addClass("fk-selected-icon");
 
+//-->
+</script>
 
 
 <div class="row">

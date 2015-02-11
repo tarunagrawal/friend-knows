@@ -34,15 +34,17 @@ public class MailServiceImpl implements MailService {
 
 	@Scheduled(fixedDelay = 30000)
 	public void processMails() {
+		
+		/*		
 		// if queue is empty
-		if (mailQueue.isEmpty()) {
+		if (mailQueue.isEmpty() || true) {
 			return;
 		}
 		List<MimeMessagePreparator> mails = sendingMails();
 		if (mails != null && !mails.isEmpty()) {
 			mailSender.send(mails.toArray(new MimeMessagePreparator[mails
 					.size()]));
-		}
+		}*/
 	}
 
 	//This method should always be called in current requestor's context

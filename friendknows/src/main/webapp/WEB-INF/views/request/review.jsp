@@ -136,8 +136,11 @@
 									theme : "facebook",
 									tokenLimit : 1,
 								});
-
+					    
+						$(".fk-selected-icon").removeClass("fk-selected");
+					    $("#new-icon label").addClass("fk-selected-icon");
 					});
+    
 </script>
 
 

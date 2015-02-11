@@ -48,7 +48,7 @@ public class Reviewer implements ApplicationEntity, Comparator<Reviewer> {
 		this.requestID = requestID;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = IConstants.ITable.IReviewerRequest.REVIEW_REQUEST_ID, nullable = false)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public Request getRequest() {
@@ -104,7 +104,7 @@ public class Reviewer implements ApplicationEntity, Comparator<Reviewer> {
 		this.updateDateTime = updateDateTime;
 	}
 
-	@OneToMany(mappedBy = "reviewerRequestId", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+	@OneToMany(mappedBy = "reviewerRequestId", fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE })
 	@Fetch(FetchMode.JOIN)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public Set<Review> getReviews() {

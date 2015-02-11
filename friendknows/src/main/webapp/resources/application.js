@@ -64,6 +64,9 @@ function poll() {
 			}, 60000);
 }
 
+
+
+
 function displayDetails(requestid) {
 	var detailId = "#details-" + requestid;
 	$(".fk-selected").removeClass("fk-selected");

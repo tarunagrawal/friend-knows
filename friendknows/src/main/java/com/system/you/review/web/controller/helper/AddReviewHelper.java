@@ -39,7 +39,7 @@ public class AddReviewHelper extends ControllerHelper {
 						Reviewer reviewer = reviewerService.getReviewer(review
 								.getReviewerRequestId());
 						// make a cleanup for current http request.
-						makeCleanup(review, reviewer);
+						// makeCleanup(review, reviewer);
 						respBean.setViewBean(reviewerBeanHelper
 								.dataToView(reviewer));
 						mailService.sendMessage(review, reviewer);
@@ -70,7 +70,7 @@ public class AddReviewHelper extends ControllerHelper {
 				if (review != null) {
 					ReviewViewBean viewBean = reviewBeanHelper.dbToView(review);
 					respBean.setViewBean(viewBean);
-				}else{
+				} else {
 					addSystemErrorMessage(respBean);
 				}
 			}

@@ -69,7 +69,7 @@ public class ConnectionSignupImpl implements ConnectionSignUp {
 	private Map<String,String> getAttributes(Connection<?> connection){
 		Map<String, String> attributes = new HashMap<String, String>();
 		FacebookProfile profile = getFacebookProfile(connection);
-		attributes.put("providerUserName", profile.getUsername());
+		attributes.put("providerUserName", "unknown");
 		attributes.put("mail", profile.getEmail());
 		attributes.put("userName", profile.getName());
 		attributes.put("providerUserId", connection.getKey().getProviderUserId());

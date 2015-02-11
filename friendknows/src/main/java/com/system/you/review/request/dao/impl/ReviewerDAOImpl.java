@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Cache;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -22,8 +23,9 @@ public class ReviewerDAOImpl extends DAOSupport<Reviewer> implements
 		ReviewerDAO {
 
 	@Override
-	public void addReviewer(Reviewer reviewerRequest) {
-		getSession().save(reviewerRequest);
+	public void addReviewer(Reviewer reviewer) {
+		getSession().save(reviewer);
+		//clearCaches(reviewer);
 	}
 
 	@Override
@@ -98,10 +100,7 @@ public class ReviewerDAOImpl extends DAOSupport<Reviewer> implements
 		Reviewer reviewer = getReviewer(reviewerId);
 		if (reviewer != null) {
 			getSession().delete(reviewer);
-			/*
-			 * reviewer.setStatus(Request.Status.CLOSED);
-			 * getSession().update(reviewer);
-			 */
+			clearCaches(reviewer);
 		}
 		return reviewer;
 	}
@@ -109,6 +108,30 @@ public class ReviewerDAOImpl extends DAOSupport<Reviewer> implements
 	@Override
 	public void update(Reviewer reviewer) {
 		getSession().update(reviewer);
+		//clearCaches(reviewer);
+	}
+
+	private void clearCaches(Reviewer reviewer) {
+		clearHibernateCache(reviewer);
+		//getSession().evict(reviewer);
+	}
+
+	private void clearHibernateCache(Reviewer reviewer) {
+		Cache cache = sessionFactory.getCache();
+		if (cache != null) {
+			String requestID = reviewer.getRequest().getRequestID();
+			if (cache.containsEntity(Request.class, requestID)) {
+				cache.evictEntity(Request.class, requestID);
+			}
+			if (cache.containsEntity(Reviewer.class, reviewer.getId())) {
+				cache.evictEntity(Reviewer.class, reviewer.getId());
+			}
+			String role = Reviewer.class.getCanonicalName() + ".reviews";
+			String reviewerId = reviewer.getId();
+			if (cache.containsCollection(role, reviewerId)) {
+				cache.evictCollection(role, reviewerId);
+			}
+		}
 	}
 
 	@Override

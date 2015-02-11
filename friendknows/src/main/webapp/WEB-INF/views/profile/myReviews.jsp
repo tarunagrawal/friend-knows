@@ -3,6 +3,10 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<script type="text/javascript">
+    $(".fk-selected-icon").removeClass("fk-selected");
+    $("#my-reviews label").addClass("fk-selected-icon");
+</script>
 <div class="row">
 	<div class="small-12 large-10 columns ">
 		<div class="row">

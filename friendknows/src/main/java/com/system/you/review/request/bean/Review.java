@@ -51,7 +51,7 @@ public class Review implements ApplicationEntity {
 		this.reviewerRequestId = reviewerRequestId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = IConstants.ITable.IReview.ITEM_ID, nullable = false)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public Item getItem() {
@@ -62,7 +62,7 @@ public class Review implements ApplicationEntity {
 		this.item = item;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = IConstants.ITable.IReview.REVIEWER_ID, nullable = false)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public ReviewUser getReviewer() {

@@ -1,3 +1,7 @@
+@media only screen and (min-width: 40.063em) 
+	
+}
+
 body {
 	font-family: Helvetica, Arial, "lucida grande", tahoma, verdana, arial,
 		sans-serif;
@@ -228,6 +232,9 @@ body {
 
 .fk-reviewer {
 	background-color: somkywhite;
+	padding-bottom: 10px;
+	margin-top: 10px !important;
+	background-color: rgba(239, 239, 240, 1);
 }
 
 .fk-answered {
@@ -329,4 +336,9 @@ body {
 
 .fk-inline-prefix {
 	height: 2.7125rem;
+}
+
+.fk-selected-icon {
+	background-color: #333333;
+	color: white !important;
 }

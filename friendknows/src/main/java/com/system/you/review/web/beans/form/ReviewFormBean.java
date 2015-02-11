@@ -35,9 +35,8 @@ public class ReviewFormBean {
 	@Range(min=0,max= 5)
 	private int rating;
 	
-	@NotNull
-	@NotBlank
-	@Length(max=500, message="description should not exceed 500 char")
+	@NotBlank(message="Description should not be left blank")
+	@Length(max=500, message="Description should not exceed 500 char")
 	private String reviewDescription;
 	
 	@NotNull

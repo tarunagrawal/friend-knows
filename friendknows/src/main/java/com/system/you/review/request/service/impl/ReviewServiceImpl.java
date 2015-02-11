@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.system.you.review.core.helper.StatusHelper;
 import com.system.you.review.core.service.exception.ServiceException;
 import com.system.you.review.item.bean.Item;
 import com.system.you.review.item.bean.helper.impl.ItemBeanHelper;
@@ -24,7 +25,6 @@ import com.system.you.review.request.service.ReviewService;
 import com.system.you.review.request.service.ServiceSupport;
 import com.system.you.review.user.bean.ReviewUser;
 import com.system.you.review.web.beans.form.ReviewFormBean;
-import com.system.you.review.web.domain.impl.SessionUtils;
 
 @Service
 public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
@@ -38,14 +38,7 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 			Review bean = reviewBean(review, reviewerRequest.getId(),
 					reviewerRequest.getRequest().getItem());
 			reviewDAO.addReview(bean);
-
-			Status status = reviewerRequest.getStatus();
-			Status newStatus = Status.ANSWERED;
-			if (status == Status.PROPAGATED) {
-				newStatus = Status.ASWERED_FORWARED;
-			}
-			reviewerRequest.setStatus(newStatus);
-			updateReviewer(reviewerRequest);
+			updateReviewerRecord(reviewerRequest, StatusHelper.Operation.ADD);
 			triggerAddChange(bean);
 			return bean;
 		} catch (Exception e) {
@@ -85,15 +78,9 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 			if (review != null) {
 				hasRight(review);
 				reviewDAO.delete(id);
-				Reviewer reviewer = reviewerDAO.getReviewer(review
-						.getReviewerRequestId());
-				Status newStatus = Status.INITIATED;
-				Status existingStatus = reviewer.getStatus();
-				if (existingStatus == Status.ASWERED_FORWARED) {
-					newStatus = Status.PROPAGATED;
-				}
-				reviewer.setStatus(newStatus);
-				updateReviewer(reviewer);
+				String reviewerRequestId = review.getReviewerRequestId();
+				Reviewer reviewer = reviewerDAO.getReviewer(reviewerRequestId);
+				updateReviewerRecord(reviewer, StatusHelper.Operation.DELETE);
 				triggerDeleteChange(review);
 				return review;
 			}
@@ -194,14 +181,7 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 			if (anyConnection(reviewer, review)) {
 				Review copied = copy(review, reviewer);
 				reviewDAO.addReview(copied);
-
-				Status newStatus = Status.ANSWERED;
-				Status existingStatus = reviewer.getStatus();
-				if (existingStatus == Status.PROPAGATED) {
-					newStatus = Status.ASWERED_FORWARED;
-				}
-				reviewer.setStatus(newStatus);
-				updateReviewer(reviewer);
+				updateReviewerRecord(reviewer, StatusHelper.Operation.ADD);
 				triggerAddChange(review);
 				return copied;
 			}
@@ -210,6 +190,19 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 					+ reviewId + " reviewer " + reviewerId, ex);
 		}
 		return null;
+	}
+
+	private void updateReviewerRecord(Reviewer reviewer,
+			StatusHelper.Operation operation) {
+		if (StatusHelper.shouldChangeReviewerStatus(reviewer, operation)) {
+			Status newStatus = StatusHelper.getNextStatus(reviewer.getStatus(),
+					operation);
+			if (newStatus != null) {
+				reviewer.setStatus(newStatus);
+			}
+		}
+		// only date time update
+		updateReviewer(reviewer);
 	}
 
 	@Override
@@ -263,7 +256,7 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 
 	private void logErrorAndThrowException(String message, Exception ex)
 			throws ServiceException {
-		logger.error(message, ex);
+		LOGGER.error(message, ex);
 		throw new ServiceException(message, ex);
 	}
 
@@ -279,7 +272,7 @@ public class ReviewServiceImpl extends ServiceSupport implements ReviewService {
 	@Autowired
 	private ReviewBeanHelper reviewBeanHelper;
 
-	private static Logger logger = LoggerFactory
+	private static Logger LOGGER = LoggerFactory
 			.getLogger(ReviewServiceImpl.class);
 
 }

@@ -125,25 +125,27 @@ public class WebRequestorImpl implements Requestor {
 		Map<String, List<FacebookProfile>> locations = new HashMap<String, List<FacebookProfile>>();
 		locations.put("", null);
 		locations.put("General", null);
-		for (FacebookProfile friend : this.friends) {
-			Reference location = friend.getHometown();
-			if (location != null) {
-				if (locations.containsKey(location.getName())) {
-					locations.get(location.getName()).add(friend);
-				} else {
-					List<FacebookProfile> list = new ArrayList<FacebookProfile>();
-					list.add(friend);
-					locations.put(location.getName(), list);
+		if (this.friends != null) {
+			for (FacebookProfile friend : this.friends) {
+				Reference location = friend.getHometown();
+				if (location != null) {
+					if (locations.containsKey(location.getName())) {
+						locations.get(location.getName()).add(friend);
+					} else {
+						List<FacebookProfile> list = new ArrayList<FacebookProfile>();
+						list.add(friend);
+						locations.put(location.getName(), list);
+					}
 				}
-			}
-			location = friend.getLocation();
-			if (location != null) {
-				if (locations.containsKey(location.getName())) {
-					locations.get(location.getName()).add(friend);
-				} else {
-					List<FacebookProfile> list = new ArrayList<FacebookProfile>();
-					list.add(friend);
-					locations.put(location.getName(), list);
+				location = friend.getLocation();
+				if (location != null) {
+					if (locations.containsKey(location.getName())) {
+						locations.get(location.getName()).add(friend);
+					} else {
+						List<FacebookProfile> list = new ArrayList<FacebookProfile>();
+						list.add(friend);
+						locations.put(location.getName(), list);
+					}
 				}
 			}
 		}

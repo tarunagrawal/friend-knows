@@ -67,6 +67,12 @@
 <a class="close-reveal-modal">&#215;</a>
 
 <SCRIPT type="text/javascript">
+
+$(".fk-selected-icon").removeClass("fk-selected");
+$("#independent-review-icon label").addClass("fk-selected-icon");
+
+
+
 	$("#add_review_button").bind("click", function(event) {
 		event.preventDefault();
 		$button = $(this);
